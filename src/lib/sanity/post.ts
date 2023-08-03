@@ -16,9 +16,12 @@ export async function getPost(slug: string): Promise<Post> {
 export interface Post {
   _type: 'post';
   _createdAt: string;
-  title?: string;
-  slug: Slug;
+  title: string;
+  author: string;
+  // categories: ...;
   excerpt?: string;
+  publishedAt?: string;
+  slug: Slug;
   mainImage?: ImageAsset;
   body: PortableTextBlock[];
 }
