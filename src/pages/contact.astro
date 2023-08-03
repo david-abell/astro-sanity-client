@@ -1,0 +1,95 @@
+---
+import DefaultLayout from '../layouts/DefaultLayout.astro';
+---
+
+<DefaultLayout title="Contact">
+  <section class="my-12 text-center">
+    <div class="space-content container">
+      <h1>Contact us</h1>
+      <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Natus, quisquam.</p>
+    </div>
+  </section>
+  <section class="mb-12">
+    <div class="container">
+      <form
+        class="flex flex-col gap-6 md:grid-cols-2 max-w-2xl mx-auto"
+        method="POST"
+        id="contact-form"
+        target="_blank"
+      >
+        <div class="grid grid-cols-6">
+          <label for="firstname" class="block">First name</label>
+          <input
+            type="text"
+            id="firstname"
+            name="firstname"
+            class="rounded-lg border border-gray-300 dark:border-gray-600 p-2 col-span-4 col-start-3 dark:bg-gray-700"
+          />
+        </div>
+
+        <div class="grid grid-cols-6">
+          <label for="lastname" class="block">Last name</label>
+          <input
+            type="text"
+            id="lastname"
+            name="lastname"
+            class="rounded-lg border border-gray-300 dark:border-gray-600 p-2 col-span-4 col-start-3 dark:bg-gray-700"
+          />
+        </div>
+
+        <div class="grid grid-cols-6">
+          <label for="email" class="block">Email</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            class="block rounded-lg border border-gray-300 dark:border-gray-600 p-2 col-span-4 col-start-3 dark:bg-gray-700"
+          />
+        </div>
+
+        <div class="grid grid-cols-6">
+          <label for="selectoption" class="block">Pick an option</label>
+          <select
+            id="selectoption"
+            name="selectoption"
+            class="block rounded-lg border border-gray-300 dark:border-gray-600 p-2 col-span-4 col-start-3 dark:bg-gray-700"
+          >
+            <option value="value1">Value 1</option>
+            <option value="value2">Value 2</option>
+            <option value="value3">Value 3</option>
+          </select>
+        </div>
+
+        <div class="grid grid-cols-6">
+          <label for="textblock" class="block">Anything else?</label>
+          <textarea
+            rows="5"
+            id="textblock"
+            name="textblock"
+            class="rounded-lg border border-gray-300 dark:border-gray-600 col-span-4 p-2 col-start-3 dark:bg-gray-700"
+          ></textarea>
+        </div>
+
+        <!-- Form honeypot -->
+        <div class="absolute left-[-999px]">
+          <label for="username" class="block">username</label>
+          <input type="text" id="username" name="username" class="" tabindex="-1" />
+        </div>
+
+        <div class="grid grid-cols-6">
+          <button type="submit" class="col-start-5 col-span-2 button dark:text-white">Submit</button>
+        </div>
+      </form>
+    </div>
+  </section>
+</DefaultLayout>
+
+<script>
+  const form = document.getElementById('contact-form');
+
+  form?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    // Do form submission here
+    return (window.location.href = '/thank-you');
+  });
+</script>
