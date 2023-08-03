@@ -1,0 +1,74 @@
+---
+import DefaultLayout from '../../layouts/DefaultLayout.astro';
+import { Breadcrumbs, BreadcrumbsItem } from 'accessible-astro-components';
+import type { InferGetStaticParamsType } from 'astro';
+import { PortableText } from 'astro-portabletext';
+import { getPost, getPosts } from '@lib/sanity/post';
+import { imageBuilder } from '@lib/sanity/imageBuilder';
+import { formatDate } from '@util/index';
+
+export async function getStaticPaths() {
+  const posts = await getPosts();
+  return posts.map((post) => ({
+    params: { slug: post.slug.current },
+  }));
+}
+
+type Params = InferGetStaticParamsType<typeof getStaticPaths>;
+const { slug } = Astro.params as Params;
+
+const post = await getPost(slug);
+---
+
+<DefaultLayout title={post.title} description={post.excerpt} url={post.slug.current}>
+  <div class="container">
+    <div class="mt-12">
+      <Breadcrumbs>
+        <BreadcrumbsItem href="/" label="Home" />
+        <BreadcrumbsItem href="/blog" label="Blog" />
+        <BreadcrumbsItem currentPage={true} label={post.title} />
+      </Breadcrumbs>
+    </div>
+  </div>
+  <section class="my-12">
+    <div class="container space-content">
+      <section class="post">
+        {
+          post.mainImage ? (
+            <img src={imageBuilder(post.mainImage, 'hero-sm')} alt={post.mainImage.description || 'Cover'} />
+          ) : (
+            <div class="post__cover--none" />
+          )
+        }
+        <div class="post__container prose lg:prose-xl my-12 dark:prose-invert">
+          <h1 class="post__title">{post.title}</h1>
+          <p class="post__excerpt">{post.excerpt}</p>
+          <time class="post__date" datetime={post._createdAt}>
+            {formatDate(post._createdAt)}
+          </time>
+          <div class="">
+            <PortableText value={post.body} />
+          </div>
+        </div>
+      </section>
+    </div>
+  </section>
+</DefaultLayout>
+
+<style lang="scss">
+  ul {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-gap: 4rem;
+
+    @media (min-width: 550px) {
+      grid-template-columns: repeat(2, 1fr);
+      grid-gap: 2rem;
+    }
+
+    @media (min-width: 950px) {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+</style>
+ util

@@ -1,0 +1,15 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+const baseLayoutProps = Astro.props;
+---
+
+<BaseLayout {...baseLayoutProps}>
+  <Header />
+  <main id="main-content">
+    <slot />
+  </main>
+  <Footer />
+</BaseLayout>
