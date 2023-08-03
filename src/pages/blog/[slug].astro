@@ -33,22 +33,14 @@ const post = await getPost(slug);
   <section class="my-12">
     <div class="container space-content">
       <section class="post">
-        {
-          post.mainImage ? (
-            <img src={imageBuilder(post.mainImage, 'hero-sm')} alt={post.mainImage.description || 'Cover'} />
-          ) : (
-            <div class="post__cover--none" />
-          )
-        }
-        <div class="post__container prose lg:prose-xl my-12 dark:prose-invert">
-          <h1 class="post__title">{post.title}</h1>
-          <p class="post__excerpt">{post.excerpt}</p>
-          <time class="post__date" datetime={post._createdAt}>
+        <img src={imageBuilder(post.mainImage, 'hero-sm')} alt={post.mainImage.description || 'Cover'} />
+        <div class="prose lg:prose-xl my-12 dark:prose-invert">
+          <h1>{post.title}</h1>
+          <p>{post.excerpt}</p>
+          <time datetime={post._createdAt}>
             {formatDate(post._createdAt)}
           </time>
-          <div class="">
-            <PortableText value={post.body} />
-          </div>
+          <PortableText value={post.body} />
         </div>
       </section>
     </div>
