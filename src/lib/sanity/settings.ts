@@ -1,11 +1,9 @@
-import type { PortableTextBlock } from '@portabletext/types';
-import type { ImageAsset } from '@sanity/types';
-// import type { Post } from './post';
 import groq from 'groq';
 import { client } from './client';
+import type { Settings } from './types';
 
 export async function getSettings(): Promise<Settings> {
-  return await client.fetch(groq`*[_type == "settings"[0]`);
+  return await client.fetch(groq`*[_type == "settings"][0]`);
 }
 
 export async function getHomePageTitle(): Promise<Settings> {
@@ -31,6 +29,14 @@ export async function getFooterText(): Promise<Settings> {
 `);
 }
 
+export async function getLogo(): Promise<Settings> {
+  return await client.fetch(groq`
+  *[_type == "settings"][0]{
+    logoImage,
+  }
+`);
+}
+
 export const settingsQuery = groq`
   *[_type == "settings"][0]{
     footer,
@@ -42,13 +48,3 @@ export const settingsQuery = groq`
     ogImage,
   }
 `;
-
-export interface Settings {
-  _type: 'settings';
-  _createdAt: string;
-  title: string;
-  overview: PortableTextBlock[];
-  footer: PortableTextBlock[];
-  ogImage: ImageAsset;
-  // showcaseProjects: ...
-}

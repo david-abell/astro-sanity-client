@@ -38,7 +38,7 @@ const post = await getPost(slug);
         <time datetime={post._createdAt}>
           {formatDate(post._createdAt)}
         </time>
-        <img src={imageBuilder(post.mainImage, 'hero-sm')} alt={post.mainImage.description || 'Cover'} />
+        <img src={imageBuilder(post.mainImage, 'hero-sm')} alt={post.mainImage.altText || 'Cover'} />
         <div class="prose lg:prose-xl my-12 dark:prose-invert">
           <PortableText value={post.body} />
         </div>

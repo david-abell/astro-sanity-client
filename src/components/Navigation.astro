@@ -1,13 +1,17 @@
 ---
+import { getSettings } from '@lib/sanity/settings';
 import ResponsiveToggle from './ResponsiveToggle.astro';
 import { DarkMode } from 'accessible-astro-components';
+import { imageBuilder } from '@lib/sanity/imageBuilder';
+
+const { logoImage, title } = await getSettings();
 ---
 
 <div id="main-navigation" class="is-desktop py-8">
   <div class="container">
     <a href="/" class="flex items-center gap-2 !no-underline">
-      <img src={(await import('../assets/img/logo.svg')).default} alt="Your Logo" width="47" height="37" />
-      <span class="font-bold">Accessible Astro</span>
+      {logoImage ? <img src={imageBuilder(logoImage, 'logo')} alt={logoImage.altText} /> : ''}
+      <span class="font-bold">{title}</span>
     </a>
     <div class="wrapper">
       <nav class="desktop-menu" aria-label="Main navigation desktop">
