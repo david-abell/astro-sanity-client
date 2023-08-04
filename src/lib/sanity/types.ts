@@ -23,6 +23,7 @@ export interface Settings {
   title: string;
   overview: PortableTextBlock[];
   footer: PortableTextBlock[];
+  heroImage: ImageAssetWithAltText;
   logoImage?: ImageAssetWithAltText;
   ogImage: ImageAsset;
   // showcaseProjects: ...
