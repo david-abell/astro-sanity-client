@@ -1,9 +1,39 @@
 import { defineConfig } from 'astro/config';
-import compress from 'astro-compress';
 import mdx from '@astrojs/mdx';
 import tailwind from '@astrojs/tailwind';
+import react from '@astrojs/react';
+import { loadEnv } from "vite";
+
+const {
+  PUBLIC_SANITY_STUDIO_PROJECT_ID,
+  PUBLIC_SANITY_STUDIO_DATASET,
+  PUBLIC_SANITY_PROJECT_ID,
+  PUBLIC_SANITY_DATASET
+} = loadEnv(import.meta.env.MODE, process.cwd(), "");
+
+// Different environments use different variables
+const projectId = PUBLIC_SANITY_STUDIO_PROJECT_ID || PUBLIC_SANITY_PROJECT_ID;
+const dataset = PUBLIC_SANITY_STUDIO_DATASET || PUBLIC_SANITY_DATASET;
+
+// Change this depending on your hosting provider (Vercel, Netlify etc)
+// https://docs.astro.build/en/guides/server-side-rendering/#adding-an-adapter
+import vercel from '@astrojs/vercel/serverless';
+
+import sanity from "@sanity/astro";
+
+
 
 // https://astro.build/config
 export default defineConfig({
-  integrations: [compress(), mdx(), tailwind()],
+  compressHTML: true,
+  // Hybrid+adapter is required to support embedded Sanity Studio
+  output: 'hybrid',
+  adapter: vercel(),
+  integrations: [mdx(), tailwind(), sanity({
+    projectId,
+    dataset,
+    studioBasePath: "/admin",
+    useCdn: false, // `false` if you want to ensure fresh data
+    apiVersion: "2023-10-28" // Set to date of setup to use the latest API version
+  }), react()]
 });

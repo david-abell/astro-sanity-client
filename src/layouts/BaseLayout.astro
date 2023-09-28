@@ -1,6 +1,8 @@
 ---
 import '../assets/scss/globals.scss';
 import SiteMeta from '../components/SiteMeta.astro';
+import { ViewTransitions } from 'astro:transitions';
+
 
 const {
   title = 'Astro',
@@ -29,6 +31,7 @@ const {
       image={image}
       author={author}
     />
+    <ViewTransitions />
   </head>
   <body>
     <slot />
