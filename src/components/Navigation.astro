@@ -9,9 +9,9 @@ const { logoImage, title } = await getSettings();
 
 <div id="main-navigation" class="is-desktop py-8">
   <div class="container">
-    <a href="/" class="flex items-center gap-2 !no-underline">
-      {logoImage ? <img src={imageBuilder(logoImage, 'logo')} alt={logoImage.altText} /> : ''}
-      <span class="font-bold">{title}</span>
+    <a href="/" class="flex flex-1 items-center gap-2 !no-underline">
+      {logoImage ? <img src={imageBuilder(logoImage, 'logo')} alt={logoImage.altText} class="max-h-[100px]" /> : ''}
+      <span class="text-2xl font-bold">{title}</span>
     </a>
     <div class="wrapper">
       <nav class="desktop-menu" aria-label="Main navigation desktop">

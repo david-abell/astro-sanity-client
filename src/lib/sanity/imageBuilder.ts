@@ -18,8 +18,15 @@ const sizes = {
 };
 
 export function imageBuilder(source: Image, size: Size, vertical: boolean = false) {
-  const image = builder.image(source).format('webp');
+  // don't transform svgs
+  if (source.asset?._ref && source.asset?._ref.length >= 3) {
+    if (source.asset?._ref.slice(source.asset?._ref.length - 3).toLowerCase() === 'svg') {
+      return builder.image(source).url();
+    }
+  }
+
   const { width, height } = sizes[size];
+  const image = builder.image(source).format('webp');
 
   return vertical ? image.size(height, width).url() : image.size(width, height).url();
 }
