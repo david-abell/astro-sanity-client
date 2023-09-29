@@ -1,10 +1,6 @@
 // Different environments use different variables
-const projectId =
-  import.meta.env.PUBLIC_SANITY_STUDIO_PROJECT_ID! ||
-  import.meta.env.PUBLIC_SANITY_PROJECT_ID!;
-const dataset =
-  import.meta.env.PUBLIC_SANITY_STUDIO_DATASET! ||
-  import.meta.env.PUBLIC_SANITY_DATASET!;
+const projectId = import.meta.env.PUBLIC_SANITY_STUDIO_PROJECT_ID! || import.meta.env.PUBLIC_SANITY_PROJECT_ID!;
+const dataset = import.meta.env.PUBLIC_SANITY_STUDIO_DATASET! || import.meta.env.PUBLIC_SANITY_DATASET!;
 
 // Feel free to remove this check if you don't need it
 if (!projectId || !dataset) {
@@ -12,22 +8,23 @@ if (!projectId || !dataset) {
     `Missing environment variable(s). Check if named correctly in .env file.\n\nShould be:\nPUBLIC_SANITY_STUDIO_PROJECT_ID=${projectId}\nPUBLIC_SANITY_STUDIO_DATASET=${dataset}\n\nAvailable environment variables:\n${JSON.stringify(
       import.meta.env,
       null,
-      2
-    )}`
+      2,
+    )}`,
   );
 }
 
-import { defineConfig } from "sanity";
-import { deskTool } from "sanity/desk";
-import { visionTool } from "@sanity/vision";
-import { schemaTypes } from "@lib/sanity/schema/";
+import { defineConfig } from 'sanity';
+import { deskTool } from 'sanity/desk';
+import { visionTool } from '@sanity/vision';
+import { schemaTypes } from '@lib/sanity/schema/';
+import { unsplashImageAsset } from 'sanity-plugin-asset-source-unsplash';
 
 export default defineConfig({
-  name: "project-name",
-  title: "Project Name",
+  name: 'project-name',
+  title: 'Project Name',
   projectId,
   dataset,
-  plugins: [deskTool(), visionTool()],
+  plugins: [deskTool(), visionTool(), unsplashImageAsset()],
   schema: {
     types: schemaTypes,
   },
