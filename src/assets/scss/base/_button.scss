@@ -9,8 +9,8 @@
   text-decoration: none;
   text-align: center;
   color: var(--neutral-12);
-  background-color: var(--primary-0);
-  border: 3px solid var(--primary-0);
+  background-color: var(--primary-2);
+  border: 3px solid var(--primary-2);
   border-radius: 3px;
   transition:
     color 0.15s ease-in-out,
@@ -19,80 +19,86 @@
 
   &:hover,
   &:focus {
+    color: var(--neutral-0);
     text-decoration: underline;
-    background-color: var(--primary-4);
-    border-color: var(--primary-4);
+    background-color: var(--primary-9);
+    border-color: var(--primary-9);
   }
 
   &:visited {
     color: var(--neutral-12);
-  }
-
-  &.color-secondary {
-    background-color: var(--secondary-0);
-    border-color: (var(--secondary-0));
 
     &:hover,
     &:focus {
-      background-color: var(--secondary-10);
-      border-color: var(--secondary-10);
+      color: var(--neutral-0);
+    }
+  }
+
+  &.color-secondary {
+    background-color: var(--secondary-2);
+    border-color: (var(--secondary-2));
+
+    &:hover,
+    &:focus {
+      background-color: var(--secondary-9);
+      border-color: var(--secondary-9);
     }
   }
 
   &.color-neutral {
-    background-color: var(--neutral-12);
-    border-color: (var(--neutral-12));
+    background-color: var(--neutral-2);
+    border-color: (var(--neutral-2));
 
     &:hover,
     &:focus {
-      background-color: var(--neutral-10);
-      border-color: var(--neutral-10);
+      background-color: var(--neutral-9);
+      border-color: var(--neutral-9);
     }
   }
+  // colors not implemented
+  // &.color-info {
+  //   background-color: var(--info-300);
+  //   border-color: (var(--info-300));
 
-  &.color-info {
-    background-color: var(--info-300);
-    border-color: (var(--info-300));
+  //   &:hover,
+  //   &:focus {
+  //     background-color: var(--info-200);
+  //     border-color: var(--info-200);
+  //   }
+  // }
 
-    &:hover,
-    &:focus {
-      background-color: var(--info-200);
-      border-color: var(--info-200);
-    }
-  }
+  // &.color-success {
+  //   background-color: var(--success-400);
+  //   border-color: (var(--success-400));
 
-  &.color-success {
-    background-color: var(--success-400);
-    border-color: (var(--success-400));
+  //   &:hover,
+  //   &:focus {
+  //     background-color: var(--success-300);
+  //     border-color: var(--success-300);
+  //   }
+  // }
 
-    &:hover,
-    &:focus {
-      background-color: var(--success-300);
-      border-color: var(--success-300);
-    }
-  }
+  // &.color-warning {
+  //   background-color: var(--warning-400);
+  //   border-color: (var(--warning-400));
 
-  &.color-warning {
-    background-color: var(--warning-400);
-    border-color: (var(--warning-400));
+  //   &:hover,
+  //   &:focus {
+  //     background-color: var(--warning-300);
+  //     border-color: var(--warning-300);
+  //   }
+  // }
 
-    &:hover,
-    &:focus {
-      background-color: var(--warning-300);
-      border-color: var(--warning-300);
-    }
-  }
+  // &.color-error {
+  //   background-color: var(--error-300);
+  //   border-color: (var(--error-300));
 
-  &.color-error {
-    background-color: var(--error-300);
-    border-color: (var(--error-300));
-
-    &:hover,
-    &:focus {
-      background-color: var(--error-200);
-      border-color: var(--error-200);
-    }
-  }
+  //   &:hover,
+  //   &:focus {
+  //     background-color: var(--error-200);
+  //     border-color: var(--error-200);
+  //   }
+  // }
 
   &.size-tiny {
     padding: 0.125rem 0.25rem;
@@ -128,6 +134,7 @@
 
     &:hover,
     &:focus {
+      color: var(--neutral-12);
       background-color: transparent;
     }
   }
@@ -143,6 +150,47 @@
   }
 }
 
-.darkmode .button.type-secondary {
-  color: var(--neutral-100);
+.darkmode .button {
+  color: var(--neutral-0);
+  background-color: var(--primary-9);
+  border-color: (var(--primary-9));
+
+  &:hover,
+  &:focus {
+    color: var(--neutral-12);
+    background-color: var(--primary-2);
+    border-color: (var(--primary-2));
+  }
+
+  &.color-secondary {
+    background-color: var(--secondary-9);
+    border-color: (var(--secondary-9));
+
+    &:hover,
+    &:focus {
+      background-color: var(--secondary-2);
+      border-color: var(--secondary-2);
+    }
+  }
+
+  &.color-neutral {
+    background-color: var(--neutral-9);
+    border-color: (var(--neutral-9));
+
+    &:hover,
+    &:focus {
+      background-color: var(--neutral-2);
+      border-color: var(--neutral-2);
+    }
+  }
+
+  &.type-secondary {
+    background-color: transparent;
+
+    &:hover,
+    &:focus {
+      color: var(--neutral-0);
+      background-color: transparent;
+    }
+  }
 }
