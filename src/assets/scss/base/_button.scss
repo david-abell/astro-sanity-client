@@ -8,9 +8,9 @@
   font-weight: bold;
   text-decoration: none;
   text-align: center;
-  color: var(--neutral-900);
-  background-color: var(--primary-100);
-  border: 3px solid var(--primary-100);
+  color: var(--neutral-12);
+  background-color: var(--primary-0);
+  border: 3px solid var(--primary-0);
   border-radius: 3px;
   transition:
     color 0.15s ease-in-out,
@@ -20,33 +20,33 @@
   &:hover,
   &:focus {
     text-decoration: underline;
-    background-color: var(--primary-200);
-    border-color: var(--primary-200);
+    background-color: var(--primary-4);
+    border-color: var(--primary-4);
   }
 
   &:visited {
-    color: var(--neutral-900);
+    color: var(--neutral-12);
   }
 
   &.color-secondary {
-    background-color: var(--secondary-100);
-    border-color: (var(--secondary-100));
+    background-color: var(--secondary-0);
+    border-color: (var(--secondary-0));
 
     &:hover,
     &:focus {
-      background-color: var(--secondary-400);
-      border-color: var(--secondary-400);
+      background-color: var(--secondary-10);
+      border-color: var(--secondary-10);
     }
   }
 
   &.color-neutral {
-    background-color: var(--neutral-500);
-    border-color: (var(--neutral-500));
+    background-color: var(--neutral-12);
+    border-color: (var(--neutral-12));
 
     &:hover,
     &:focus {
-      background-color: var(--neutral-400);
-      border-color: var(--neutral-400);
+      background-color: var(--neutral-10);
+      border-color: var(--neutral-10);
     }
   }
 
