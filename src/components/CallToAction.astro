@@ -6,8 +6,8 @@ const { footer } = await getFooterText();
 ---
 
 <div class="container">
-  <div class="call-to-action mt-24 mb-32 flex flex-col items-center gap-12 rounded-xl p-12 md:p-24">
-    <div class="prose lg:prose-xl my-12 dark:prose-invert">
+  <div class="call-to-action mb-32 mt-24 flex flex-col items-center gap-12 rounded-xl p-12 md:p-24">
+    <div class="prose my-12 dark:prose-invert lg:prose-xl">
       <div class="">
         <PortableText value={footer} />
       </div>
@@ -17,16 +17,20 @@ const { footer } = await getFooterText();
 
 <style lang="scss">
   .call-to-action {
-    color: var(--neutral-900);
-    background-image: linear-gradient(40deg, var(--primary-100), var(--secondary-200));
+    color: var(--neutral-12);
+    background-image: linear-gradient(40deg, var(--primary-1), var(--secondary-3));
+  }
+
+  :global(.darkmode) .call-to-action {
+    background-image: linear-gradient(40deg, var(--primary-9), var(--secondary-12));
   }
 
   .call-to-action a:not(button),
   .call-to-action a:not(button):visited {
     padding: 1rem;
-    color: var(--neutral-900);
+    color: var(--neutral-12);
     font-weight: bold;
-    border: 3px solid var(--neutral-900);
+    border: 3px solid var(--neutral-12);
     border-radius: 3px;
     text-decoration: none;
     transition:
@@ -34,8 +38,8 @@ const { footer } = await getFooterText();
       background-color 0.15s ease-in-out;
 
     &:where(:hover, :focus) {
-      color: var(--neutral-100);
-      background-color: var(--neutral-900);
+      color: var(--neutral-0);
+      background-color: var(--neutral-12);
       text-decoration: underline;
     }
   }
