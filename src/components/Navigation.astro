@@ -208,6 +208,18 @@ const { logoImage, title } = await getSettings();
       closeAllDropdownMenus();
     }
   });
+
+  document.addEventListener('click', (event) => {
+    if (mainNav && !mainNav.contains(event.target as HTMLElement)) {
+      closeAllDropdownMenus();
+      window.closeMainMenu();
+    }
+
+    if (mainNav && event.target instanceof HTMLAnchorElement) {
+      closeAllDropdownMenus();
+      window.closeMainMenu();
+    }
+  });
 </script>
 
 <style lang="scss" is:global>
