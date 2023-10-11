@@ -1,12 +1,12 @@
 import imageUrlBuilder from '@sanity/image-url';
-import type { Image } from '@sanity/types';
 import { client } from '@lib/sanity/client';
+import type { ImageWithExpandedMetaData } from './types';
 
 const builder = imageUrlBuilder(client);
 
-type Size = 'logo' | 'logo-sq' | 'thumb' | 'thumb-lg' | 'social' | 'hero' | 'hero-sm' | 'full';
+export type ImageFormFactor = 'logo' | 'logo-sq' | 'thumb' | 'thumb-lg' | 'social' | 'hero' | 'hero-sm' | 'full';
 
-const sizes = {
+export const imageSizes = {
   logo: { width: 250, height: 100 },
   'logo-sq': { width: 100, height: 100 },
   thumb: { width: 150, height: 150 },
@@ -15,9 +15,9 @@ const sizes = {
   hero: { width: 1280, height: 720 },
   'hero-sm': { width: 1200, height: 630 },
   full: { width: 1800, height: 600 },
-};
+} as const;
 
-export function imageBuilder(source: Image, size: Size, vertical: boolean = false) {
+export function imageBuilder(source: ImageWithExpandedMetaData, size: ImageFormFactor, vertical: boolean = false) {
   // don't transform svgs
   if (source.asset?._ref && source.asset?._ref.length >= 3) {
     if (source.asset?._ref.slice(source.asset?._ref.length - 3).toLowerCase() === 'svg') {
@@ -25,8 +25,12 @@ export function imageBuilder(source: Image, size: Size, vertical: boolean = fals
     }
   }
 
-  const { width, height } = sizes[size];
+  const { width, height } = imageSizes[size];
   const image = builder.image(source).format('webp');
 
   return vertical ? image.size(height, width).url() : image.size(width, height).url();
+}
+
+export function placeholderBuilder(source: ImageWithExpandedMetaData) {
+  return source.asset?.metadata?.lqip || '';
 }

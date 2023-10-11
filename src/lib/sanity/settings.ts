@@ -32,7 +32,9 @@ export async function getFooterText(): Promise<Settings> {
 export async function getLogo(): Promise<Settings> {
   return await client.fetch(groq`
   *[_type == "settings"][0]{
-    logoImage,
+    logoImage {
+      ...,
+    asset->},
   }
 `);
 }

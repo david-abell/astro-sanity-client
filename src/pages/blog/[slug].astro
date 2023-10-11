@@ -4,8 +4,8 @@ import { Breadcrumbs, BreadcrumbsItem } from 'accessible-astro-components';
 import type { InferGetStaticParamsType } from 'astro';
 import { PortableText } from 'astro-portabletext';
 import { getPost, getPosts } from '@lib/sanity/post';
-import { imageBuilder } from '@lib/sanity/imageBuilder';
 import { formatDate } from '@util/index';
+import ExternalImage from '@components/ExternalImage.astro';
 
 export async function getStaticPaths() {
   const posts = await getPosts();
@@ -31,15 +31,16 @@ const post = await getPost(slug);
     </div>
   </div>
   <section class="my-12">
-    <div class="container space-content">
+    <div class="space-content container">
       <section class="post space-content">
         <h1>{post.title}</h1>
         <p>{post.excerpt}</p>
         <time datetime={post._createdAt}>
           {formatDate(post._createdAt)}
         </time>
-        <img src={imageBuilder(post.mainImage, 'hero-sm')} alt={post.mainImage.altText || 'Cover'} />
-        <div class="prose lg:prose-xl my-12 dark:prose-invert">
+        <!-- <img src={imageBuilder(post.mainImage, 'hero-sm')} alt={post.mainImage.altText || 'Cover'} /> -->
+        <ExternalImage imageSource={post.mainImage} size="hero-sm" />
+        <div class="prose my-12 dark:prose-invert lg:prose-xl">
           <PortableText value={post.body} />
         </div>
       </section>

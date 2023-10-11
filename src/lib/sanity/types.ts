@@ -1,8 +1,9 @@
-import type { ImageAsset, PortableTextBlock, Slug } from '@sanity/types';
+import type { ImageAsset, PortableTextBlock, Slug, Image } from '@sanity/types';
 
-export type ImageAssetWithAltText = {
+export type ImageWithExpandedMetaData = Image & {
   altText: string;
-} & ImageAsset;
+  asset: ImageAsset;
+};
 
 export interface Post {
   _type: 'post';
@@ -13,7 +14,7 @@ export interface Post {
   excerpt?: string;
   publishedAt?: string;
   slug: Slug;
-  mainImage: ImageAssetWithAltText;
+  mainImage: ImageWithExpandedMetaData;
   body: PortableTextBlock[];
 }
 
@@ -23,8 +24,8 @@ export interface Settings {
   title: string;
   overview: PortableTextBlock[];
   footer: PortableTextBlock[];
-  heroImage: ImageAssetWithAltText;
-  logoImage?: ImageAssetWithAltText;
+  heroImage: ImageWithExpandedMetaData;
+  logoImage?: ImageWithExpandedMetaData;
   ogImage: ImageAsset;
   // showcaseProjects: ...
 }

@@ -1,0 +1,38 @@
+---
+import { imageBuilder, type ImageFormFactor, placeholderBuilder, imageSizes } from '@lib/sanity/imageBuilder';
+import type { ImageWithExpandedMetaData } from '@lib/sanity/types';
+import type { HTMLAttributes } from 'astro/types';
+
+export interface Props extends HTMLAttributes<'img'> {
+  imageSource: ImageWithExpandedMetaData;
+  size: ImageFormFactor;
+  vertical?: boolean;
+}
+
+const { imageSource, size, vertical } = Astro.props;
+
+const { width, height } = imageSizes[size];
+
+const placeHolderStyles = `
+          background-image: url('${placeholderBuilder(imageSource)}');
+          background-repeat: no-repeat;
+          background-size: cover;
+          background-position: center;
+          width: ${vertical ? height : width}px;
+          height: ${vertical ? width : height}px;`;
+---
+
+<>
+  {
+    imageSource ? (
+      <img
+        src={imageBuilder(imageSource, size, vertical)}
+        alt={imageSource.altText || 'cover'}
+        loading="lazy"
+        style={placeHolderStyles}
+      />
+    ) : (
+      ''
+    )
+  }
+</>
