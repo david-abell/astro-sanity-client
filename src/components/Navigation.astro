@@ -10,7 +10,7 @@ const { logoImage, title } = await getSettings();
 <div id="main-navigation" class="is-desktop py-8">
   <div class="container">
     <a href="/" class="flex flex-1 items-center gap-2 !no-underline">
-      {logoImage ? <img src={imageBuilder(logoImage, 'logo')} alt={logoImage.altText} class="max-h-[100px]" /> : ''}
+      {logoImage ? <img src={imageBuilder(logoImage, 'logo')} alt={logoImage.altText} class="max-h-[50px]" /> : ''}
       <span class="text-2xl font-bold">{title}</span>
     </a>
     <div class="wrapper">
@@ -238,6 +238,7 @@ const { logoImage, title } = await getSettings();
 
     &.is-mobile {
       flex-direction: column;
+      background-color: var(--neutral-background);
 
       .mobile-menu {
         display: none;
