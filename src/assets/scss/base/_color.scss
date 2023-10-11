@@ -13,9 +13,9 @@
 }
 
 $colors: (
-  primary: map-keys($pallets, purple),
-  secondary: map-keys($pallets, cyan),
-  neutral: map-keys($pallets, gray),
+  primary: map-keys($pallets, 'purple'),
+  secondary: map-keys($pallets, 'cyan'),
+  neutral: map-keys($pallets, 'gray'),
   dark: (
     100: hsl(240, 4%, 9%),
   ),
