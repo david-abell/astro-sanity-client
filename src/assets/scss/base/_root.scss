@@ -3,7 +3,7 @@
 // | -------------------------------------------------------------
 
 @use 'color' as *;
-@use 'color-pallets' as *;
+@use 'color-palettes' as *;
 
 :root {
   @each $color, $shades in $colors {
@@ -12,7 +12,7 @@
     }
   }
 
-  @each $color, $shades in $pallets {
+  @each $color, $shades in $palettes {
     @each $shade, $value in $shades {
       --clr-#{$color}-#{$shade}: #{$value};
     }

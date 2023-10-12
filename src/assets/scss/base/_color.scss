@@ -1,4 +1,4 @@
-@use 'color-pallets' as *;
+@use 'color-palettes' as *;
 
 // | -------------------------------------------------------------
 // | Color
@@ -13,9 +13,9 @@
 }
 
 $colors: (
-  primary: map-keys($pallets, 'purple'),
-  secondary: map-keys($pallets, 'cyan'),
-  neutral: map-keys($pallets, 'gray'),
+  primary: map-keys($palettes, 'purple'),
+  secondary: map-keys($palettes, 'cyan'),
+  neutral: map-keys($palettes, 'gray'),
   dark: (
     100: hsl(240, 4%, 9%),
   ),
