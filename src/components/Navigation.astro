@@ -51,6 +51,9 @@ const { logoImage, title } = await getSettings();
         } else if (menuItem.textContent === 'Home' && currenPathname === '/') {
           menuItem.classList.add('is-active');
           menuItem.setAttribute('aria-current', 'page');
+        } else {
+          menuItem.classList.remove('is-active');
+          menuItem.removeAttribute('aria-current');
         }
       });
     });
@@ -219,6 +222,11 @@ const { logoImage, title } = await getSettings();
       closeAllDropdownMenus();
       window.closeMainMenu();
     }
+  });
+
+  document.addEventListener('astro:after-swap', () => {
+    setActiveMenuItem();
+    checkMenuSize();
   });
 </script>
 
