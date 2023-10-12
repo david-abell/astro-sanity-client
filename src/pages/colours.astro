@@ -42,8 +42,8 @@ import Icon from 'astro-icon';
                       </div>
                     ))}
                 </button>
-                <Modal triggerId={`grid-button-${hueIndex}`} title="Theme example">
-                  <div class="model-content container w-[36rem] max-w-full">
+                <Modal triggerId={`grid-button-${hueIndex}`} title={`Selected palette: ${paletteHues[hueIndex]!}`}>
+                  <div class="model-content container mx-auto w-[36rem] max-w-full text-center">
                     <div class="mb-8 mt-8 flex flex-row items-center justify-center">
                       <a href="/" class="flex items-center gap-2 pr-4 !no-underline">
                         <span class="text-2xl font-bold">Company Name</span>
@@ -77,6 +77,17 @@ import Icon from 'astro-icon';
                         </div>
                       </div>
                     </div>
+                    <div data-id="grid-button-group" class="flex flex-row gap-4">
+                      <button id={`grid-button-unset`} type="button" class="button color-neutral">
+                        Set all colours to default
+                      </button>
+                      <button id={`grid-button-primary-${hueIndex}`} type="button" class="button">
+                        Set as primary color palette
+                      </button>
+                      <button id={`grid-button-secondary-${hueIndex}`} type="button" class="button color-secondary">
+                        Set as secondary color palette
+                      </button>
+                    </div>
                   </div>
                 </Modal>
               </>
@@ -90,8 +101,7 @@ import Icon from 'astro-icon';
 <script>
   import { colorPalettes, paletteHues } from '@assets/scss/base/color-palettes';
 
-  let hueButtons = document.querySelectorAll<HTMLButtonElement>("button[data-id='grid-button']");
-  console.log(hueButtons);
+  let hueButtonGroups = document.querySelectorAll<HTMLButtonElement>("[data-id='grid-button-group']");
 
   function setThemeProperties(hue: keyof typeof colorPalettes, isPrimary = true) {
     const propertyName = isPrimary ? 'primary' : 'secondary';
@@ -101,6 +111,20 @@ import Icon from 'astro-icon';
       localStorage.setItem(`--${propertyName}-${i}`, colorPalettes[hue][i]);
       // @ts-expect-error i is correct hue index
       document.documentElement.style.setProperty(`--${propertyName}-${i}`, colorPalettes[hue][i]);
+    }
+  }
+
+  function unsetThemeProperties() {
+    for (let i = 0; i <= 12; i++) {
+      // @ts-expect-error i is correct hue index
+      localStorage.setItem(`--primary-${i}`, colorPalettes['purple'][i]);
+      // @ts-expect-error i is correct hue index
+      localStorage.setItem(`--secondary-${i}`, colorPalettes['cyan'][i]);
+
+      // @ts-expect-error i is correct hue index
+      document.documentElement.style.setProperty(`--primary-${i}`, colorPalettes['purple'][i]);
+      // @ts-expect-error i is correct hue index
+      document.documentElement.style.setProperty(`--secondary-${i}`, colorPalettes['cyan'][i]);
     }
   }
 
@@ -117,24 +141,44 @@ import Icon from 'astro-icon';
       }
     }
   }
-
-  hueButtons.forEach((button, index) => {
+  console.log(hueButtonGroups);
+  hueButtonGroups.forEach((group, index) => {
     const hue = paletteHues[index];
     if (!hue) return;
-    button.addEventListener('click', () => {
+    const primaryButton = group.querySelector("button[id*='primary']");
+    const secondaryButton = group.querySelector("button[id*='secondary']");
+    const unsetButton = group.querySelector("button[id*='unset']");
+
+    primaryButton?.addEventListener('click', () => {
       setThemeProperties(hue);
+    });
+    secondaryButton?.addEventListener('click', () => {
+      setThemeProperties(hue, false);
+    });
+    unsetButton?.addEventListener('click', () => {
+      unsetThemeProperties();
     });
   });
 
   document.addEventListener('astro:after-swap', () => {
     setRootThemeProperties();
-    hueButtons = document.querySelectorAll<HTMLButtonElement>("button[data-id='grid-button']");
+    hueButtonGroups = document.querySelectorAll<HTMLButtonElement>("button[data-id='grid-button-group']");
 
-    hueButtons.forEach((button, index) => {
+    hueButtonGroups.forEach((group, index) => {
       const hue = paletteHues[index];
       if (!hue) return;
-      button.addEventListener('click', () => {
+      const primaryButton = group.querySelector("button[id*='primary']");
+      const secondaryButton = group.querySelector("button[id*='secondary']");
+      const unsetButton = group.querySelector("button[id*='unset']");
+
+      primaryButton?.addEventListener('click', () => {
         setThemeProperties(hue);
+      });
+      secondaryButton?.addEventListener('click', () => {
+        setThemeProperties(hue, false);
+      });
+      unsetButton?.addEventListener('click', () => {
+        unsetThemeProperties();
       });
     });
   });
