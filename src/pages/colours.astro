@@ -1,6 +1,9 @@
 ---
 import DefaultLayout from '../layouts/DefaultLayout.astro';
 import { colorPalettes, paletteHues } from '@assets/scss/base/color-palettes';
+import { Modal } from 'accessible-astro-components';
+
+import Icon from 'astro-icon';
 ---
 
 <DefaultLayout title="Accessible Components">
@@ -17,27 +20,66 @@ import { colorPalettes, paletteHues } from '@assets/scss/base/color-palettes';
           .fill(null)
           .map((_, hueIndex) => {
             return (
-              <button type="button" class="grid-row" data-id="grid-button">
-                {Array(13)
-                  .fill(null)
-                  .map((_, valueIndex) => (
-                    // @ts-expect-error indexing by valueIndex is correct
-                    <div
-                      class="grid-item"
-                      data-hue={paletteHues[hueIndex]}
-                      data-hue-value={colorPalettes[paletteHues[hueIndex]!][valueIndex]}
-                    >
-                      <p class="color-description">
-                        {paletteHues[hueIndex]}
-                        <br />
-                        {
-                          // @ts-expect-error indexing by valueIndex is correct
-                          colorPalettes[paletteHues[hueIndex]!][valueIndex]
-                        }
-                      </p>
+              <>
+                <button type="button" class="grid-row" data-id="grid-button" id={`grid-button-${hueIndex}`}>
+                  {Array(13)
+                    .fill(null)
+                    .map((_, valueIndex) => (
+                      // @ts-expect-error indexing by valueIndex is correct
+                      <div
+                        class="grid-item"
+                        data-hue={paletteHues[hueIndex]}
+                        data-hue-value={colorPalettes[paletteHues[hueIndex]!][valueIndex]}
+                      >
+                        <p class="color-description">
+                          {paletteHues[hueIndex]}
+                          <br />
+                          {
+                            // @ts-expect-error indexing by valueIndex is correct
+                            colorPalettes[paletteHues[hueIndex]!][valueIndex]
+                          }
+                        </p>
+                      </div>
+                    ))}
+                </button>
+                <Modal triggerId={`grid-button-${hueIndex}`} title="Theme example">
+                  <div class="model-content container w-[36rem] max-w-full">
+                    <div class="mb-8 mt-8 flex flex-row items-center justify-center">
+                      <a href="/" class="flex items-center gap-2 pr-4 !no-underline">
+                        <span class="text-2xl font-bold">Company Name</span>
+                      </a>
+                      <ul class="menu flex flex-1 flex-row items-center justify-center gap-2">
+                        <li class="menu-item type-icon ">
+                          <a href="#" title="Example link with icon">
+                            <Icon pack="ion" name="logo-github" alt="" />
+                            Example link with icon
+                          </a>
+                        </li>
+                        <li class="menu-item">
+                          <a href="#">Example link</a>
+                        </li>
+                      </ul>
                     </div>
-                  ))}
-              </button>
+
+                    <section class="mb-8 mt-8">
+                      <h2>Example Header</h2>
+                      <p>
+                        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ab minus qui eos tempora, corporis
+                        aperiam esse obcaecati eligendi voluptas dicta?
+                      </p>
+                    </section>
+
+                    <div class="call-to-action mb-8 mt-8 flex flex-col items-center gap-12 rounded-xl p-12">
+                      <div class="my-12">
+                        <div class="">
+                          <h2>Example footer</h2>
+                          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Distinctio, tenetur.</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </Modal>
+              </>
             );
           })
       }
@@ -49,6 +91,7 @@ import { colorPalettes, paletteHues } from '@assets/scss/base/color-palettes';
   import { colorPalettes, paletteHues } from '@assets/scss/base/color-palettes';
 
   let hueButtons = document.querySelectorAll<HTMLButtonElement>("button[data-id='grid-button']");
+  console.log(hueButtons);
 
   function setThemeProperties(hue: keyof typeof colorPalettes, isPrimary = true) {
     const propertyName = isPrimary ? 'primary' : 'secondary';
@@ -100,6 +143,40 @@ import { colorPalettes, paletteHues } from '@assets/scss/base/color-palettes';
 <style lang="scss">
   @use '../assets/scss/base/color-palettes' as *;
 
+  .model-content {
+    .call-to-action {
+      color: var(--neutral-12);
+      background-image: linear-gradient(40deg, var(--primary-1), var(--secondary-3));
+    }
+
+    :global(.darkmode) .call-to-action {
+      background-image: linear-gradient(40deg, var(--primary-9), var(--secondary-12));
+    }
+
+    .type-icon a {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+
+      [astro-icon] {
+        width: 30px;
+        padding-right: 0.25rem;
+
+        path {
+          fill: var(--action-color);
+          transition: fill 0.2s ease-in-out;
+        }
+      }
+
+      &:hover {
+        [astro-icon] path {
+          fill: var(--action-color-state);
+        }
+      }
+    }
+  }
+
   .color-grid {
     display: flex;
     flex-direction: column;
@@ -136,7 +213,7 @@ import { colorPalettes, paletteHues } from '@assets/scss/base/color-palettes';
     @each $color, $shades in $palettes {
       $i: index(($palettes), ($color $shades));
       @for $j from 0 through 13 {
-        .grid-row:nth-child(#{$i}) .grid-item:nth-child(#{$j}) {
+        .grid-row[data-id='grid-button']:nth-of-type(#{$i}) .grid-item:nth-child(#{$j}) {
           background-color: var(--clr-#{$color}-#{$j - 1});
           // set dark text for lightest colors
           color: var(--clr-#{$color}-#{if($j < 5, 12, 0)});
