@@ -30,6 +30,26 @@ const {
       image={image}
       author={author}
     />
+    <script is:inline>
+      // Setup any saved theme custom properties in :root
+      function setRootThemeProperties() {
+        for (let i = 0; i <= 12; i++) {
+          const storePrimaryProperty = localStorage.getItem(`--primary-${i}`);
+          const storeSecondaryProperty = localStorage.getItem(`--secondary-${i}`);
+
+          if (storePrimaryProperty) {
+            document.documentElement.style.setProperty(`--primary-${i}`, storePrimaryProperty);
+          }
+          if (storeSecondaryProperty) {
+            document.documentElement.style.setProperty(`--secondary-${i}`, storeSecondaryProperty);
+          }
+        }
+      }
+
+      // Execution
+      setRootThemeProperties();
+      document.addEventListener('astro:after-swap', setRootThemeProperties);
+    </script>
     <ViewTransitions />
   </head>
   <body>
@@ -45,21 +65,28 @@ const {
         --font-family-special: 'Open Sans', sans-serif;
         // light theme
         --font-color: var(--neutral-12);
-        --action-color: var(--primary-9);
-        --action-color-state: var(--primary-10);
+        --action-color: var(--primary-10);
+        --action-color-state: var(--secondary-10);
         --background: var(--neutral-0);
         --primary-background: var(--primary-0);
         --neutral-background: var(--neutral-1);
+        // dark theme
+        --font-color-dark: var(--neutral-0);
+        --action-color-dark: var(--secondary-4);
+        --action-color-state-dark: var(--secondary-9);
+        --background-dark: var(--dark-100);
+        --primary-background-dark: var(--primary-10);
+        --neutral-background-dark: var(--neutral-12);
       }
 
       // dark color scheme overrides
       .darkmode {
-        --font-color: var(--neutral-0);
-        --action-color: var(--secondary-4);
-        --action-color-state: var(--secondary-9);
-        --background: var(--dark-100);
-        --primary-background: var(--primary-10);
-        --neutral-background: var(--neutral-12);
+        --font-color: var(--font-color-dark);
+        --action-color: var(--action-color-dark);
+        --action-color-state: var(--action-color-state-dark);
+        --background: var(--background-dark);
+        --primary-background: var(--primary-background-dark);
+        --neutral-background: var(--neutral-background-dark);
       }
 
       // sticky footer on low content pages
