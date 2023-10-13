@@ -8,7 +8,14 @@
     "lib": ["dom", "dom.iterable", "esnext"],
     "module": "esnext",
     "moduleResolution": "node",
-    // astro/tsconfigs/strictest except no unused parameters and locals  to false
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "target": "ES2022",
+    "verbatimModuleSyntax": true,
+    "baseUrl": ".",
+    // astro/tsconfigs/strictest compiler options except:
+    // disable noUnusedParameters and noUnusedLocals
     "noUnusedParameters": false, // Overide strictest setting
     "noUnusedLocals": false, // Report an error when a variable is declared but never used.
     "noFallthroughCasesInSwitch": true, // Report errors for fallthrough cases in switch statements
@@ -19,12 +26,6 @@
     "allowUnreachableCode": false, // Report an error for unreachable code instead of just a warning.
     "allowUnusedLabels": false, // Report an error for unused labels instead of just a warning.
     "allowJs": false, // Disallow JavaScript files from being imported
-    "resolveJsonModule": true,
-    "skipLibCheck": true,
-    "strict": true,
-    "target": "ES2022",
-    "verbatimModuleSyntax": true,
-    "baseUrl": ".",
     "paths": {
       "@components/*": ["src/components/*"],
       "@assets/*": ["src/assets/*"],
