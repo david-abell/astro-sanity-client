@@ -42,13 +42,24 @@ import Icon from 'astro-icon';
                       </div>
                     ))}
                 </button>
-                <Modal triggerId={`grid-button-${hueIndex}`} title={`Selected palette: ${paletteHues[hueIndex]!}`}>
-                  <div class="model-content container mx-auto w-[36rem] max-w-full text-center">
-                    <div class="mb-8 mt-8 flex flex-row items-center justify-center">
+                <Modal triggerId={`grid-button-${hueIndex}`} title={'Select an option to see theme colors in action'}>
+                  <div class="model-content space-content mx-auto max-w-full">
+                    <div data-id="grid-button-group" class="flex flex-col gap-4 md:flex-row">
+                      <button id={`grid-button-unset`} type="button" class="button color-neutral">
+                        Set all colours to default
+                      </button>
+                      <button id={`grid-button-primary-${hueIndex}`} type="button" class="button">
+                        Set palette as primary colors
+                      </button>
+                      <button id={`grid-button-secondary-${hueIndex}`} type="button" class="button color-secondary">
+                        Set palette as secondary colors
+                      </button>
+                    </div>
+                    <div class="flex flex-col items-center justify-center gap-2 md:flex-row">
                       <a href="/" class="flex items-center gap-2 pr-4 !no-underline">
                         <span class="text-2xl font-bold">Company Name</span>
                       </a>
-                      <ul class="menu flex flex-1 flex-row items-center justify-center gap-2">
+                      <ul class="menu flex flex-1 flex-col justify-center gap-2 md:flex-row md:items-center">
                         <li class="menu-item type-icon ">
                           <a href="#" title="Example link with icon">
                             <Icon pack="ion" name="logo-github" alt="" />
@@ -61,32 +72,25 @@ import Icon from 'astro-icon';
                       </ul>
                     </div>
 
-                    <section class="mb-8 mt-8">
-                      <h2>Example Header</h2>
+                    <section>
+                      <h2>
+                        <span class="text-gradient">EXTRA FANCY</span> Header
+                      </h2>
+                      <h3>Example basic Header</h3>
+                      <p>This is some sample text.</p>
                       <p>
                         Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ab minus qui eos tempora, corporis
                         aperiam esse obcaecati eligendi voluptas dicta?
                       </p>
                     </section>
 
-                    <div class="call-to-action mb-8 mt-8 flex flex-col items-center gap-12 rounded-xl p-12">
+                    <div class="call-to-action flex flex-col items-center gap-12 rounded-xl p-12">
                       <div class="my-12">
                         <div class="">
                           <h2>Example footer</h2>
                           <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Distinctio, tenetur.</p>
                         </div>
                       </div>
-                    </div>
-                    <div data-id="grid-button-group" class="flex flex-row gap-4">
-                      <button id={`grid-button-unset`} type="button" class="button color-neutral">
-                        Set all colours to default
-                      </button>
-                      <button id={`grid-button-primary-${hueIndex}`} type="button" class="button">
-                        Set as primary color palette
-                      </button>
-                      <button id={`grid-button-secondary-${hueIndex}`} type="button" class="button color-secondary">
-                        Set as secondary color palette
-                      </button>
                     </div>
                   </div>
                 </Modal>
@@ -141,7 +145,7 @@ import Icon from 'astro-icon';
       }
     }
   }
-  console.log(hueButtonGroups);
+
   hueButtonGroups.forEach((group, index) => {
     const hue = paletteHues[index];
     if (!hue) return;
@@ -162,7 +166,7 @@ import Icon from 'astro-icon';
 
   document.addEventListener('astro:after-swap', () => {
     setRootThemeProperties();
-    hueButtonGroups = document.querySelectorAll<HTMLButtonElement>("button[data-id='grid-button-group']");
+    hueButtonGroups = document.querySelectorAll<HTMLButtonElement>("[data-id='grid-button-group']");
 
     hueButtonGroups.forEach((group, index) => {
       const hue = paletteHues[index];
@@ -185,11 +189,11 @@ import Icon from 'astro-icon';
 </script>
 
 <style lang="scss">
-  @use '../assets/scss/base/color-palettes' as *;
+  @use '@assets/scss/base/color-palettes' as *;
 
   .model-content {
     .call-to-action {
-      color: var(--neutral-12);
+      // color: var(--neutral-12);
       background-image: linear-gradient(40deg, var(--primary-1), var(--secondary-3));
     }
 
@@ -219,6 +223,20 @@ import Icon from 'astro-icon';
         }
       }
     }
+  }
+
+  .text-gradient {
+    background: linear-gradient(315deg, var(--primary-6) 25%, var(--secondary-4));
+    background-clip: border-box;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  :global(.darkmode .text-gradient) {
+    background: linear-gradient(315deg, var(--primary-4) 25%, var(--secondary-6));
+    background-clip: border-box;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
   }
 
   .color-grid {
@@ -266,4 +284,3 @@ import Icon from 'astro-icon';
     }
   }
 </style>
- @assets/scss/base/color-palettes
