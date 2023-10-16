@@ -42,32 +42,56 @@ import Icon from 'astro-icon';
                       </div>
                     ))}
                 </button>
-                <Modal triggerId={`grid-button-${hueIndex}`} title={'Select an option to see theme colors in action'}>
-                  <div class="model-content space-content mx-auto max-w-full">
+                <Modal triggerId={`grid-button-${hueIndex}`} title={`Select ${paletteHues[hueIndex]} colours?`}>
+                  <div class="modal-content space-content mx-auto max-w-full">
+                    <div class="grid-row">
+                      {Array(13)
+                        .fill(null)
+                        .map((_, valueIndex) => (
+                          // @ts-expect-error indexing by valueIndex is correct
+                          <div
+                            class="grid-item"
+                            data-hue={paletteHues[hueIndex]}
+                            data-hue-value={colorPalettes[paletteHues[hueIndex]!][valueIndex]}
+                          />
+                        ))}
+                    </div>
                     <div data-id="grid-button-group" class="flex flex-col gap-4 md:flex-row">
-                      <button id={`grid-button-unset`} type="button" class="button color-neutral">
-                        Set all colours to default
-                      </button>
                       <button id={`grid-button-primary-${hueIndex}`} type="button" class="button">
-                        Set palette as primary colors
+                        Set primary palette colours
                       </button>
-                      <button id={`grid-button-secondary-${hueIndex}`} type="button" class="button color-secondary">
-                        Set palette as secondary colors
+                      <button
+                        id={`grid-button-secondary-${hueIndex}`}
+                        type="button"
+                        class="button"
+                        data-color="secondary"
+                      >
+                        Set secondary palette colours
+                      </button>
+                      <button id={`grid-button-unset`} type="button" class="button" data-color="neutral">
+                        Revert to default colours
                       </button>
                     </div>
                     <div class="flex flex-col items-center justify-center gap-2 md:flex-row">
                       <a href="/" class="flex items-center gap-2 pr-4 !no-underline">
                         <span class="text-2xl font-bold">Company Name</span>
                       </a>
-                      <ul class="menu flex flex-1 flex-col justify-center gap-2 md:flex-row md:items-center">
-                        <li class="menu-item type-icon ">
-                          <a href="#" title="Example link with icon">
+                      <ul class="menu flex flex-1 flex-col justify-center gap-4 md:flex-row md:items-center">
+                        <li class="menu-item type-icon">
+                          <button type="button" title="Example link with icon" class="fake-anchor">
                             <Icon pack="ion" name="logo-github" alt="" />
                             Example link with icon
-                          </a>
+                          </button>
                         </li>
                         <li class="menu-item">
-                          <a href="#">Example link</a>
+                          <button type="button" class="fake-anchor">
+                            Example link
+                          </button>
+                        </li>
+                        <li class="menu-item">
+                          <button type="button" class="fake-anchor is-active">
+                            Example active link
+                          </button>
                         </li>
                       </ul>
                     </div>
@@ -191,7 +215,7 @@ import Icon from 'astro-icon';
 <style lang="scss">
   @use '@assets/scss/base/color-palettes' as *;
 
-  .model-content {
+  .modal-content {
     .call-to-action {
       // color: var(--neutral-12);
       background-image: linear-gradient(40deg, var(--primary-1), var(--secondary-3));
@@ -201,7 +225,30 @@ import Icon from 'astro-icon';
       background-image: linear-gradient(40deg, var(--primary-9), var(--secondary-12));
     }
 
-    .type-icon a {
+    .fake-anchor {
+      text-decoration: none;
+      font-size: 1.125rem;
+      line-height: 1.6875rem;
+      transition: color 0.15s ease-in-out;
+      border: none;
+      color: var(--action-color);
+    }
+
+    .fake-anchor:focus,
+    .fake-anchor:hover,
+    .is-active {
+      text-decoration: underline;
+      text-decoration-thickness: 1px;
+      text-decoration-style: wavy;
+      text-underline-offset: 7px;
+      color: var(--action-color-state);
+    }
+
+    .is-active {
+      font-weight: bold;
+    }
+
+    .type-icon .fake-anchor {
       display: flex;
       flex-direction: row;
       justify-content: center;
@@ -275,7 +322,8 @@ import Icon from 'astro-icon';
     @each $color, $shades in $palettes {
       $i: index(($palettes), ($color $shades));
       @for $j from 0 through 13 {
-        .grid-row[data-id='grid-button']:nth-of-type(#{$i}) .grid-item:nth-child(#{$j}) {
+        .grid-row[data-id='grid-button']:nth-of-type(#{$i}) .grid-item:nth-child(#{$j}),
+        :global(.modal[aria-labelledby='grid-button-#{$i - 1}']) .grid-item:nth-child(#{$j}) {
           background-color: var(--clr-#{$color}-#{$j - 1});
           // set dark text for lightest colors
           color: var(--clr-#{$color}-#{if($j < 5, 12, 0)});
