@@ -113,93 +113,92 @@ const { logoImage, title } = await getSettings();
   };
 
   // execution;
-  mainMenu &&
-    mainMenu.addEventListener('keydown', (event) => {
-      const element = event.target as Element;
-      const currentMenuItem = element.closest('li');
-      const menuItems = [...mainMenu.querySelectorAll('.menu-item')];
-      const currentDropdownMenu: HTMLElement | null = element.closest('.has-dropdown button');
-      const currentDropdownMenuItem: HTMLElement | null = element.closest('.has-dropdown li');
-      const currentIndex = menuItems.findIndex((item) => item === currentMenuItem);
 
-      const key = event.key;
-      let targetItem;
+  mainMenu?.addEventListener('keydown', (event) => {
+    const element = event.target as Element;
+    const currentMenuItem = element.closest('li');
+    const menuItems = [...mainMenu.querySelectorAll('.menu-item')];
+    const currentDropdownMenu: HTMLElement | null = element.closest('.has-dropdown button');
+    const currentDropdownMenuItem: HTMLElement | null = element.closest('.has-dropdown li');
+    const currentIndex = menuItems.findIndex((item) => item === currentMenuItem);
 
-      if (currentMenuItem && key === 'ArrowRight') {
-        if (menuItems.indexOf(currentMenuItem) === menuItems.length - 1) {
-          targetItem = menuItems[0];
+    const key = event.key;
+    let targetItem;
+
+    if (currentMenuItem && key === 'ArrowRight') {
+      if (menuItems.indexOf(currentMenuItem) === menuItems.length - 1) {
+        targetItem = menuItems[0];
+      } else {
+        targetItem = menuItems[currentIndex + 1];
+      }
+    }
+
+    if (currentMenuItem && key === 'ArrowLeft') {
+      if (menuItems.indexOf(currentMenuItem) === 0) {
+        targetItem = menuItems[menuItems.length - 1];
+      } else {
+        targetItem = menuItems[currentIndex - 1];
+      }
+    }
+
+    if (key === 'Escape') {
+      targetItem = menuItems[0];
+    }
+
+    if (currentDropdownMenu) {
+      const firstDropdownItem = currentDropdownMenu.nextElementSibling?.querySelector('li');
+
+      if (key === 'ArrowDown') {
+        event.preventDefault();
+        openDropdownMenu(currentDropdownMenu);
+        targetItem = firstDropdownItem;
+      }
+
+      if (key === 'Escape') {
+        closeDropdownMenu(currentDropdownMenu);
+      }
+    }
+
+    if (currentDropdownMenuItem) {
+      const currentDropdownList = currentDropdownMenuItem.parentNode;
+      const dropdownMenuItems = currentDropdownList ? [...currentDropdownList.querySelectorAll('li')] : [];
+      const currentIndex = dropdownMenuItems.findIndex((item) => item === currentDropdownMenuItem);
+
+      if (key === 'ArrowDown') {
+        event.preventDefault();
+
+        if (dropdownMenuItems.indexOf(currentDropdownMenuItem as HTMLLIElement) === dropdownMenuItems.length - 1) {
+          targetItem = dropdownMenuItems[0];
         } else {
-          targetItem = menuItems[currentIndex + 1];
+          targetItem = dropdownMenuItems[currentIndex + 1];
         }
       }
 
-      if (currentMenuItem && key === 'ArrowLeft') {
-        if (menuItems.indexOf(currentMenuItem) === 0) {
-          targetItem = menuItems[menuItems.length - 1];
+      if (key === 'ArrowUp') {
+        event.preventDefault();
+
+        if (dropdownMenuItems.indexOf(currentDropdownMenuItem as HTMLLIElement) === 0) {
+          targetItem = dropdownMenuItems[dropdownMenuItems.length - 1];
         } else {
-          targetItem = menuItems[currentIndex - 1];
+          targetItem = dropdownMenuItems[currentIndex - 1];
         }
       }
 
       if (key === 'Escape') {
-        targetItem = menuItems[0];
+        const currentDropdownMenu = (currentDropdownList as Element).previousElementSibling;
+        targetItem = currentDropdownMenu?.parentNode;
+        closeAllDropdownMenus();
       }
+    }
 
-      if (currentDropdownMenu) {
-        const firstDropdownItem = currentDropdownMenu.nextElementSibling?.querySelector('li');
+    if (targetItem) {
+      (targetItem.querySelector('a, button, input') as HTMLInputElement)?.focus();
+    }
+  });
 
-        if (key === 'ArrowDown') {
-          event.preventDefault();
-          openDropdownMenu(currentDropdownMenu);
-          targetItem = firstDropdownItem;
-        }
-
-        if (key === 'Escape') {
-          closeDropdownMenu(currentDropdownMenu);
-        }
-      }
-
-      if (currentDropdownMenuItem) {
-        const currentDropdownList = currentDropdownMenuItem.parentNode;
-        const dropdownMenuItems = currentDropdownList ? [...currentDropdownList.querySelectorAll('li')] : [];
-        const currentIndex = dropdownMenuItems.findIndex((item) => item === currentDropdownMenuItem);
-
-        if (key === 'ArrowDown') {
-          event.preventDefault();
-
-          if (dropdownMenuItems.indexOf(currentDropdownMenuItem as HTMLLIElement) === dropdownMenuItems.length - 1) {
-            targetItem = dropdownMenuItems[0];
-          } else {
-            targetItem = dropdownMenuItems[currentIndex + 1];
-          }
-        }
-
-        if (key === 'ArrowUp') {
-          event.preventDefault();
-
-          if (dropdownMenuItems.indexOf(currentDropdownMenuItem as HTMLLIElement) === 0) {
-            targetItem = dropdownMenuItems[dropdownMenuItems.length - 1];
-          } else {
-            targetItem = dropdownMenuItems[currentIndex - 1];
-          }
-        }
-
-        if (key === 'Escape') {
-          const currentDropdownMenu = (currentDropdownList as Element).previousElementSibling;
-          targetItem = currentDropdownMenu?.parentNode;
-          closeAllDropdownMenus();
-        }
-      }
-
-      if (targetItem) {
-        (targetItem.querySelector('a, button, input') as HTMLInputElement)?.focus();
-      }
-    });
-
-  dropdownMenus &&
-    dropdownMenus.forEach((dropdownMenu) => {
-      dropdownMenu.addEventListener('click', toggleDropdownMenu);
-    });
+  dropdownMenus?.forEach((dropdownMenu) => {
+    dropdownMenu.addEventListener('click', toggleDropdownMenu);
+  });
 
   setActiveMenuItem();
   checkMenuSize();
