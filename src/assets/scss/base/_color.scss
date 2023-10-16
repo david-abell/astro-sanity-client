@@ -1,55 +1,21 @@
-@use 'colors' as *;
+@use 'color-palettes' as *;
 
 // | -------------------------------------------------------------
 // | Color
 // | -------------------------------------------------------------
 
+// from https://css-tricks.com/snippets/sass/deep-getset-maps/
+@function map-keys($map, $keys...) {
+  @each $key in $keys {
+    $map: map-get($map, $key);
+  }
+  @return $map;
+}
+
 $colors: (
-  primary: (
-    0: $color-purple-0,
-    1: $color-purple-1,
-    2: $color-purple-2,
-    3: $color-purple-3,
-    4: $color-purple-4,
-    5: $color-purple-5,
-    6: $color-purple-6,
-    7: $color-purple-7,
-    8: $color-purple-8,
-    9: $color-purple-9,
-    10: $color-purple-10,
-    11: $color-purple-11,
-    12: $color-purple-12,
-  ),
-  secondary: (
-    0: $color-cyan-0,
-    1: $color-cyan-1,
-    2: $color-cyan-2,
-    3: $color-cyan-3,
-    4: $color-cyan-4,
-    5: $color-cyan-5,
-    6: $color-cyan-6,
-    7: $color-cyan-7,
-    8: $color-cyan-8,
-    9: $color-cyan-9,
-    10: $color-cyan-10,
-    11: $color-cyan-11,
-    12: $color-cyan-12,
-  ),
-  neutral: (
-    0: $color-gray-0,
-    1: $color-gray-1,
-    2: $color-gray-2,
-    3: $color-gray-3,
-    4: $color-gray-4,
-    5: $color-gray-5,
-    6: $color-gray-6,
-    7: $color-gray-7,
-    8: $color-gray-8,
-    9: $color-gray-9,
-    10: $color-gray-10,
-    11: $color-gray-11,
-    12: $color-gray-12,
-  ),
+  primary: map-keys($palettes, 'purple'),
+  secondary: map-keys($palettes, 'cyan'),
+  neutral: map-keys($palettes, 'gray'),
   dark: (
     100: hsl(240, 4%, 9%),
   ),

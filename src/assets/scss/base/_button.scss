@@ -34,7 +34,7 @@
     }
   }
 
-  &.color-secondary {
+  &[data-color='secondary'] {
     background-color: var(--secondary-2);
     border-color: (var(--secondary-2));
 
@@ -45,7 +45,7 @@
     }
   }
 
-  &.color-neutral {
+  &[data-color='neutral'] {
     background-color: var(--neutral-2);
     border-color: (var(--neutral-2));
 
@@ -55,8 +55,9 @@
       border-color: var(--neutral-9);
     }
   }
-  // colors not implemented
-  // &.color-info {
+  // Not implemented colors
+  //
+  // &[data-color='info'] {
   //   background-color: var(--info-300);
   //   border-color: (var(--info-300));
 
@@ -67,7 +68,7 @@
   //   }
   // }
 
-  // &.color-success {
+  // &[data-color='success'] {
   //   background-color: var(--success-400);
   //   border-color: (var(--success-400));
 
@@ -78,7 +79,7 @@
   //   }
   // }
 
-  // &.color-warning {
+  // &[data-color='warning'] {
   //   background-color: var(--warning-400);
   //   border-color: (var(--warning-400));
 
@@ -89,7 +90,7 @@
   //   }
   // }
 
-  // &.color-error {
+  // &[data-color='error'] {
   //   background-color: var(--error-300);
   //   border-color: (var(--error-300));
 
@@ -100,25 +101,25 @@
   //   }
   // }
 
-  &.size-tiny {
+  &[data-size='tiny'] {
     padding: 0.125rem 0.25rem;
     font-size: 0.75rem;
     line-height: 1.125rem;
   }
 
-  &.size-small {
+  &[data-size='small'] {
     padding: 0.25rem 0.5rem;
     font-size: 0.875rem;
     line-height: 1.3125rem;
   }
 
-  &.size-large {
+  &[data-size='large'] {
     padding: 0.75rem 1rem;
     font-size: 1.125rem;
     line-height: 1.6875rem;
   }
 
-  &.size-huge {
+  &[data-size='huge'] {
     padding: 1rem 2rem;
     font-size: 1.25rem;
     line-height: 1.875rem;
@@ -129,7 +130,7 @@
     width: 100%;
   }
 
-  &.type-secondary {
+  &[data-color='transparent'] {
     background-color: transparent;
 
     &:hover,
@@ -162,7 +163,7 @@
     border-color: (var(--primary-2));
   }
 
-  &.color-secondary {
+  &[data-color='secondary'] {
     background-color: var(--secondary-9);
     border-color: (var(--secondary-9));
 
@@ -173,7 +174,7 @@
     }
   }
 
-  &.color-neutral {
+  &[data-color='neutral'] {
     background-color: var(--neutral-9);
     border-color: (var(--neutral-9));
 
@@ -184,7 +185,7 @@
     }
   }
 
-  &.type-secondary {
+  &[data-color='transparent'] {
     background-color: transparent;
 
     &:hover,
