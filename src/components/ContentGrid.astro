@@ -1,0 +1,79 @@
+<div class="container">
+  <div class="content__grid">
+    <slot />
+  </div>
+</div>
+
+<style lang="scss">
+  @use '../assets/scss/base/breakpoint' as *;
+
+  .content__grid {
+    --background: var(--primary-1);
+    --background-2: var(--primary-9);
+    --action-color: var(--secondary-4);
+    --action-color-state: var(--secondary-12);
+    color: var(--neutral-12);
+  }
+
+  :global(.darkmode) .content__grid {
+    --action-color: var(--secondary-10);
+    --action-color-state: var(--secondary-12);
+  }
+
+  .content__grid {
+    display: flex;
+    flex-direction: column;
+    gap: 48px;
+
+    :global(:where(.content-media__outer)) {
+      background-color: var(--background);
+    }
+
+    :global(:where(.content-media__outer:nth-of-type(even))) {
+      background-color: var(--background-2);
+    }
+
+    @include breakpoint(large) {
+      display: grid;
+      align-items: center;
+      justify-content: center;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0;
+      margin: 0;
+
+      :global(.content-media__grid) {
+        gap: 48px;
+        grid-template-columns: repeat(3, 1fr);
+        align-items: center;
+      }
+
+      :global(:where(.content-media__outer)) {
+        background-color: var(--background);
+      }
+
+      :global(.content-media__grid > div) {
+        grid-column: 2 / span 2;
+      }
+      :global(.content-media__grid[data-reversed] > div) {
+        grid-column: 1 / span 2;
+      }
+
+      :global(
+          .content-media__outer:first-child,
+          .content-media__outer:nth-child(4n),
+          .content-media__outer:nth-child(4n + 1)
+        ) {
+        background-color: var(--background-2);
+        --action-color: var(--secondary-12);
+        --action-color-state: var(--secondary-10);
+        // color: var(--neutral-0);
+      }
+    }
+
+    :global(.content-media__outer) {
+      margin: 0;
+      padding: 48px;
+      height: 100%;
+    }
+  }
+</style>
