@@ -12,7 +12,16 @@
     --background-2: var(--primary-9);
     --action-color: var(--secondary-4);
     --action-color-state: var(--secondary-12);
+  }
 
+  .darkmode .content__grid {
+    --background: var(--primary-2);
+    --background-2: var(--primary-11);
+    --action-color: var(--secondary-11);
+    --action-color-state: var(--secondary-12);
+  }
+
+  .content__grid {
     color: var(--neutral-12);
 
     // overide base anchor styles
@@ -28,14 +37,7 @@
         color: var(--action-color-state);
       }
     }
-  }
 
-  .darkmode .content__grid {
-    --action-color: var(--secondary-10);
-    --action-color-state: var(--secondary-12);
-  }
-
-  .content__grid {
     display: flex;
     flex-direction: column;
     gap: 36px;
@@ -46,6 +48,7 @@
     }
 
     .content-media__outer:nth-child(even) {
+      --action-color: var(--secondary-2);
       background-color: var(--background-2);
       color: var(--neutral-0);
     }
@@ -107,7 +110,7 @@
       .content-media__outer:first-child,
       .content-media__outer:nth-child(4n),
       .content-media__outer:nth-child(4n + 1) {
-        --action-color: var(--secondary-12);
+        --action-color: var(--secondary-2);
         --action-color-state: var(--secondary-10);
 
         background-color: var(--background-2);
