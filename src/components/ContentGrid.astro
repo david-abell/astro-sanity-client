@@ -91,7 +91,7 @@
 
       .content-media__grid {
         gap: 48px;
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(5, 1fr);
       }
 
       :where(.content-media__outer) {
@@ -100,10 +100,16 @@
       }
 
       .content-media__grid > div {
-        grid-column: 2 / span 2;
+        grid-column: 3 / span 3;
       }
       .content-media__grid[data-reversed] > div {
+        grid-column: 1 / span 3;
+      }
+      .content-media__grid > img {
         grid-column: 1 / span 2;
+      }
+      .content-media__grid[data-reversed] > img {
+        grid-column: 4 / span 2;
       }
 
       .content-media__outer:first-child,
