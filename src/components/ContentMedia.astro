@@ -2,7 +2,7 @@
 import { Media } from 'accessible-astro-components';
 
 type Props = {
-  title: string;
+  title?: string;
   reverseImg?: boolean;
   imgSrc: string;
 };
@@ -12,9 +12,15 @@ const { imgSrc, reverseImg = false, title } = Astro.props;
 
 <section class="content-media__outer my-64">
   <div class="space-content container">
-    <header>
-      <h2>{title}</h2>
-    </header>
+    {
+      title ? (
+        <header>
+          <h2>{title}</h2>
+        </header>
+      ) : (
+        ''
+      )
+    }
     <div class="content-media__grid grid grid-cols-1 items-start gap-24 md:grid-cols-2" data-reversed={reverseImg}>
       {!reverseImg ? <Media class="rounded-lg" src={imgSrc} /> : ''}
       <div class="flex flex-col justify-center">
