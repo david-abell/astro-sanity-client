@@ -4,10 +4,51 @@ import Hero from '../components/Hero.astro';
 import Feature from '../components/Feature.astro';
 import Counter from '../components/Counter.astro';
 import ContentMedia from '../components/ContentMedia.astro';
+import ContentGrid from '@components/ContentGrid.astro';
 ---
 
 <DefaultLayout title="Home">
   <Hero />
+  <section class="my-64">
+    <ContentGrid>
+      <ContentMedia imgSrc="/wcag-compliant.webp" reverseImg={true} title="Lorem ipsum dolor sit amet.">
+        <div class="space-content">
+          <p class="text-2xl">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Aspernatur laudantium officia porro architecto
+            libero, eaque accusantium nobis qui rerum, cumque molestias dolorum sequi cum aliquam.
+          </p>
+          <div class="flex flex-row gap-4">
+            <div><button class="button" type="button" data-color="secondary">Click me</button></div>
+            <div><button class="button" type="button" data-color="neutral">Click me</button></div>
+          </div>
+          <p slot="footer">Disclaimer, this is some footer text.</p>
+        </div>
+      </ContentMedia>
+      <ContentMedia imgSrc="/accessible-components.webp" title="Accessible Components">
+        <p class="text-2xl">
+          This theme provides plenty of tried and tested Accessible Astro Components. Some are native to this theme and
+          a lot of others are integrated using a <a href="https://github.com/markteekman/accessible-astro-components"
+            >separate package</a
+          >. They'll get you up and running in building an accessible solution for your visitors.
+        </p>
+      </ContentMedia>
+      <ContentMedia imgSrc="/wcag-compliant.webp" title="WCAG 2.1 AA Compliant">
+        <p class="text-2xl">
+          Using semantic HTML, landmarks, skip links, screen reader friendly content, aria-labels, keyboard accessible
+          navigation and components, clear outlines and tab indicators and the right color contrast, you're more certain
+          of reaching WCAG AA compliance.
+        </p>
+      </ContentMedia>
+      <ContentMedia imgSrc="/accessible-components.webp" title="Accessible Components">
+        <p class="text-2xl">
+          This theme provides plenty of tried and tested Accessible Astro Components. Some are native to this theme and
+          a lot of others are integrated using a <a href="https://github.com/markteekman/accessible-astro-components"
+            >separate package</a
+          >. They'll get you up and running in building an accessible solution for your visitors.
+        </p>
+      </ContentMedia>
+    </ContentGrid>
+  </section>
   <section class="my-64">
     <div class="container">
       <h2 class="mb-16 text-6xl">Features</h2>
@@ -42,6 +83,7 @@ import ContentMedia from '../components/ContentMedia.astro';
       </div>
     </div>
   </section>
+
   <ContentMedia imgSrc="/accessible-components.webp">
     <h2>Accessible Components</h2>
     <p class="text-2xl">
@@ -59,7 +101,7 @@ import ContentMedia from '../components/ContentMedia.astro';
       reaching WCAG AA compliance.
     </p>
   </ContentMedia>
-  <section class="mt-64 mb-32">
+  <section class="mb-32 mt-64">
     <div class="container">
       <h2 class="mb-16 text-6xl">Counters</h2>
       <div class="grid grid-cols-1 gap-12 sm:grid-cols-2 md:grid-cols-4">
