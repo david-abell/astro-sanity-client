@@ -1,15 +1,15 @@
 ---
 import { PortableText } from 'astro-portabletext';
-import { getFooterText } from '@lib/sanity/settings';
+import { getCallToAction } from '@lib/sanity/companySettings';
 
-const { footer } = await getFooterText();
+const { callToAction } = await getCallToAction();
 ---
 
 <div class="container">
   <div class="call-to-action mb-32 mt-24 flex flex-col items-center gap-12 rounded-xl p-12 md:p-24">
-    <div class="prose my-12 dark:prose-invert lg:prose-xl">
+    <div class="prose my-12 dark:prose-invert lg:prose-2xl">
       <div class="">
-        <PortableText value={footer} />
+        <PortableText value={callToAction} />
       </div>
     </div>
   </div>
