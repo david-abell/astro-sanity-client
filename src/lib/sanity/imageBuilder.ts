@@ -1,9 +1,9 @@
 import imageUrlBuilder from '@sanity/image-url';
-import { client } from '@lib/sanity/client';
+import { sanityClient } from 'sanity:client';
 import type { ImageWithExpandedMetaData } from './types';
 import type { Image } from 'sanity';
 
-const builder = imageUrlBuilder(client);
+const builder = imageUrlBuilder(sanityClient);
 
 export type ImageFormFactor =
   | 'logo'
