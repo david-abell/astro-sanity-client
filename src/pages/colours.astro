@@ -11,10 +11,11 @@ import Icon from 'astro-icon';
     <div class="space-content container">
       <h1>Find your Colour palette</h1>
       <p class="text-2xl">Design your own colour scheme with eighteen carefully selected hues.</p>
+      <p class="text-2xl">Select a row of hues to set them as theme colours</p>
     </div>
   </section>
   <section class="mb-12 mt-32">
-    <div class="color-grid w-full">
+    <div class="color-grid w-full text-center">
       {
         Array(18)
           .fill(null)
@@ -56,7 +57,7 @@ import Icon from 'astro-icon';
                           />
                         ))}
                     </div>
-                    <div data-id="grid-button-group" class="flex flex-col gap-4 md:flex-row">
+                    <div data-id="grid-button-group" class="flex flex-col justify-center gap-4 md:flex-row">
                       <button id={`grid-button-primary-${hueIndex}`} type="button" class="button">
                         Set primary palette colours
                       </button>
@@ -76,7 +77,7 @@ import Icon from 'astro-icon';
                       <a href="/" class="flex items-center gap-2 pr-4 !no-underline">
                         <span class="text-2xl font-bold">Company Name</span>
                       </a>
-                      <ul class="menu flex flex-1 flex-col justify-center gap-4 md:flex-row md:items-center">
+                      <ul class="menu flex flex-col justify-center gap-4 md:flex-row md:items-center">
                         <li class="menu-item type-icon">
                           <button type="button" title="Example link with icon" class="fake-anchor">
                             <Icon pack="ion" name="logo-github" alt="" />
@@ -96,7 +97,7 @@ import Icon from 'astro-icon';
                       </ul>
                     </div>
 
-                    <section>
+                    <section class="space-content">
                       <h2>
                         <span class="text-gradient">EXTRA FANCY</span> Header
                       </h2>
@@ -214,6 +215,16 @@ import Icon from 'astro-icon';
 
 <style lang="scss">
   @use '@assets/scss/base/color-palettes' as *;
+
+  .grid-row:hover,
+  .grid-row:focus-visible {
+    outline: 3px solid black;
+  }
+
+  :global(.darkmode) .grid-row:hover,
+  .grid-row:focus-visible {
+    outline: 3px solid white;
+  }
 
   .modal-content {
     .call-to-action {
