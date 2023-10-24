@@ -1,17 +1,18 @@
 ---
-import { getSettings } from '@lib/sanity/settings';
+import { Image } from 'astro:assets';
+import { getCompanyName } from '@lib/sanity/companySettings';
 import ResponsiveToggle from './ResponsiveToggle.astro';
 import { DarkMode } from 'accessible-astro-components';
-import { imageBuilder } from '@lib/sanity/imageBuilder';
+import logo from '../assets/img/logo.svg';
 
-const { logoImage, title } = await getSettings();
+const companyName = await getCompanyName();
 ---
 
 <div id="main-navigation" class="is-desktop py-8">
   <div class="container">
     <a href="/" class="flex flex-1 items-center gap-2 !no-underline">
-      {logoImage ? <img src={imageBuilder(logoImage, 'logo')} alt={logoImage.altText} class="max-h-[50px]" /> : ''}
-      <span class="text-2xl font-bold">{title}</span>
+      <Image src={logo} alt={`${companyName} home`} width="47" height="37" />
+      <span class="text-2xl font-bold">{companyName}</span>
     </a>
     <div class="wrapper">
       <nav class="desktop-menu" aria-label="Main navigation desktop">
@@ -257,7 +258,7 @@ const { logoImage, title } = await getSettings();
 
     &.is-mobile {
       flex-direction: column;
-      background-color: var(--neutral-background);
+      // background-color: var(--neutral-background);
 
       .mobile-menu {
         display: none;
