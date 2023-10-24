@@ -11,7 +11,7 @@ export interface Post {
   title: string;
   author: string;
   // categories: ...;
-  excerpt?: string;
+  excerpt: string;
   publishedAt?: string;
   slug: Slug;
   mainImage: ImageWithExpandedMetaData;
