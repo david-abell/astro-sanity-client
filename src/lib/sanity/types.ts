@@ -11,21 +11,41 @@ export interface Post {
   title: string;
   author: string;
   // categories: ...;
-  excerpt?: string;
+  excerpt: string;
   publishedAt?: string;
   slug: Slug;
   mainImage: ImageWithExpandedMetaData;
   body: PortableTextBlock[];
 }
 
-export interface Settings {
+export interface CompanySettings {
   _type: 'settings';
   _createdAt: string;
-  title: string;
+  companyName: string;
+  tagline: string;
   overview: PortableTextBlock[];
-  footer: PortableTextBlock[];
-  heroImage: ImageWithExpandedMetaData;
-  logoImage?: ImageWithExpandedMetaData;
+  callToAction: PortableTextBlock[];
   ogImage: ImageAsset;
-  // showcaseProjects: ...
+}
+
+export interface Benefit {
+  headline: string;
+  textBlock: PortableTextBlock[];
+  benefitImage: ImageWithExpandedMetaData;
+}
+
+export interface Homepage {
+  _type: 'settings';
+  _createdAt: string;
+  headline: 'string';
+  subheadline: 'string';
+  heroImage: ImageWithExpandedMetaData;
+  introduction: 'string';
+  companyPortrait: ImageWithExpandedMetaData;
+  problemTitle: 'string';
+  problem: 'string';
+  solutionTitle: 'string';
+  solution: 'string';
+  benefits: Benefit[];
+  // showcaseProjects: Post[]; // This is actually an array of references...
 }

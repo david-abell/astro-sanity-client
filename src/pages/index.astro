@@ -5,51 +5,93 @@ import Feature from '../components/Feature.astro';
 import Counter from '../components/Counter.astro';
 import ContentMedia from '../components/ContentMedia.astro';
 import ContentGrid from '@components/ContentGrid.astro';
+import { getHomepage } from '@lib/sanity/homePage';
+import { imageBuilder } from '@lib/sanity/imageBuilder';
+import { PortableText } from 'astro-portabletext';
+
+const { headline, heroImage, introduction, companyPortrait, problem, problemTitle, solution, solutionTitle, benefits, subheadline } = await getHomepage();
+const [benefit1, benefit2, benefit3, benefit4] = benefits;
+const areBenefits = !!benefit1 && !!benefit2 && !!benefit3 && !!benefit4;
+const heroImageUrl = imageBuilder(heroImage, 'hero-sq');
 ---
 
 <DefaultLayout title="Home">
-  <Hero />
-  <section class="my-64">
+  <Hero src={heroImageUrl} headline={headline} subheadline={subheadline} heroImgAltText={heroImage.altText}/>
+
+  <section class="my-24 lg:my-48 container" id="first-section">
+    <div class="text-container md:text-2xl space-content">
+      <h2>{problemTitle}</h2>
+      <p>{problem}</p>
+      <h2>{solutionTitle}</h2>
+      <p>{solution}</p>      
+    </div>
+  </section>
+
+  <section class="my-24 lg:my-48">
     <ContentGrid>
-      <ContentMedia imgSrc="/wcag-compliant.webp" reverseImg={true} title="Lorem ipsum dolor sit amet.">
-        <div class="space-content">
-          <p class="text-2xl">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Aspernatur laudantium officia porro architecto
-            libero, eaque accusantium nobis qui rerum, cumque molestias dolorum sequi cum aliquam.
-          </p>
-          <div class="flex flex-row gap-4">
-            <div><button class="button" type="button" data-color="secondary">Click me</button></div>
-            <div><button class="button" type="button" data-color="neutral">Click me</button></div>
-          </div>
-          <p slot="footer">Disclaimer, this is some footer text.</p>
-        </div>
-      </ContentMedia>
-      <ContentMedia imgSrc="/accessible-components.webp" title="Accessible Components">
-        <p class="text-2xl">
-          This theme provides plenty of tried and tested Accessible Astro Components. Some are native to this theme and
-          a lot of others are integrated using a <a href="https://github.com/markteekman/accessible-astro-components"
-            >separate package</a
-          >. They'll get you up and running in building an accessible solution for your visitors.
-        </p>
-      </ContentMedia>
-      <ContentMedia imgSrc="/wcag-compliant.webp" title="WCAG 2.1 AA Compliant">
-        <p class="text-2xl">
-          Using semantic HTML, landmarks, skip links, screen reader friendly content, aria-labels, keyboard accessible
-          navigation and components, clear outlines and tab indicators and the right color contrast, you're more certain
-          of reaching WCAG AA compliance.
-        </p>
-      </ContentMedia>
-      <ContentMedia imgSrc="/accessible-components.webp" title="Accessible Components">
-        <p class="text-2xl">
-          This theme provides plenty of tried and tested Accessible Astro Components. Some are native to this theme and
-          a lot of others are integrated using a <a href="https://github.com/markteekman/accessible-astro-components"
-            >separate package</a
-          >. They'll get you up and running in building an accessible solution for your visitors.
-        </p>
-      </ContentMedia>
+      {
+        areBenefits ? (
+          <ContentMedia imgSrc={imageBuilder(benefit1.benefitImage, 'thumb-lg')} title={benefit1.headline} reverseImg>
+            <div class="space-content">
+              <PortableText value={benefit1.textBlock} />
+              <div class="flex flex-row gap-4">
+                <button class="button uppercase mt-4" type="button" data-color="neutral">
+                  learn more
+                </button>
+              </div>
+            </div>
+            <p slot="footer">Disclaimer, results may vary.</p>
+          </ContentMedia>
+
+          <ContentMedia imgSrc={imageBuilder(benefit2.benefitImage, 'thumb-lg')} title={benefit2.headline}>
+            <div class="space-content">
+              <PortableText value={benefit2.textBlock} />
+              <div class="flex flex-row gap-4">
+                <button class="button uppercase mt-4" type="button" data-color="neutral">
+                  learn more
+                </button>
+              </div>
+            </div>
+            <p slot="footer">Disclaimer, results may vary.</p>
+          </ContentMedia>
+
+          <ContentMedia imgSrc={imageBuilder(benefit3.benefitImage, 'thumb-lg')} title={benefit3.headline}>
+            <div class="space-content">
+              <PortableText value={benefit3.textBlock} />
+              <div class="flex flex-row gap-4">
+                <button class="button uppercase mt-4" type="button" data-color="neutral">
+                  learn more
+                </button>
+              </div>
+            </div>
+            <p slot="footer">Disclaimer, results may vary.</p>
+          </ContentMedia>
+
+          <ContentMedia imgSrc={imageBuilder(benefit4.benefitImage, 'thumb-lg')} title={benefit4.headline}>
+            <div class="space-content">
+              <PortableText value={benefit4.textBlock} />
+              <div class="flex flex-row gap-4">
+                <button class="button uppercase mt-4" type="button" data-color="neutral">
+                  learn more
+                </button>
+              </div>
+            </div>
+            <p slot="footer" >Disclaimer, results may vary. Read the fine print.</p>
+          </ContentMedia>
+        ) : (
+          ''
+        )
+      }
     </ContentGrid>
   </section>
-  <section class="my-64">
+
+  <section class="my-24 lg:my-48 container">
+      <ContentMedia title='About our company' imgSrc={imageBuilder(companyPortrait, 'hero-xs')}>
+        <p>{introduction}</p>
+      </ContentMedia>
+  </section>
+
+  <!-- <section class="my-24 lg:my-48">
     <div class="container">
       <h2 class="mb-16 text-6xl">Features</h2>
       <div class="grid grid-cols-1 gap-12 md:grid-cols-2 lg:grid-cols-3">
@@ -100,15 +142,15 @@ import ContentGrid from '@components/ContentGrid.astro';
       navigation and components, clear outlines and tab indicators and the right color contrast, you're more certain of
       reaching WCAG AA compliance.
     </p>
-  </ContentMedia>
-  <section class="mb-32 mt-64">
+  </ContentMedia> -->
+  <section class="my-24 lg:my-48">
     <div class="container">
-      <h2 class="mb-16 text-6xl">Counters</h2>
+      <h2 class="mb-12">Counters</h2>
       <div class="grid grid-cols-1 gap-12 sm:grid-cols-2 md:grid-cols-4">
-        <Counter count="130" title="Stars" sub="On GitHub" />
-        <Counter count="17" title="Accessible" sub="Components" />
-        <Counter count="500" title="Commits" sub="Merged" />
-        <Counter count="18+" title="Months" sub="Since launch" />
+        <Counter count="5" title="Popular" sub="Locations" />
+        <Counter count="50+" title="Lighting" sub="Styles" />
+        <Counter count="5000" title="Satisfied" sub="Customers" />
+        <Counter count="5+" title="Years" sub="Since launch" />
       </div>
     </div>
   </section>

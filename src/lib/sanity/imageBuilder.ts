@@ -1,10 +1,21 @@
 import imageUrlBuilder from '@sanity/image-url';
 import { client } from '@lib/sanity/client';
 import type { ImageWithExpandedMetaData } from './types';
+import type { Image } from 'sanity';
 
 const builder = imageUrlBuilder(client);
 
-export type ImageFormFactor = 'logo' | 'logo-sq' | 'thumb' | 'thumb-lg' | 'social' | 'hero' | 'hero-sm' | 'full';
+export type ImageFormFactor =
+  | 'logo'
+  | 'logo-sq'
+  | 'thumb'
+  | 'thumb-lg'
+  | 'social'
+  | 'hero'
+  | 'hero-xs'
+  | 'hero-sq'
+  | 'hero-sm'
+  | 'full';
 
 export const imageSizes = {
   logo: { width: 250, height: 100 },
@@ -13,11 +24,17 @@ export const imageSizes = {
   'thumb-lg': { width: 350, height: 350 },
   social: { width: 32, height: 32 },
   hero: { width: 1280, height: 720 },
+  'hero-xs': { width: 600, height: 315 },
   'hero-sm': { width: 1200, height: 630 },
+  'hero-sq': { width: 720, height: 720 },
   full: { width: 1800, height: 600 },
 } as const;
 
-export function imageBuilder(source: ImageWithExpandedMetaData, size: ImageFormFactor, vertical: boolean = false) {
+export function imageBuilder(
+  source: ImageWithExpandedMetaData | Image,
+  size: ImageFormFactor,
+  vertical: boolean = false,
+) {
   // don't transform svgs
   if (source.asset?._ref && source.asset?._ref.length >= 3) {
     if (source.asset?._ref.slice(source.asset?._ref.length - 3).toLowerCase() === 'svg') {

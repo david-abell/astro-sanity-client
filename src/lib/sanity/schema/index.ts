@@ -1,7 +1,9 @@
 import blockContent from './blockContent';
+import benefit from './benefit';
 import category from './category';
 import post from './post';
 import author from './author';
-import settings from './settings';
+import companySettings from './companySettings';
+import homePage from './homePage';
 
-export const schemaTypes = [post, author, category, blockContent, settings];
+export const schemaTypes = [homePage, post, author, category, companySettings, blockContent, benefit];
