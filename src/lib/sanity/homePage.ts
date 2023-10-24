@@ -1,7 +1,7 @@
 import groq from 'groq';
-import { client } from './client';
+import { sanityClient } from 'sanity:client';
 import type { Homepage } from './types';
 
 export async function getHomepage(): Promise<Homepage> {
-  return await client.fetch(groq`*[_type == "homepage"][0]`);
+  return await sanityClient.fetch(groq`*[_type == "homepage"][0]`);
 }

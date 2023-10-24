@@ -1,9 +1,9 @@
 import groq from 'groq';
-import { client } from './client';
+import { sanityClient } from 'sanity:client';
 import type { Post } from './types';
 
 export async function getPosts(): Promise<Post[]> {
-  return await client.fetch(groq`*[_type == "post" && defined(slug.current)]  {
+  return await sanityClient.fetch(groq`*[_type == "post" && defined(slug.current)]  {
     ...,
     mainImage {
       ...,
@@ -13,7 +13,7 @@ export async function getPosts(): Promise<Post[]> {
 }
 
 export async function getPost(slug: string): Promise<Post> {
-  return await client.fetch(
+  return await sanityClient.fetch(
     groq`*[_type == "post" && slug.current == $slug][0] {
       ...,
       mainImage {
