@@ -1,48 +1,42 @@
 ---
 import { Icon } from 'astro-icon';
 
-const { src = '/astronaut-hero-img.webp' } = Astro.props;
+const defaultSubheadline =
+  'Welcome to Ambient Lighting Limited, where we specialize in enhancing spaces with exquisite mood lighting. We believe that lighting has the power to create captivating atmospheres and elevate any environment.';
+
+const {
+  src = '/astronaut-hero-img.webp',
+  heroImgAltText = 'An assortment of pendant lights agains a white wall.',
+  headline = 'Captivating Moods for Striking Spaces',
+  subheadline = defaultSubheadline,
+} = Astro.props;
 ---
 
-<section class="hero my-24">
+<section class="hero my-24 lg:my-48">
   <div class="container">
     <div class="grid grid-cols-1 items-center gap-24 lg:grid-cols-2">
       <div class="flex flex-col items-center gap-8 md:items-start">
-        <h1 class="text-center text-6xl md:text-left lg:text-8xl">
-          <slot><span class="text-gradient">Accessible</span> Starter for Astro</slot>
+        <h1 class="text-balance text-4xl md:text-left lg:text-6xl lg:leading-tight">
+          {headline}
         </h1>
+        <p class="text-balance text-lg">{subheadline}</p>
         <div class="flex flex-col gap-3 min-[500px]:flex-row">
-          <a class="button has-icon" href="https://github.com/markteekman/accessible-astro-starter">
-            <Icon pack="ion" name="star-outline" alt="" />
-             Star on GitHub
-          </a>
-          <a
-            class="button has-icon"
-            data-color="secondary"
-            href="https://github.com/markteekman/accessible-astro-starter/blob/main/README.md"
+          <a class="button has-icon" href="/contact">
+            <Icon pack="ion" name="paper-plane-outline" alt="" />
+             Send us a message</a
           >
-            <Icon pack="ion" name="bookmark-outline" alt="" />
-             Read the Docs
-          </a>
-          <a
-            class="button has-icon"
-            data-color="neutral"
-            href="https://github.com/markteekman/accessible-astro-starter/blob/main/README.md"
-          >
-            <Icon pack="ion" name="bookmark-outline" alt="" />
-             Read the Docs
-          </a>
-          <a
-            class="button has-icon"
-            data-color="transparent"
-            href="https://github.com/markteekman/accessible-astro-starter/blob/main/README.md"
-          >
-            <Icon pack="ion" name="bookmark-outline" alt="" />
-             Read the Docs
+          <a class="button has-icon" href="#first-section" data-color="secondary">
+            <Icon pack="ion" name="arrow-down-circle-outline" alt="" />
+             About us
           </a>
         </div>
       </div>
-      <img class="hidden lg:block" src={src} alt="" decoding="async" />
+      <img
+        class="hero-img lg:auto h-[50vmin] w-full rounded-lg object-cover lg:h-auto lg:rounded-full"
+        src={src}
+        alt={heroImgAltText}
+        decoding="async"
+      />
     </div>
   </div>
 </section>
