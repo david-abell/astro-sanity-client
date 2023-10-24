@@ -1,5 +1,5 @@
 <div class="container">
-  <div class="content__grid">
+  <div class="content__grid md:text-2xl">
     <slot />
   </div>
 </div>
@@ -22,25 +22,11 @@
   }
 
   .content__grid {
-    color: var(--neutral-12);
-
-    // overide base anchor styles
-    a:not(.button) {
-      color: var(--action-color);
-
-      &:visited {
-        color: var(--action-color);
-      }
-
-      &:hover,
-      &:focus {
-        color: var(--action-color-state);
-      }
-    }
+    color: var(--primary-12);
 
     display: flex;
     flex-direction: column;
-    gap: 36px;
+    gap: 6rem;
 
     :where(.content-media__outer) {
       background-color: var(--background);
@@ -49,6 +35,7 @@
 
     .content-media__outer:nth-child(even) {
       --action-color: var(--secondary-2);
+
       background-color: var(--background-2);
       color: var(--neutral-0);
     }
@@ -70,16 +57,13 @@
     @include breakpoint(large) {
       display: grid;
       align-items: center;
-      justify-content: center;
+      // justify-content: center;
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 0;
       margin: 0;
 
       // resets .content-media__outer:nth-child(even) {...} for breakpoint styles
       .content-media__outer:nth-child(n) {
-        --action-color: var(--secondary-12);
-        --action-color-state: var(--secondary-10);
-
         background-color: var(--background);
         color: var(--neutral-12);
       }
@@ -115,9 +99,6 @@
       .content-media__outer:first-child,
       .content-media__outer:nth-child(4n),
       .content-media__outer:nth-child(4n + 1) {
-        --action-color: var(--secondary-2);
-        --action-color-state: var(--secondary-10);
-
         background-color: var(--background-2);
         color: var(--neutral-0);
       }
