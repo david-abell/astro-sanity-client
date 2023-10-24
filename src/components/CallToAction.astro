@@ -1,6 +1,7 @@
 ---
 import { PortableText } from 'astro-portabletext';
 import { getCallToAction } from '@lib/sanity/companySettings';
+import Icon from 'astro-icon';
 
 const { callToAction } = await getCallToAction();
 ---
@@ -10,6 +11,10 @@ const { callToAction } = await getCallToAction();
     <div class="prose my-12 dark:prose-invert lg:prose-2xl">
       <div class="">
         <PortableText value={callToAction} />
+        <a class="button has-icon" href="/contact">
+          <Icon pack="ion" name="paper-plane-outline" alt="" />
+           Send us a message</a
+        >
       </div>
     </div>
   </div>
@@ -25,8 +30,12 @@ const { callToAction } = await getCallToAction();
     background-image: linear-gradient(40deg, var(--primary-9), var(--secondary-12));
   }
 
-  .call-to-action a:not(button),
-  .call-to-action a:not(button):visited {
+  :global(.darkmode) .call-to-action a.button {
+    color: var(--neutral-0);
+  }
+
+  .call-to-action a,
+  .call-to-action a:visited {
     padding: 1rem;
     color: var(--neutral-12);
     font-weight: bold;
