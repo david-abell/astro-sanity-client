@@ -208,7 +208,7 @@ const { tagline, companyAddress, companyEmail, companyPhone } = await getSetting
       }
     }
 
-    if (isDirty) return false;
+    if (!form.checkValidity()) return false;
 
     // typescript fix for Formdata file fields
     const convertedFormEntries = Array.from(data, ([key, value]) => [
