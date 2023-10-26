@@ -22,6 +22,9 @@ export interface CompanySettings {
   _type: 'settings';
   _createdAt: string;
   companyName: string;
+  companyAddress: string;
+  companyEmail: string;
+  companyPhone: string;
   tagline: string;
   overview: PortableTextBlock[];
   callToAction: PortableTextBlock[];
