@@ -136,6 +136,10 @@ const { tagline, companyAddress, companyEmail, companyPhone } = await getSetting
       }
     }
   }
+
+  :global([astro-icon] path) {
+    fill: var(--action-color);
+  }
 </style>
 
 <script>
