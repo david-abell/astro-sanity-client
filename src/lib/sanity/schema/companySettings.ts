@@ -17,6 +17,27 @@ const companySettings = defineType({
       validation: (rule) => rule.required(),
     }),
     defineField({
+      name: 'companyAddress',
+      title: 'Company Address',
+      description: 'This field is your companies address.',
+      type: 'string',
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: 'companyEmail',
+      title: 'Company Email',
+      description: 'This field is your companies email address.',
+      type: 'string',
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: 'companyPhone',
+      title: 'Company Phone',
+      description: 'This field is your companies phone.',
+      type: 'string',
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
       name: 'tagline',
       title: 'Tagline',
       description: 'This field is your companies tagline.',

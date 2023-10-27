@@ -1,95 +1,237 @@
 ---
+import Icon from 'astro-icon';
 import DefaultLayout from '../layouts/DefaultLayout.astro';
+import { getSettings } from '@lib/sanity/companySettings';
+const { tagline, companyAddress, companyEmail, companyPhone } = await getSettings();
 ---
 
 <DefaultLayout title="Contact">
-  <section class="my-12 text-center">
-    <div class="space-content container">
+  <section class="container my-24 md:my-48">
+    <div class="space-content my-24">
+      <p class="font-bold">{tagline}</p>
       <h1>Contact us</h1>
       <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Natus, quisquam.</p>
     </div>
-  </section>
-  <section class="mb-12">
-    <div class="container">
+    <div class="my-24 grid w-full gap-24 lg:grid-cols-2">
       <form
-        class="flex flex-col gap-6 md:grid-cols-2 max-w-2xl mx-auto"
+        class="grid gap-4"
         method="POST"
         id="contact-form"
         target="_blank"
+        data-netlify="true"
+        action="/success"
+        netlify-honeypot="bot-field"
       >
-        <div class="grid grid-cols-6">
-          <label for="firstname" class="block">First name</label>
-          <input
-            type="text"
-            id="firstname"
-            name="firstname"
-            class="rounded-lg border border-gray-300 dark:border-gray-600 p-2 col-span-4 col-start-3 dark:bg-gray-700"
-          />
+        <div class="label__group">
+          <label for="name">Name</label>
+          <input type="text" id="name" name="name" data-required />
         </div>
 
-        <div class="grid grid-cols-6">
-          <label for="lastname" class="block">Last name</label>
-          <input
-            type="text"
-            id="lastname"
-            name="lastname"
-            class="rounded-lg border border-gray-300 dark:border-gray-600 p-2 col-span-4 col-start-3 dark:bg-gray-700"
-          />
+        <div class="label__group">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" data-required />
         </div>
 
-        <div class="grid grid-cols-6">
-          <label for="email" class="block">Email</label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            class="block rounded-lg border border-gray-300 dark:border-gray-600 p-2 col-span-4 col-start-3 dark:bg-gray-700"
-          />
-        </div>
-
-        <div class="grid grid-cols-6">
-          <label for="selectoption" class="block">Pick an option</label>
-          <select
-            id="selectoption"
-            name="selectoption"
-            class="block rounded-lg border border-gray-300 dark:border-gray-600 p-2 col-span-4 col-start-3 dark:bg-gray-700"
-          >
+        <div class="label__group">
+          <label for="selectoption">Pick an option</label>
+          <select id="selectoption" name="selectoption">
             <option value="value1">Value 1</option>
             <option value="value2">Value 2</option>
             <option value="value3">Value 3</option>
           </select>
         </div>
 
-        <div class="grid grid-cols-6">
-          <label for="textblock" class="block">Anything else?</label>
-          <textarea
-            rows="5"
-            id="textblock"
-            name="textblock"
-            class="rounded-lg border border-gray-300 dark:border-gray-600 col-span-4 p-2 col-start-3 dark:bg-gray-700"
-          ></textarea>
+        <div class="label__group">
+          <label for="userMessage">Message:</label>
+          <textarea rows="5" id="userMessage" name="userMessage" data-required></textarea>
         </div>
 
         <!-- Form honeypot -->
         <div class="absolute left-[-999px]">
-          <label for="username" class="block">username</label>
-          <input type="text" id="username" name="username" class="" tabindex="-1" />
+          <label for="bot-field">username</label>
+          <input type="text" id="bot-field" name="bot-field" class="" tabindex="-1" />
         </div>
 
-        <div class="grid grid-cols-6">
-          <button type="submit" class="col-start-5 col-span-2 button dark:text-white">Submit</button>
+        <div class="label__group">
+          <button type="submit" class="button col-span-2 col-start-5 w-full dark:text-white">Submit</button>
         </div>
       </form>
+
+      <div class="grid gap-24 sm:grid-cols-2 md:justify-items-center">
+        <div class="flex flex-col gap-2">
+          <Icon pack="ion" name="mail" alt="" />
+          <h2>Email</h2>
+          <p>Lorem ipsum dolor sit amet.</p>
+          <a href={`mailto:${companyEmail}`}>{companyEmail}</a>
+        </div>
+        <div class="flex flex-col gap-2">
+          <Icon pack="ion" name="location-sharp" alt="" />
+          <h2>Address</h2>
+          <p>Lorem ipsum dolor sit amet.</p>
+          <address>{companyAddress}</address>
+        </div>
+        <div class="flex flex-col gap-2">
+          <Icon pack="ion" name="call" alt="" />
+          <h2>Phone</h2>
+          <p>Lorem ipsum dolor sit amet.</p>
+          <a href={`tel:${companyPhone}`}>{companyPhone}</a>
+        </div>
+      </div>
     </div>
   </section>
 </DefaultLayout>
 
-<script>
-  const form = document.getElementById('contact-form');
+<style lang="scss">
+  .label__group {
+    margin-bottom: 1.5rem;
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
 
-  form?.addEventListener('submit', (e) => {
+    label {
+      display: block;
+      grid-column: span 2 / span 2;
+    }
+
+    input,
+    select,
+    textarea {
+      display: block;
+      padding: 0.5rem;
+      border-radius: 0.5rem;
+      background-color: var(--neutral-background);
+      grid-column: span 4 / span 4;
+      grid-column-start: 3;
+      width: 100%;
+    }
+
+    input:required:valid,
+    select:required:valid,
+    textarea:required:valid {
+      border: 2px solid green;
+    }
+
+    input:invalid:required,
+    select:invalid:required,
+    textarea:invalid:required {
+      border: 2px dashed red;
+    }
+  }
+
+  @media (max-width: 1024px) {
+    .label__group {
+      display: block;
+
+      label {
+        margin-bottom: 0.5rem;
+      }
+    }
+  }
+
+  :global(.darkmode) {
+    .label__group {
+      input,
+      select,
+      textarea {
+        background-color: var(--neutral-11);
+      }
+    }
+  }
+
+  :global([astro-icon] path) {
+    fill: var(--action-color);
+  }
+</style>
+
+<script>
+  import { navigate } from 'astro:transitions/client';
+  const arrivalTime = new Date().getTime();
+
+  const spamKeywords = [
+    'generate more leads',
+    'click here',
+    'unsubscribe',
+    'freelance',
+    'logo',
+    'tinyurl',
+    'seo',
+    'income',
+    'hosting',
+    'optout',
+    'opt-out',
+    'pills',
+    '/>',
+    'copyright',
+    'violating',
+    'sex',
+    'href',
+    'weight loss',
+    'money-back guarantee',
+    'www',
+  ];
+
+  function handleSubmit(e: SubmitEvent) {
     e.preventDefault();
-    // Do form submission here
-    return (window.location.href = '/thank-you');
-  });
+
+    // silently reject if form submission is too quick
+    if (new Date().getTime() - arrivalTime < 3000) {
+      return navigate('/success');
+    }
+
+    const form = e.target as HTMLFormElement;
+    const requireFields = form.querySelectorAll('[data-required]');
+
+    // don't bug user with form validation before entry
+    requireFields.forEach((field) => field.setAttribute('required', ''));
+
+    const data = new FormData(form);
+
+    for (const [key, value] of data.entries()) {
+      switch (key.trim()) {
+        case 'name':
+          break;
+        case 'email':
+          break;
+        case 'selectoption':
+          break;
+        case 'userMessage':
+          if (typeof value === 'string') {
+            const loweredValue = value.toLowerCase();
+            for (const word of spamKeywords) {
+              if (loweredValue.includes(word)) {
+                return navigate('/success');
+              }
+            }
+          }
+          break;
+        case 'bot-field':
+          if (typeof value === 'string' && value.trim().length) {
+            return navigate('/success');
+          }
+          break;
+      }
+    }
+
+    if (!form.checkValidity()) return false;
+
+    // typescript fix for Formdata file fields
+    const convertedFormEntries = Array.from(data, ([key, value]) => [
+      key,
+      typeof value === 'string' ? value : value.name,
+    ]);
+    const searchParams = new URLSearchParams(convertedFormEntries);
+
+    // Netlify form submission
+    fetch('/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: searchParams.toString(),
+    })
+      .then(() => navigate('/success'))
+      .catch((error) => alert(error));
+  }
+
+  document.querySelector('form')?.addEventListener('submit', handleSubmit);
+  document.addEventListener('astro:after-swap', () =>
+    document.querySelector('form')?.addEventListener('submit', handleSubmit),
+  );
 </script>
