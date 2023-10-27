@@ -171,7 +171,6 @@ const { tagline, companyAddress, companyEmail, companyPhone } = await getSetting
 
   function handleSubmit(e: SubmitEvent) {
     e.preventDefault();
-    let isDirty = false;
 
     // silently reject if form submission is too quick
     if (new Date().getTime() - arrivalTime < 3000) {
