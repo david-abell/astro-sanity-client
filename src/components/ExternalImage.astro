@@ -9,7 +9,7 @@ export interface Props extends HTMLAttributes<'img'> {
   vertical?: boolean;
 }
 
-const { imageSource, size, vertical } = Astro.props;
+const { imageSource, size, vertical, class: className } = Astro.props;
 
 const { width, height } = imageSizes[size];
 
@@ -30,6 +30,7 @@ const placeHolderStyles = `
         alt={imageSource.altText || 'cover'}
         loading="lazy"
         style={placeHolderStyles}
+        class={className}
       />
     ) : (
       ''
