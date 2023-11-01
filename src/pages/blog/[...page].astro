@@ -39,7 +39,7 @@ const { page } = Astro.props;
               <Card
                 url={`/blog/${post.slug.current}`}
                 title={post.title}
-                img={post.mainImage ? imageBuilder(post.mainImage, 'thumb-lg') : ''}
+                img={post.mainImage ? imageBuilder(post.mainImage, 'thumb').largeUrl : ''}
                 footer={'date:' + formatDate(post._createdAt)}
               >
                 {post.excerpt}

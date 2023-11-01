@@ -1,36 +1,32 @@
 ---
-import { imageBuilder, type ImageFormFactor, placeholderBuilder, imageSizes } from '@lib/sanity/imageBuilder';
+import { imageBuilder, type ImageFormFactor } from '@lib/sanity/imageBuilder';
 import type { ImageWithExpandedMetaData } from '@lib/sanity/types';
 import type { HTMLAttributes } from 'astro/types';
 
 export interface Props extends HTMLAttributes<'img'> {
   imageSource: ImageWithExpandedMetaData;
   size: ImageFormFactor;
-  vertical?: boolean;
 }
 
-const { imageSource, size, vertical, class: className } = Astro.props;
+const { imageSource, size, class: className } = Astro.props;
 
-const { width, height } = imageSizes[size];
-
-const placeHolderStyles = `
-          background-image: url('${placeholderBuilder(imageSource)}');
-          background-repeat: no-repeat;
-          background-size: cover;
-          background-position: center;
-          width: ${vertical ? height : width}px;
-          height: ${vertical ? width : height}px;`;
+const { smallUrl, mediumUrl, largeUrl, ogImageUrl } = imageBuilder(imageSource, size);
 ---
 
 <>
   {
-    imageSource ? (
+    ogImageUrl ? (
+      <img alt={imageSource.altText || 'cover'} loading="lazy" class={className} src={ogImageUrl} />
+    ) : smallUrl && mediumUrl && largeUrl ? (
       <img
-        src={imageBuilder(imageSource, size, vertical)}
         alt={imageSource.altText || 'cover'}
         loading="lazy"
-        style={placeHolderStyles}
         class={className}
+        srcset={`${smallUrl} 480w, ${mediumUrl} 800w, ${largeUrl} 1200w`}
+        sizes="(max-width: 480px) 480px,
+        (max-width: 800px) 800px,
+         1200px"
+        src={smallUrl}
       />
     ) : (
       ''

@@ -1,10 +1,11 @@
 ---
-import { Media } from 'accessible-astro-components';
+import type { ImageWithExpandedMetaData } from '@lib/sanity/types';
+import ExternalImage from './ExternalImage.astro';
 
 type Props = {
   title?: string;
   reverseImg?: boolean;
-  imgSrc: string;
+  imgSrc: ImageWithExpandedMetaData;
 };
 
 const { imgSrc, reverseImg = false, title } = Astro.props;
@@ -25,11 +26,31 @@ const { imgSrc, reverseImg = false, title } = Astro.props;
       class="content-media__grid content mt-12 grid grid-cols-1 items-center justify-items-center gap-24 md:grid-cols-2"
       data-reversed={reverseImg}
     >
-      {!reverseImg ? <Media class="rounded-lg " src={imgSrc} /> : ''}
+      {
+        !reverseImg ? (
+          <ExternalImage
+            imageSource={imgSrc}
+            size="hero-sq"
+            class="max-h-40 w-full rounded-lg object-cover object-center md:max-h-full"
+          />
+        ) : (
+          ''
+        )
+      }
       <div class="flex flex-col justify-center gap-4 md:text-xl">
         <slot />
       </div>
-      {reverseImg ? <Media class="rounded-lg" src={imgSrc} /> : ''}
+      {
+        reverseImg ? (
+          <ExternalImage
+            imageSource={imgSrc}
+            size="hero-sq"
+            class="max-h-40 w-full rounded-lg object-cover object-center md:max-h-full"
+          />
+        ) : (
+          ''
+        )
+      }
     </div>
 
     <footer class="space-content mt-auto pt-12 text-base">
