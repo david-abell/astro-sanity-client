@@ -1,0 +1,105 @@
+---
+import type { ImageWithExpandedMetaData } from '@lib/sanity/types';
+import { chunkArray } from '@util/index';
+import { Modal } from 'accessible-astro-components';
+import ExternalImage from './ExternalImage.astro';
+
+type Props = {
+  images: ImageWithExpandedMetaData[];
+  name: string;
+  preview?: boolean;
+};
+
+const { images, name, preview = false } = Astro.props;
+
+const COLUMN_COUNT = 4;
+const CHUNK_SIZE = images.length < COLUMN_COUNT ? 1 : Math.floor(images.length / COLUMN_COUNT);
+
+const chunkedImages = chunkArray(images, CHUNK_SIZE);
+---
+
+<div class="gallery">
+  <div class="grid grid-cols-2 items-start justify-items-center gap-4 md:grid-cols-4">
+    {
+      chunkedImages.map((chunk, chunkIndex) => {
+        return (
+          <div class="grid__column grid h-full w-full gap-4">
+            {chunk.map((imgSrc, imgIndex) => {
+              const isTall = !preview && (chunkIndex + imgIndex) % 2 === 0;
+              return (
+                <button
+                  class={`image-button flex h-full w-full rounded-lg border-none p-0`}
+                  id={`gallery-${name}-${chunkIndex * CHUNK_SIZE + imgIndex}`}
+                >
+                  <ExternalImage
+                    imageSource={imgSrc}
+                    size="thumb"
+                    class={`h-full w-full rounded-lg object-cover object-center  ${isTall ? 'min-h-[320px]' : ''}`}
+                  />
+                </button>
+              );
+            })}
+          </div>
+        );
+      })
+    }
+    {
+      preview && (
+        <a
+          href={`/gallery/${name}`}
+          class={`image-button grid h-full w-full place-items-center rounded-lg border-none bg-[var(--secondary-background)] p-0 font-bold`}
+        >
+          See the full gallery
+        </a>
+      )
+    }
+  </div>
+  {
+    images.map((imgSrc, index) => {
+      return (
+        <Modal triggerId={`gallery-${name}-${index}`}>
+          <label for={`img-close-button-${index}`} class="sr-only">
+            hide image
+          </label>
+          <button
+            type="button"
+            onclick="
+            closeModal()
+            "
+            class="border-none p-0"
+            id={`img-close-button-${index}`}
+          >
+            <ExternalImage imageSource={imgSrc} size="full" class="max-h-[94dvh] object-cover object-center" />
+          </button>
+        </Modal>
+      );
+    })
+  }
+</div>
+
+<style>
+  .grid__column {
+    grid-template-rows: max-content;
+  }
+
+  :global(.gallery .modal .modal__content) {
+    padding: 0;
+  }
+  :global(.gallery .modal .modal__content h3) {
+    display: none;
+  }
+  :global(.gallery .modal) {
+    overflow: hidden;
+  }
+  :global(.gallery .modal .modal__close) {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+</style>

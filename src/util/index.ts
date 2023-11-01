@@ -5,3 +5,15 @@ export function formatDate(date: string) {
     year: 'numeric',
   });
 }
+
+export function chunkArray<T>(array: T[], chunkSize: number) {
+  const chunkedArray = [];
+  let index = 0;
+
+  while (index < array.length) {
+    chunkedArray.push(array.slice(index, index + chunkSize));
+    index += chunkSize;
+  }
+
+  return chunkedArray;
+}

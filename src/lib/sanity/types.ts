@@ -28,7 +28,7 @@ export interface CompanySettings {
   tagline: string;
   overview: PortableTextBlock[];
   callToAction: PortableTextBlock[];
-  ogImage: ImageAsset;
+  ogImage: ImageWithExpandedMetaData;
 }
 
 export interface Benefit {
@@ -51,4 +51,14 @@ export interface Homepage {
   solution: 'string';
   benefits: Benefit[];
   // showcaseProjects: Post[]; // This is actually an array of references...
+}
+
+export interface Gallery {
+  _type: 'settings';
+  _createdAt: string;
+  title: 'string';
+  slug: Slug;
+  headline: 'string';
+  description: 'string';
+  images: ImageWithExpandedMetaData[];
 }

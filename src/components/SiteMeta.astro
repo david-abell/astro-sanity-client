@@ -1,4 +1,5 @@
 ---
+import { imageSizes } from '@lib/sanity/imageBuilder';
 const { title, description, url, image, author } = Astro.props;
 
 let subtitle = 'Accessible Astro Starter';
@@ -15,6 +16,8 @@ let subtitle = 'Accessible Astro Starter';
 <meta property="og:type" content="website" />
 <meta property="og:url" content={url} />
 <meta property="og:image" content={Astro.site ? `${Astro.site}${image}` : image} />
+<meta property="og:image:width" content={String(imageSizes.ogImage.width)} />
+<meta property="og:image:height" content={String(imageSizes.ogImage.height)} />
 
 <!-- twitter card -->
 

@@ -3,6 +3,7 @@ import mdx from '@astrojs/mdx';
 import tailwind from '@astrojs/tailwind';
 import react from '@astrojs/react';
 import { loadEnv } from 'vite';
+import nodejs from '@astrojs/node';
 
 const {
   PUBLIC_SANITY_STUDIO_PROJECT_ID,
@@ -17,7 +18,7 @@ const dataset = PUBLIC_SANITY_STUDIO_DATASET || PUBLIC_SANITY_DATASET;
 
 // Change this depending on your hosting provider (Vercel, Netlify etc)
 // https://docs.astro.build/en/guides/server-side-rendering/#adding-an-adapter
-import vercel from '@astrojs/vercel/serverless';
+// import vercel from '@astrojs/vercel/serverless';
 
 import sanity from '@sanity/astro';
 
@@ -26,7 +27,10 @@ export default defineConfig({
   compressHTML: true,
   // Hybrid+adapter is required to support embedded Sanity Studio
   output: 'hybrid',
-  adapter: vercel(),
+  // adapter: vercel(),
+  adapter: nodejs({
+    mode: 'standalone',
+  }),
   integrations: [
     mdx(),
     tailwind(),
