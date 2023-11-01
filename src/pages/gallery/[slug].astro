@@ -1,0 +1,59 @@
+---
+import GalleryGrid from '../../components/GalleryGrid.astro';
+import DefaultLayout from '../../layouts/DefaultLayout.astro';
+import groq from 'groq';
+import type { Gallery } from '../../lib/sanity/types';
+import { sanityClient } from 'sanity:client';
+import { Breadcrumbs, BreadcrumbsItem } from 'accessible-astro-components';
+
+const loremDescription =
+  'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Aperiam tenetur ut repellat quaerat cum deleniti eos ipsam officiis necessitatibus iste.';
+
+export const getStaticPaths = async () => {
+  const gallery = await sanityClient.fetch<Gallery[]>(groq`*[_type == "gallery"] {
+      ...,
+      images[] {
+        ...,
+         asset->
+        }
+      }`);
+
+  return gallery.map((gallery) => {
+    return {
+      params: { slug: gallery.slug.current },
+      props: { ...gallery },
+    };
+  });
+};
+
+const {
+  title = 'Sample gallery',
+  headline = 'This will be a fancy gallery',
+  description = loremDescription,
+  images,
+} = Astro.props;
+---
+
+<DefaultLayout title="Gallery">
+  <div class="container my-12">
+    <Breadcrumbs>
+      <BreadcrumbsItem href="/" label="Home" />
+      <BreadcrumbsItem href="/gallery/" label="Gallery" />
+      <BreadcrumbsItem currentPage={true} label={title} />
+    </Breadcrumbs>
+  </div>
+  <div class="container my-12">
+    <div class="space-content my-12">
+      <h1>{title}</h1>
+      <h2>{headline}</h2>
+      <p>{description}</p>
+    </div>
+    {!!images && <GalleryGrid images={images} name="current" />}
+  </div>
+</DefaultLayout>
+
+<style lang="scss">
+  :global(.breadcrumbs ol) {
+    margin: 0;
+  }
+</style>
