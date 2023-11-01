@@ -3,6 +3,7 @@ import mdx from '@astrojs/mdx';
 import tailwind from '@astrojs/tailwind';
 import react from '@astrojs/react';
 import { loadEnv } from 'vite';
+import nodejs from '@astrojs/node';
 
 const {
   PUBLIC_SANITY_STUDIO_PROJECT_ID,
@@ -26,7 +27,10 @@ export default defineConfig({
   compressHTML: true,
   // Hybrid+adapter is required to support embedded Sanity Studio
   output: 'hybrid',
-  adapter: vercel(),
+  // adapter: vercel(),
+  adapter: nodejs({
+    mode: 'standalone',
+  }),
   integrations: [
     mdx(),
     tailwind(),
