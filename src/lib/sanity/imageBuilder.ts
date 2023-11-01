@@ -9,7 +9,7 @@ export const imageSizes = {
   thumb: {
     small: { width: 150, height: 150 },
     medium: { width: 250, height: 250 },
-    large: { width: 350, height: 350 },
+    large: { width: 380, height: 380 },
   },
   ogImage: { width: 1200, height: 630 },
   hero: {
