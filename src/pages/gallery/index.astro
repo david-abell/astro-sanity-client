@@ -12,7 +12,6 @@ const galleries = await sanityClient.fetch<Gallery[]>(groq`*[_type == "gallery"]
          asset->
         }
       }`);
-galleries.forEach((el) => console.log(el.slug.current));
 ---
 
 <DefaultLayout title="Gallery">
