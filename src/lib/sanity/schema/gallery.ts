@@ -8,11 +8,21 @@ const gallery = defineType({
   // liveEdit: true,
   fields: [
     defineField({
-      name: 'name',
+      name: 'title',
       title: 'Gallery Name',
       description: 'This field is the gallery name.',
       type: 'string',
       validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: 'slug',
+      title: 'Slug',
+      type: 'slug',
+      validation: (Rule) => Rule.required(),
+      options: {
+        source: 'title',
+        maxLength: 96,
+      },
     }),
     defineField({
       name: 'headline',

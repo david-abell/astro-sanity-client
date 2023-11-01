@@ -56,7 +56,8 @@ export interface Homepage {
 export interface Gallery {
   _type: 'settings';
   _createdAt: string;
-  name: 'string';
+  title: 'string';
+  slug: Slug;
   headline: 'string';
   description: 'string';
   images: ImageWithExpandedMetaData[];
