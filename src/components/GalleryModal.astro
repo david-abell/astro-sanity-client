@@ -1,43 +1,52 @@
 ---
+import type { ImageWithExpandedMetaData } from '@lib/sanity/types';
 import Icon from 'astro-icon';
+import ExternalImage from './ExternalImage.astro';
 
 interface Props {
   galleryName: string;
   children: HTMLElement | HTMLElement[];
+  images: ImageWithExpandedMetaData[];
 }
 
-const { galleryName } = Astro.props;
+const { galleryName, images } = Astro.props;
 ---
 
 <dialog class="gallery__modal" aria-labelledby={galleryName}>
   <gallery-modal galleryName={galleryName}>
-    <div class="gallery__modal__inner p-0">
+    <div class="gallery__modal__inner p-0" role="region" aria-roledescription="carousel">
       <div class="gallery__modal__content p-0">
-        <slot />
+        {
+          images.map((imgSrc, index) => {
+            return <ExternalImage imageSource={imgSrc} size="full" data-item-index={index} />;
+          })
+        }
       </div>
-      <div class="gallery__modal__close absolute right-0 top-0">
-        <label class="sr-only" for={`${galleryName}-close-button`}>
-          {'Close image gallery'}
-        </label>
-        <button id={`${galleryName}-close-button`}>
-          <Icon pack="ion" name="close" alt="" />
-        </button>
-      </div>
-      <div class="absolute right-0 top-1/2">
-        <label class="sr-only" for={`${galleryName}-close-button`}>
-          {'next image'}
-        </label>
-        <button class="p-0" id={`${galleryName}-next`}>
-          <Icon pack="ion" name="chevron-forward-outline" alt="" />
-        </button>
-      </div>
-      <div class="absolute left-0 top-1/2">
-        <label class="sr-only" for={`${galleryName}-close-button`}>
-          {'previous image'}
-        </label>
-        <button id={`${galleryName}-previous`}>
-          <Icon pack="ion" name="chevron-back-outline" alt="" />
-        </button>
+      <div role="group" aria-label="Slide controls">
+        <div class="gallery__modal__close absolute right-0 top-0">
+          <label class="sr-only" for={`${galleryName}-close-button`}>
+            {'Close image gallery'}
+          </label>
+          <button id={`${galleryName}-close-button`}>
+            <Icon pack="ion" name="close" alt="" />
+          </button>
+        </div>
+        <div class="absolute right-0 top-1/2">
+          <label class="sr-only" for={`${galleryName}-next`} id="next-image-label">
+            {'next image'}
+          </label>
+          <button class="p-0" id={`${galleryName}-next`}>
+            <Icon pack="ion" name="chevron-forward-outline" alt="" />
+          </button>
+        </div>
+        <div class="absolute left-0 top-1/2">
+          <label class="sr-only" for={`${galleryName}-previous`} id="previous-image-label">
+            {'previous image'}
+          </label>
+          <button id={`${galleryName}-previous`}>
+            <Icon pack="ion" name="chevron-back-outline" alt="" />
+          </button>
+        </div>
       </div>
     </div>
   </gallery-modal>
@@ -64,6 +73,7 @@ const { galleryName } = Astro.props;
   let modals = document.querySelectorAll<HTMLDialogElement>('.gallery__modal');
   let modalTrigger: HTMLButtonElement | null = null;
   let imageIndex = 0;
+  let imageCount = 0;
 
   // abort controllers for global event listeners
   let trapFocusController: AbortController | undefined;
@@ -94,6 +104,16 @@ const { galleryName } = Astro.props;
     }
   };
 
+  const setButtonLabels = (imageIndex: number) => {
+    const previousButtonLabel = document.getElementById('previous-image-label');
+    const nextButtonLabel = document.getElementById('next-image-label');
+
+    previousButtonLabel!.textContent =
+      imageIndex <= 1 ? 'Previous image' : `Show image ${imageIndex - 1} of ${imageCount}`;
+    nextButtonLabel!.textContent =
+      imageIndex >= imageCount - 1 ? 'Next image' : `Show image ${imageIndex + 1} of ${imageCount}`;
+  };
+
   const setActiveImage = (images: HTMLImageElement[]) => {
     images.forEach((img, index) => {
       if (index === imageIndex) {
@@ -102,6 +122,19 @@ const { galleryName } = Astro.props;
         img.classList.remove('is-active');
       }
     });
+  };
+  const setButtonState = (nextButton: HTMLButtonElement | null, previousButton: HTMLButtonElement | null) => {
+    if (!nextButton || !previousButton) return;
+    if (imageIndex >= imageCount - 1) {
+      nextButton.setAttribute('aria-disabled', 'true');
+    } else {
+      nextButton.removeAttribute('aria-disabled');
+    }
+    if (imageIndex === 0) {
+      previousButton.setAttribute('aria-disabled', 'true');
+    } else {
+      previousButton?.removeAttribute('aria-disabled');
+    }
   };
 
   const openGallery = (e: Event, modal: HTMLDialogElement) => {
@@ -113,25 +146,37 @@ const { galleryName } = Astro.props;
 
     // focus target for when modal is closed
     modalTrigger = e.target as HTMLButtonElement;
+
     imageIndex = Number(modalTrigger.id.split('-').at(-1)!) ?? 0;
+    imageCount = images.length;
 
     setActiveImage(images);
+    setButtonLabels(imageIndex);
+
+    setButtonState(nextButton, previousButton);
 
     nextButton?.addEventListener('click', () => {
-      if (imageIndex >= images.length - 1) {
-        imageIndex = 0;
-      } else {
+      if (nextButton.hasAttribute('aria-disabled')) return;
+      if (imageIndex < images.length - 1) {
         imageIndex += 1;
+      } else {
+        nextButton.setAttribute('aria-disabled', 'true');
       }
-
+      if (imageIndex > 0) {
+        previousButton?.removeAttribute('aria-disabled');
+      }
       setActiveImage(images);
     });
 
     previousButton?.addEventListener('click', () => {
+      if (previousButton.hasAttribute('aria-disabled')) return;
       if (imageIndex > 0) {
         imageIndex -= 1;
       } else {
-        imageIndex = images.length - 1;
+        previousButton.setAttribute('aria-disabled', 'true');
+      }
+      if (imageIndex < images.length - 1) {
+        nextButton?.removeAttribute('aria-disabled');
       }
 
       setActiveImage(images);
@@ -152,19 +197,17 @@ const { galleryName } = Astro.props;
         } else if (event.key === 'ArrowLeft') {
           if (imageIndex > 0) {
             imageIndex -= 1;
-          } else {
-            imageIndex = images.length - 1;
           }
 
           setActiveImage(images);
+          setButtonState(nextButton, previousButton);
         } else if (event.key === 'ArrowRight') {
-          if (imageIndex >= images.length - 1) {
-            imageIndex = 0;
-          } else {
+          if (imageIndex < images.length - 1) {
             imageIndex += 1;
           }
 
           setActiveImage(images);
+          setButtonState(nextButton, previousButton);
         }
       },
       { signal: keydownController.signal },
@@ -238,6 +281,7 @@ const { galleryName } = Astro.props;
   .gallery__modal {
     color: black;
     border: 0.5rem solid black;
+    background-color: grey;
     border-radius: 1rem;
     padding: 0;
     overflow: hidden;
@@ -272,11 +316,14 @@ const { galleryName } = Astro.props;
   .gallery__modal button {
     border: none;
     color: black;
-    transition: background-color 0.15s ease-in-out;
+    background-color: grey;
     margin: 0;
     padding: 0;
     width: 100%;
     height: 100%;
+  }
+  .gallery__modal button[aria-disabled] {
+    color: red;
   }
   .gallery__modal button svg {
     width: auto;
@@ -285,7 +332,6 @@ const { galleryName } = Astro.props;
 
   .gallery__modal button:hover,
   .gallery__modal button:focus {
-    background-color: grey;
     text-decoration: underline;
   }
 

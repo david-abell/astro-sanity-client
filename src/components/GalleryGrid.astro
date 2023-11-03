@@ -58,13 +58,7 @@ const chunkedImages = chunkArray(images, CHUNK_SIZE);
       )
     }
   </div>
-  <GalleryModal galleryName={galleryName}>
-    {
-      images.map((imgSrc) => {
-        return <ExternalImage imageSource={imgSrc} size="full" />;
-      })
-    }
-  </GalleryModal>
+  <GalleryModal galleryName={galleryName} images={images} />
 </div>
 
 <!-- <style>
