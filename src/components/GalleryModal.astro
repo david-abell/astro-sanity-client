@@ -14,11 +14,28 @@ const { galleryName, images } = Astro.props;
 
 <dialog class="gallery__modal" aria-labelledby={galleryName}>
   <gallery-modal galleryName={galleryName}>
-    <div class="gallery__modal__inner p-0" role="region" aria-roledescription="carousel">
+    <div
+      class="gallery__modal__inner p-0"
+      role="region"
+      aria-roledescription="carousel"
+      aria-label={galleryName.replace('-', ' ')}
+    >
       <div class="gallery__modal__content p-0">
         {
           images.map((imgSrc, index) => {
-            return <ExternalImage imageSource={imgSrc} size="full" data-item-index={index} />;
+            return (
+              <div
+                role="group"
+                aria-roledescription="Slide"
+                aria-labelledby={`carousel-item-${index}__heading`}
+                id={`carousel-item-${index}`}
+              >
+                <h3 id={`carousel-item-${index}__heading`} class="sr-only">
+                  {imgSrc.altText}
+                </h3>
+                <ExternalImage imageSource={imgSrc} size="full" data-item-index={index} />
+              </div>
+            );
           })
         }
       </div>
@@ -33,7 +50,7 @@ const { galleryName, images } = Astro.props;
         </div>
         <div class="absolute right-0 top-1/2">
           <label class="sr-only" for={`${galleryName}-next`} id="next-image-label">
-            {'next image'}
+            {'Next image'}
           </label>
           <button class="p-0" id={`${galleryName}-next`}>
             <Icon pack="ion" name="chevron-forward-outline" alt="" />
@@ -41,7 +58,7 @@ const { galleryName, images } = Astro.props;
         </div>
         <div class="absolute left-0 top-1/2">
           <label class="sr-only" for={`${galleryName}-previous`} id="previous-image-label">
-            {'previous image'}
+            {'Previous image'}
           </label>
           <button id={`${galleryName}-previous`}>
             <Icon pack="ion" name="chevron-back-outline" alt="" />
@@ -75,9 +92,7 @@ const { galleryName, images } = Astro.props;
   let imageIndex = 0;
   let imageCount = 0;
 
-  // abort controllers for global event listeners
-  let trapFocusController: AbortController | undefined;
-  let keydownController: AbortController | undefined;
+  let abortController: AbortController | undefined;
 
   const getKeyboardFocusableElements = (element: HTMLElement) => {
     const focusables = [
@@ -108,13 +123,12 @@ const { galleryName, images } = Astro.props;
     const previousButtonLabel = document.getElementById('previous-image-label');
     const nextButtonLabel = document.getElementById('next-image-label');
 
-    previousButtonLabel!.textContent =
-      imageIndex <= 1 ? 'Previous image' : `Show image ${imageIndex - 1} of ${imageCount}`;
+    previousButtonLabel!.textContent = imageIndex <= 0 ? 'Previous image' : `Show image ${imageIndex} of ${imageCount}`;
     nextButtonLabel!.textContent =
-      imageIndex >= imageCount - 1 ? 'Next image' : `Show image ${imageIndex + 1} of ${imageCount}`;
+      imageIndex >= imageCount - 1 ? 'Next image' : `Show image ${imageIndex + 2} of ${imageCount}`;
   };
 
-  const setActiveImage = (images: HTMLImageElement[]) => {
+  const setActiveImageClass = (images: HTMLImageElement[]) => {
     images.forEach((img, index) => {
       if (index === imageIndex) {
         img.classList.add('is-active');
@@ -144,73 +158,78 @@ const { galleryName, images } = Astro.props;
     const previousButton = modal.querySelector<HTMLButtonElement>(`#${galleryName}-previous`);
     const images = [...modal.querySelectorAll<HTMLImageElement>('.gallery__modal__content img')];
 
+    abortController = new AbortController();
+
     // focus target for when modal is closed
     modalTrigger = e.target as HTMLButtonElement;
 
     imageIndex = Number(modalTrigger.id.split('-').at(-1)!) ?? 0;
     imageCount = images.length;
 
-    setActiveImage(images);
+    setActiveImageClass(images);
     setButtonLabels(imageIndex);
-
     setButtonState(nextButton, previousButton);
 
-    nextButton?.addEventListener('click', () => {
-      if (nextButton.hasAttribute('aria-disabled')) return;
-      if (imageIndex < images.length - 1) {
-        imageIndex += 1;
-      } else {
-        nextButton.setAttribute('aria-disabled', 'true');
-      }
-      if (imageIndex > 0) {
-        previousButton?.removeAttribute('aria-disabled');
-      }
-      setActiveImage(images);
-    });
+    nextButton?.addEventListener(
+      'click',
+      () => {
+        if (nextButton.hasAttribute('aria-disabled')) return;
+        if (imageIndex < images.length - 1) {
+          imageIndex += 1;
+        }
 
-    previousButton?.addEventListener('click', () => {
-      if (previousButton.hasAttribute('aria-disabled')) return;
-      if (imageIndex > 0) {
-        imageIndex -= 1;
-      } else {
-        previousButton.setAttribute('aria-disabled', 'true');
-      }
-      if (imageIndex < images.length - 1) {
-        nextButton?.removeAttribute('aria-disabled');
-      }
+        setActiveImageClass(images);
+        setButtonLabels(imageIndex);
+        setButtonState(nextButton, previousButton);
+      },
+      { signal: abortController.signal },
+    );
 
-      setActiveImage(images);
-    });
+    previousButton?.addEventListener(
+      'click',
+      () => {
+        if (previousButton.hasAttribute('aria-disabled')) return;
+        if (imageIndex > 0) {
+          imageIndex -= 1;
+        }
+
+        setActiveImageClass(images);
+        setButtonLabels(imageIndex);
+        setButtonState(nextButton, previousButton);
+      },
+      { signal: abortController.signal },
+    );
 
     modal.showModal();
 
-    trapFocusController = new AbortController();
-    keydownController = new AbortController();
-
-    document.addEventListener('keydown', (e) => trapFocus(e, modal), { signal: trapFocusController.signal });
+    document.addEventListener('keydown', (e) => trapFocus(e, modal), { signal: abortController.signal });
 
     modal.addEventListener(
       'keydown',
       (event) => {
-        if (event.key === 'Escape') {
-          closeGallery();
-        } else if (event.key === 'ArrowLeft') {
-          if (imageIndex > 0) {
-            imageIndex -= 1;
-          }
-
-          setActiveImage(images);
-          setButtonState(nextButton, previousButton);
-        } else if (event.key === 'ArrowRight') {
-          if (imageIndex < images.length - 1) {
-            imageIndex += 1;
-          }
-
-          setActiveImage(images);
-          setButtonState(nextButton, previousButton);
+        switch (event.key) {
+          case 'Escape':
+            closeGallery();
+            break;
+          case 'ArrowLeft':
+            if (imageIndex > 0) {
+              imageIndex -= 1;
+            }
+            setActiveImageClass(images);
+            setButtonLabels(imageIndex);
+            setButtonState(nextButton, previousButton);
+            break;
+          case 'ArrowRight':
+            if (imageIndex < images.length - 1) {
+              imageIndex += 1;
+            }
+            setActiveImageClass(images);
+            setButtonLabels(imageIndex);
+            setButtonState(nextButton, previousButton);
+            break;
         }
       },
-      { signal: keydownController.signal },
+      { signal: abortController.signal },
     );
 
     modal.addEventListener(
@@ -218,7 +237,7 @@ const { galleryName, images } = Astro.props;
       () => {
         closeGallery();
       },
-      { signal: keydownController.signal },
+      { signal: abortController.signal },
     );
 
     modalInner!.addEventListener(
@@ -226,7 +245,7 @@ const { galleryName, images } = Astro.props;
       (event) => {
         event.stopPropagation();
       },
-      { signal: keydownController.signal },
+      { signal: abortController.signal },
     );
   };
 
@@ -235,8 +254,7 @@ const { galleryName, images } = Astro.props;
       modal.close();
       modalTrigger?.focus({ preventScroll: true });
       modalTrigger = null;
-      trapFocusController?.abort();
-      keydownController?.abort();
+      abortController?.abort();
     });
   };
 
@@ -254,7 +272,7 @@ const { galleryName, images } = Astro.props;
       }
 
       triggers.forEach((btn) => btn.addEventListener('click', (e) => openGallery(e, modal)));
-      modalCloseButton!.addEventListener('click', closeGallery);
+      modalCloseButton?.addEventListener('click', closeGallery);
     });
   }
 
