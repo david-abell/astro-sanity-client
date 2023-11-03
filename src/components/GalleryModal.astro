@@ -1,0 +1,314 @@
+---
+import Icon from 'astro-icon';
+
+interface Props {
+  galleryName: string;
+  children: HTMLElement | HTMLElement[];
+}
+
+const { galleryName } = Astro.props;
+---
+
+<dialog class="gallery__modal" aria-labelledby={galleryName}>
+  <gallery-modal galleryName={galleryName}>
+    <div class="gallery__modal__inner p-0">
+      <div class="gallery__modal__content p-0">
+        <slot />
+      </div>
+      <div class="gallery__modal__close absolute right-0 top-0">
+        <label class="sr-only" for={`${galleryName}-close-button`}>
+          {'Close image gallery'}
+        </label>
+        <button id={`${galleryName}-close-button`}>
+          <Icon pack="ion" name="close" alt="" />
+        </button>
+      </div>
+      <div class="absolute right-0 top-1/2">
+        <label class="sr-only" for={`${galleryName}-close-button`}>
+          {'next image'}
+        </label>
+        <button class="p-0" id={`${galleryName}-next`}>
+          <Icon pack="ion" name="chevron-forward-outline" alt="" />
+        </button>
+      </div>
+      <div class="absolute left-0 top-1/2">
+        <label class="sr-only" for={`${galleryName}-close-button`}>
+          {'previous image'}
+        </label>
+        <button id={`${galleryName}-previous`}>
+          <Icon pack="ion" name="chevron-back-outline" alt="" />
+        </button>
+      </div>
+    </div>
+  </gallery-modal>
+</dialog>
+
+<script>
+  import type { FocusableElement } from '../types';
+
+  class GalleryModal extends HTMLElement {
+    constructor() {
+      super();
+
+      const galleryName = this.dataset.galleryName;
+    }
+
+    logId() {
+      console.log(this.dataset.galleryName);
+    }
+  }
+
+  customElements.define('astro-greet', GalleryModal);
+
+  // variables
+  let modals = document.querySelectorAll<HTMLDialogElement>('.gallery__modal');
+  let modalTrigger: HTMLButtonElement | null = null;
+  let imageIndex = 0;
+
+  // abort controllers for global event listeners
+  let trapFocusController: AbortController | undefined;
+  let keydownController: AbortController | undefined;
+
+  const getKeyboardFocusableElements = (element: HTMLElement) => {
+    const focusables = [
+      ...element.querySelectorAll('a, button, input, textarea, select, details,[tabindex]:not([tabindex="-1"])'),
+    ] as FocusableElement[];
+    return focusables.filter((el) => !el.hasAttribute('disabled'));
+  };
+
+  const trapFocus = (event: KeyboardEvent, modal: HTMLDialogElement) => {
+    const focusables = getKeyboardFocusableElements(modal);
+
+    // These will not be undefined as a modal always has at least one <button>
+    const firstFocusable = focusables[0]!;
+    const lastFocusable = focusables[focusables.length - 1]!;
+
+    if (document.activeElement === lastFocusable && event.key === 'Tab' && !event.shiftKey) {
+      event.preventDefault();
+      firstFocusable.focus();
+    }
+
+    if (document.activeElement === firstFocusable && event.key === 'Tab' && event.shiftKey) {
+      event.preventDefault();
+      lastFocusable.focus();
+    }
+  };
+
+  const setActiveImage = (images: HTMLImageElement[]) => {
+    images.forEach((img, index) => {
+      if (index === imageIndex) {
+        img.classList.add('is-active');
+      } else {
+        img.classList.remove('is-active');
+      }
+    });
+  };
+
+  const openGallery = (e: Event, modal: HTMLDialogElement) => {
+    const modalInner = modal.querySelector<HTMLDivElement>('.gallery__modal__inner');
+    const galleryName = modal.firstElementChild?.getAttribute('galleryName');
+    const nextButton = modal.querySelector<HTMLButtonElement>(`#${galleryName}-next`);
+    const previousButton = modal.querySelector<HTMLButtonElement>(`#${galleryName}-previous`);
+    const images = [...modal.querySelectorAll<HTMLImageElement>('.gallery__modal__content img')];
+
+    // focus target for when modal is closed
+    modalTrigger = e.target as HTMLButtonElement;
+    imageIndex = Number(modalTrigger.id.split('-').at(-1)!) ?? 0;
+
+    setActiveImage(images);
+
+    nextButton?.addEventListener('click', () => {
+      if (imageIndex >= images.length - 1) {
+        imageIndex = 0;
+      } else {
+        imageIndex += 1;
+      }
+
+      setActiveImage(images);
+    });
+
+    previousButton?.addEventListener('click', () => {
+      if (imageIndex > 0) {
+        imageIndex -= 1;
+      } else {
+        imageIndex = images.length - 1;
+      }
+
+      setActiveImage(images);
+    });
+
+    modal.showModal();
+
+    trapFocusController = new AbortController();
+    keydownController = new AbortController();
+
+    document.addEventListener('keydown', (e) => trapFocus(e, modal), { signal: trapFocusController.signal });
+
+    modal.addEventListener(
+      'keydown',
+      (event) => {
+        if (event.key === 'Escape') {
+          closeGallery();
+        } else if (event.key === 'ArrowLeft') {
+          if (imageIndex > 0) {
+            imageIndex -= 1;
+          } else {
+            imageIndex = images.length - 1;
+          }
+
+          setActiveImage(images);
+        } else if (event.key === 'ArrowRight') {
+          if (imageIndex >= images.length - 1) {
+            imageIndex = 0;
+          } else {
+            imageIndex += 1;
+          }
+
+          setActiveImage(images);
+        }
+      },
+      { signal: keydownController.signal },
+    );
+
+    modal.addEventListener(
+      'click',
+      () => {
+        closeGallery();
+      },
+      { signal: keydownController.signal },
+    );
+
+    modalInner!.addEventListener(
+      'click',
+      (event) => {
+        event.stopPropagation();
+      },
+      { signal: keydownController.signal },
+    );
+  };
+
+  const closeGallery = () => {
+    modals.forEach((modal) => {
+      modal.close();
+      modalTrigger?.focus({ preventScroll: true });
+      modalTrigger = null;
+      trapFocusController?.abort();
+      keydownController?.abort();
+    });
+  };
+
+  // execution
+  function setTriggers() {
+    modals.forEach((modal) => {
+      const modalId = modal.getAttribute('aria-labelledby');
+      const modalCloseButton = modal.querySelector('.gallery__modal__close button');
+      const galleryName = modal.firstElementChild?.getAttribute('galleryName');
+      const triggers = document.querySelectorAll(`[data-gallery-trigger="${galleryName}"]`);
+
+      if (!triggers) {
+        throw new Error(`Trigger element not found. \n
+        Did you forget to add a trigger element with id: "${modalId}"?`);
+      }
+
+      triggers.forEach((btn) => btn.addEventListener('click', (e) => openGallery(e, modal)));
+      modalCloseButton!.addEventListener('click', closeGallery);
+    });
+  }
+
+  setTriggers();
+
+  window.closeGallery = closeGallery;
+
+  // Listen for view transitions
+  document.addEventListener('astro:after-swap', () => {
+    // reset variables
+    modals = document.querySelectorAll<HTMLDialogElement>('.gallery__modal');
+
+    setTriggers();
+  });
+</script>
+
+<style>
+  .gallery__modal::backdrop {
+    background-color: rgba(0, 0, 0, 0.5);
+    filter: blur(6px);
+    position: relative;
+  }
+
+  .gallery__modal {
+    color: black;
+    border: 0.5rem solid black;
+    border-radius: 1rem;
+    padding: 0;
+    overflow: hidden;
+  }
+
+  .gallery__modal__inner {
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .gallery__modal__content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    overflow: hidden;
+  }
+
+  :global(.gallery__modal__content img) {
+    object-fit: cover;
+    object-position: center;
+    visibility: hidden;
+    opacity: 0;
+    max-height: 0px;
+    transition: opacity 300ms ease-in-out;
+  }
+  :global(.gallery__modal__content img.is-active) {
+    visibility: visible;
+    opacity: 1;
+    max-height: 94dvh;
+  }
+
+  .gallery__modal button {
+    border: none;
+    color: black;
+    transition: background-color 0.15s ease-in-out;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+  }
+  .gallery__modal button svg {
+    width: auto;
+    height: 3rem;
+  }
+
+  .gallery__modal button:hover,
+  .gallery__modal button:focus {
+    background-color: grey;
+    text-decoration: underline;
+  }
+
+  /* Animation */
+  dialog[open],
+  dialog[open]::backdrop {
+    animation: fadein 0.3s ease-in-out;
+  }
+
+  @keyframes fadein {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  @keyframes fadeout {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
+  }
+</style>

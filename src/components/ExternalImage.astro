@@ -8,7 +8,7 @@ export interface Props extends HTMLAttributes<'img'> {
   size: ImageFormFactor;
 }
 
-const { imageSource, size, class: className } = Astro.props;
+const { imageSource, size, class: className, id } = Astro.props;
 
 const { smallUrl, mediumUrl, largeUrl, ogImageUrl } = imageBuilder(imageSource, size);
 ---
@@ -21,12 +21,13 @@ const { smallUrl, mediumUrl, largeUrl, ogImageUrl } = imageBuilder(imageSource, 
       <img
         alt={imageSource.altText || 'cover'}
         loading="lazy"
-        class={className}
+        class:list={[className]}
         srcset={`${smallUrl} 480w, ${mediumUrl} 800w, ${largeUrl} 1200w`}
         sizes="(max-width: 480px) 480px,
         (max-width: 800px) 800px,
          1200px"
         src={smallUrl}
+        id={id}
       />
     ) : (
       ''

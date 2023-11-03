@@ -24,7 +24,7 @@ const galleries = await sanityClient.fetch<Gallery[]>(groq`*[_type == "gallery"]
             <h2>{gallery.headline}</h2>
             <p>{gallery.description}</p>
           </div>
-          <GalleryGrid images={gallery.images} name={gallery.slug.current} preview />
+          <GalleryGrid images={gallery.images} galleryName={gallery.slug.current} preview />
         </section>
       );
     })
