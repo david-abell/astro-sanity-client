@@ -17,79 +17,71 @@ const { galleryName, images } = Astro.props;
   role="region"
   aria-roledescription="carousel"
 >
-  <gallery-modal galleryName={galleryName}>
-    <div
-      class="gallery__modal__inner relative p-0"
-      role="region"
-      aria-roledescription="carousel"
-      aria-label={galleryName.replace('-', ' ')}
-    >
-      <div role="group" aria-label="Slide controls" class="slide__controls">
-        <div class="gallery__modal__close absolute right-0 top-0">
-          <label class="sr-only" for={`${galleryName}-close-button`}>
-            {'Close image gallery'}
-          </label>
-          <button id={`${galleryName}-close-button`}>
-            <Icon pack="ion" name="close" alt="" />
-          </button>
-        </div>
-        <div class="absolute right-0 top-1/2">
-          <label class="sr-only" for={`${galleryName}-next`} id="next-image-label">
-            {'Next image'}
-          </label>
-          <button class="p-0" id={`${galleryName}-next`}>
-            <Icon pack="ion" name="chevron-forward-outline" alt="" />
-          </button>
-        </div>
-        <div class="absolute left-0 top-1/2">
-          <label class="sr-only" for={`${galleryName}-previous`} id="previous-image-label">
-            {'Previous image'}
-          </label>
-          <button id={`${galleryName}-previous`}>
-            <Icon pack="ion" name="chevron-back-outline" alt="" />
-          </button>
-        </div>
+  <div
+    class="relative p-0"
+    role="region"
+    aria-roledescription="carousel"
+    aria-label={galleryName.replace('-', ' ')}
+    data-galleryName={galleryName}
+  >
+    <div role="group" aria-label="Slide controls" class="slide__controls">
+      <div class="gallery__close absolute right-0 top-0">
+        <label class="sr-only" for={`${galleryName}-close-button`}>
+          {'Close image gallery'}
+        </label>
+        <button id={`${galleryName}-close-button`}>
+          <Icon pack="ion" name="close" alt="" />
+        </button>
       </div>
-      <div class="gallery__modal__content p-0">
-        {
-          images.map((imgSrc, index) => {
-            return (
-              <div
-                role="group"
-                aria-roledescription="Slide"
-                aria-labelledby={`carousel-item-${index}__heading`}
-                id={`carousel-item-${index}`}
-                class="carousel__item"
-              >
-                <ExternalImage imageSource={imgSrc} size="full" data-item-index={index} />
-                <div class="carousel__item__text text-container space-content">
-                  <h3 id={`carousel-item-${index}__heading`} class="">
-                    {imgSrc.altText}
-                  </h3>
-                  <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Fugiat ipsum impedit consequuntur.</p>
-                  <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Fugiat ipsum impedit consequuntur.</p>
-                </div>
-              </div>
-            );
-          })
-        }
+      <div class="absolute right-0 top-1/2">
+        <label class="sr-only" for={`${galleryName}-next`} id="next-image-label">
+          {'Next image'}
+        </label>
+        <button class="p-0" id={`${galleryName}-next`}>
+          <Icon pack="ion" name="chevron-forward-outline" alt="" />
+        </button>
+      </div>
+      <div class="absolute left-0 top-1/2">
+        <label class="sr-only" for={`${galleryName}-previous`} id="previous-image-label">
+          {'Previous image'}
+        </label>
+        <button id={`${galleryName}-previous`}>
+          <Icon pack="ion" name="chevron-back-outline" alt="" />
+        </button>
       </div>
     </div>
-  </gallery-modal>
+    <div class="gallery__content p-0">
+      {
+        images.map((imgSrc, index) => {
+          return (
+            <div
+              role="group"
+              aria-roledescription="Slide"
+              aria-labelledby={`carousel-item-${index}__heading`}
+              id={`carousel-item-${index}`}
+              class="carousel__item"
+            >
+              <ExternalImage imageSource={imgSrc} size="full" data-item-index={index} />
+              <div class="carousel__item__text space-content">
+                <h3 id={`carousel-item-${index}__heading`} class="">
+                  {imgSrc.altText}
+                </h3>
+                <p>
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia autem itaque aspernatur quidem amet
+                  accusamus beatae debitis eaque. Cumque, culpa ipsum doloremque commodi distinctio eos aspernatur harum
+                  voluptatibus voluptate voluptatum.
+                </p>
+              </div>
+            </div>
+          );
+        })
+      }
+    </div>
+  </div>
 </dialog>
 
 <script>
   import type { FocusableElement } from '../types';
-
-  class GalleryModal extends HTMLElement {
-    constructor() {
-      super();
-
-      // const galleryName = this.dataset.galleryName;
-    }
-  }
-
-  customElements.define('astro-greet', GalleryModal);
 
   // variables
   let modals = document.querySelectorAll<HTMLDialogElement>('.gallery__modal');
@@ -157,8 +149,8 @@ const { galleryName, images } = Astro.props;
   };
 
   const showGallery = (e: Event, modal: HTMLDialogElement) => {
-    const galleryContent = modal.querySelector<HTMLDivElement>('.gallery__modal__content');
-    const galleryName = modal.firstElementChild?.getAttribute('galleryName');
+    // const galleryContent = modal.querySelector<HTMLDivElement>('.gallery__content');
+    const galleryName = modal.firstElementChild?.getAttribute('data-galleryName');
     const nextButton = modal.querySelector<HTMLButtonElement>(`#${galleryName}-next`);
     const previousButton = modal.querySelector<HTMLButtonElement>(`#${galleryName}-previous`);
     const slides = [...modal.querySelectorAll<HTMLDivElement>('.carousel__item')];
@@ -241,16 +233,10 @@ const { galleryName, images } = Astro.props;
 
     modal.addEventListener(
       'click',
-      () => {
-        closeGallery();
-      },
-      { signal: abortController.signal },
-    );
-
-    galleryContent!.addEventListener(
-      'click',
       (e) => {
-        e.stopPropagation();
+        if (e.target === modal.querySelector('.carousel__item.is-active')) {
+          closeGallery();
+        }
       },
       { signal: abortController.signal },
     );
@@ -269,8 +255,8 @@ const { galleryName, images } = Astro.props;
   function setTriggers() {
     modals.forEach((modal) => {
       const modalId = modal.getAttribute('aria-labelledby');
-      const modalCloseButton = modal.querySelector('.gallery__modal__close button');
-      const galleryName = modal.firstElementChild?.getAttribute('galleryName');
+      const modalCloseButton = modal.querySelector('.gallery__close button');
+      const galleryName = modal.firstElementChild?.getAttribute('data-galleryName');
       const triggers = document.querySelectorAll(`[data-gallery-trigger="${galleryName}"]`);
 
       if (!triggers) {
@@ -317,12 +303,21 @@ const { galleryName, images } = Astro.props;
     position: absolute;
     width: 100%;
     height: 100dvh;
+    pointer-events: none;
+  }
+  .slide__controls button {
+    pointer-events: auto;
+  }
+
+  .gallery__content {
+    pointer-events: auto;
   }
 
   .carousel__item {
     visibility: hidden;
     display: flex;
     flex-direction: column;
+    align-items: center;
     color: white;
     max-height: 0;
   }
@@ -339,26 +334,27 @@ const { galleryName, images } = Astro.props;
     }
   }
 
-  :global(.gallery__modal__content img) {
+  :global(.carousel__item img) {
     visibility: hidden;
     transition: opacity 300ms ease-in-out;
     object-fit: contain;
     opacity: 0;
     min-height: 0;
   }
-  :global(.gallery__modal__content .is-active img) {
+  :global(.carousel__item.is-active img) {
     visibility: visible;
     opacity: 1;
     max-height: 94dvh;
     min-height: 50vh;
     flex: 1 1 94dvh;
-  }
-  :global(.gallery__modal__content .is-active img:hover) {
-    min-height: 94vh;
+    width: fit-content;
   }
 
   .carousel__item__text {
     color: white;
+    text-align: center;
+    max-width: 100ch;
+    text-wrap: balance;
   }
   .carousel__item__text::first-letter {
     text-transform: capitalize;
