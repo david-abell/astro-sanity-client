@@ -11,34 +11,20 @@ interface Props {
 const { galleryName, images } = Astro.props;
 ---
 
-<dialog class="gallery__modal" aria-labelledby={galleryName}>
+<dialog
+  class="gallery__modal w-full max-w-full"
+  aria-labelledby={galleryName}
+  role="region"
+  aria-roledescription="carousel"
+>
   <gallery-modal galleryName={galleryName}>
     <div
-      class="gallery__modal__inner p-0"
+      class="gallery__modal__inner relative p-0"
       role="region"
       aria-roledescription="carousel"
       aria-label={galleryName.replace('-', ' ')}
     >
-      <div class="gallery__modal__content p-0">
-        {
-          images.map((imgSrc, index) => {
-            return (
-              <div
-                role="group"
-                aria-roledescription="Slide"
-                aria-labelledby={`carousel-item-${index}__heading`}
-                id={`carousel-item-${index}`}
-              >
-                <h3 id={`carousel-item-${index}__heading`} class="sr-only">
-                  {imgSrc.altText}
-                </h3>
-                <ExternalImage imageSource={imgSrc} size="full" data-item-index={index} />
-              </div>
-            );
-          })
-        }
-      </div>
-      <div role="group" aria-label="Slide controls">
+      <div role="group" aria-label="Slide controls" class="slide__controls">
         <div class="gallery__modal__close absolute right-0 top-0">
           <label class="sr-only" for={`${galleryName}-close-button`}>
             {'Close image gallery'}
@@ -64,6 +50,30 @@ const { galleryName, images } = Astro.props;
           </button>
         </div>
       </div>
+      <div class="gallery__modal__content p-0">
+        {
+          images.map((imgSrc, index) => {
+            return (
+              <div
+                role="group"
+                aria-roledescription="Slide"
+                aria-labelledby={`carousel-item-${index}__heading`}
+                id={`carousel-item-${index}`}
+                class="carousel__item"
+              >
+                <ExternalImage imageSource={imgSrc} size="full" data-item-index={index} />
+                <div class="carousel__item__text text-container space-content">
+                  <h3 id={`carousel-item-${index}__heading`} class="">
+                    {imgSrc.altText}
+                  </h3>
+                  <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Fugiat ipsum impedit consequuntur.</p>
+                  <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Fugiat ipsum impedit consequuntur.</p>
+                </div>
+              </div>
+            );
+          })
+        }
+      </div>
     </div>
   </gallery-modal>
 </dialog>
@@ -75,11 +85,7 @@ const { galleryName, images } = Astro.props;
     constructor() {
       super();
 
-      const galleryName = this.dataset.galleryName;
-    }
-
-    logId() {
-      console.log(this.dataset.galleryName);
+      // const galleryName = this.dataset.galleryName;
     }
   }
 
@@ -127,12 +133,12 @@ const { galleryName, images } = Astro.props;
       imageIndex >= imageCount - 1 ? 'Next image' : `Show image ${imageIndex + 2} of ${imageCount}`;
   };
 
-  const setActiveImageClass = (images: HTMLImageElement[]) => {
-    images.forEach((img, index) => {
+  const setActiveSlide = (slides: HTMLDivElement[]) => {
+    slides.forEach((slide, index) => {
       if (index === imageIndex) {
-        img.classList.add('is-active');
+        slide.classList.add('is-active');
       } else {
-        img.classList.remove('is-active');
+        slide.classList.remove('is-active');
       }
     });
   };
@@ -150,12 +156,12 @@ const { galleryName, images } = Astro.props;
     }
   };
 
-  const openGallery = (e: Event, modal: HTMLDialogElement) => {
-    const modalInner = modal.querySelector<HTMLDivElement>('.gallery__modal__inner');
+  const showGallery = (e: Event, modal: HTMLDialogElement) => {
+    const galleryContent = modal.querySelector<HTMLDivElement>('.gallery__modal__content');
     const galleryName = modal.firstElementChild?.getAttribute('galleryName');
     const nextButton = modal.querySelector<HTMLButtonElement>(`#${galleryName}-next`);
     const previousButton = modal.querySelector<HTMLButtonElement>(`#${galleryName}-previous`);
-    const images = [...modal.querySelectorAll<HTMLImageElement>('.gallery__modal__content img')];
+    const slides = [...modal.querySelectorAll<HTMLDivElement>('.carousel__item')];
 
     abortController = new AbortController();
 
@@ -163,21 +169,22 @@ const { galleryName, images } = Astro.props;
     modalTrigger = e.target as HTMLButtonElement;
 
     imageIndex = Number(modalTrigger.id.split('-').at(-1)!) ?? 0;
-    imageCount = images.length;
+    imageCount = slides.length;
 
-    setActiveImageClass(images);
+    setActiveSlide([...slides]);
     setButtonLabels(imageIndex);
     setButtonState(nextButton, previousButton);
 
     nextButton?.addEventListener(
       'click',
-      () => {
+      (e) => {
+        e.stopPropagation();
         if (nextButton.hasAttribute('aria-disabled')) return;
-        if (imageIndex < images.length - 1) {
+        if (imageIndex < slides.length - 1) {
           imageIndex += 1;
         }
 
-        setActiveImageClass(images);
+        setActiveSlide(slides);
         setButtonLabels(imageIndex);
         setButtonState(nextButton, previousButton);
       },
@@ -186,13 +193,14 @@ const { galleryName, images } = Astro.props;
 
     previousButton?.addEventListener(
       'click',
-      () => {
+      (e) => {
+        e.stopPropagation();
         if (previousButton.hasAttribute('aria-disabled')) return;
         if (imageIndex > 0) {
           imageIndex -= 1;
         }
 
-        setActiveImageClass(images);
+        setActiveSlide(slides);
         setButtonLabels(imageIndex);
         setButtonState(nextButton, previousButton);
       },
@@ -205,8 +213,8 @@ const { galleryName, images } = Astro.props;
 
     modal.addEventListener(
       'keydown',
-      (event) => {
-        switch (event.key) {
+      (e) => {
+        switch (e.key) {
           case 'Escape':
             closeGallery();
             break;
@@ -214,15 +222,15 @@ const { galleryName, images } = Astro.props;
             if (imageIndex > 0) {
               imageIndex -= 1;
             }
-            setActiveImageClass(images);
+            setActiveSlide(slides);
             setButtonLabels(imageIndex);
             setButtonState(nextButton, previousButton);
             break;
           case 'ArrowRight':
-            if (imageIndex < images.length - 1) {
+            if (imageIndex < slides.length - 1) {
               imageIndex += 1;
             }
-            setActiveImageClass(images);
+            setActiveSlide(slides);
             setButtonLabels(imageIndex);
             setButtonState(nextButton, previousButton);
             break;
@@ -239,10 +247,10 @@ const { galleryName, images } = Astro.props;
       { signal: abortController.signal },
     );
 
-    modalInner!.addEventListener(
+    galleryContent!.addEventListener(
       'click',
-      (event) => {
-        event.stopPropagation();
+      (e) => {
+        e.stopPropagation();
       },
       { signal: abortController.signal },
     );
@@ -270,7 +278,7 @@ const { galleryName, images } = Astro.props;
         Did you forget to add a trigger element with id: "${modalId}"?`);
       }
 
-      triggers.forEach((btn) => btn.addEventListener('click', (e) => openGallery(e, modal)));
+      triggers.forEach((btn) => btn.addEventListener('click', (e) => showGallery(e, modal)));
       modalCloseButton?.addEventListener('click', closeGallery);
     });
   }
@@ -288,53 +296,78 @@ const { galleryName, images } = Astro.props;
   });
 </script>
 
-<style>
+<style lang="scss">
+  @use '../assets/scss/base/breakpoint' as *;
+
   .gallery__modal::backdrop {
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.9);
     filter: blur(6px);
-    position: relative;
   }
 
   .gallery__modal {
-    color: black;
-    border: 0.5rem solid black;
-    background-color: grey;
-    border-radius: 1rem;
+    margin: 0;
     padding: 0;
     overflow: hidden;
+    height: 100lvh;
+    background-color: transparent;
+    position: relative;
   }
 
-  .gallery__modal__inner {
+  .slide__controls {
+    position: absolute;
     width: 100%;
-    overflow: hidden;
+    height: 100dvh;
   }
 
-  .gallery__modal__content {
+  .carousel__item {
+    visibility: hidden;
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    overflow: hidden;
+    color: white;
+    max-height: 0;
+  }
+
+  .carousel__item.is-active {
+    visibility: visible;
+    gap: 1rem;
+    padding: 1rem;
+    max-height: 100dvh;
+    transition: opacity 300ms ease-in-out;
+
+    @include breakpoint(medium) {
+      padding: 2rem 0;
+    }
   }
 
   :global(.gallery__modal__content img) {
-    object-fit: cover;
-    object-position: center;
     visibility: hidden;
-    opacity: 0;
-    max-height: 0px;
     transition: opacity 300ms ease-in-out;
+    object-fit: contain;
+    opacity: 0;
+    min-height: 0;
   }
-  :global(.gallery__modal__content img.is-active) {
+  :global(.gallery__modal__content .is-active img) {
     visibility: visible;
     opacity: 1;
     max-height: 94dvh;
+    min-height: 50vh;
+    flex: 1 1 94dvh;
+  }
+  :global(.gallery__modal__content .is-active img:hover) {
+    min-height: 94vh;
+  }
+
+  .carousel__item__text {
+    color: white;
+  }
+  .carousel__item__text::first-letter {
+    text-transform: capitalize;
   }
 
   .gallery__modal button {
     border: none;
     color: black;
     background-color: grey;
-    margin: 0;
     padding: 0;
     width: 100%;
     height: 100%;
