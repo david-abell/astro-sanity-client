@@ -1,11 +1,11 @@
 ---
-import type { ImageWithExpandedMetaData } from '@lib/sanity/types';
+import type { ImageWithOptionalDescription } from '@lib/sanity/types';
 import { chunkArray } from '@util/index';
 import ExternalImage from './ExternalImage.astro';
 import GalleryModal from './GalleryModal.astro';
 
 type Props = {
-  images: ImageWithExpandedMetaData[];
+  images: ImageWithOptionalDescription[];
   galleryName: string;
   preview?: boolean;
 };
