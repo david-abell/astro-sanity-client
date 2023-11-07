@@ -50,7 +50,7 @@ const { galleryName, images } = Astro.props;
         </button>
       </div>
     </div>
-    <div class="gallery__content p-0">
+    <div class="gallery__content">
       {
         images.map((imgSrc, index) => {
           return (
@@ -59,10 +59,10 @@ const { galleryName, images } = Astro.props;
               aria-roledescription="Slide"
               aria-labelledby={`carousel-item-${index}__heading`}
               id={`carousel-item-${index}`}
-              class="carousel__item"
+              class="gallery__item"
             >
               <ExternalImage imageSource={imgSrc} size="full" data-item-index={index} />
-              <div class="carousel__item__text">
+              <div class="gallery__item__text">
                 <h3 id={`carousel-item-${index}__heading`} class="sr-only">
                   {imgSrc.altText}
                 </h3>
@@ -145,11 +145,10 @@ const { galleryName, images } = Astro.props;
   };
 
   const showGallery = (e: Event, modal: HTMLDialogElement) => {
-    // const galleryContent = modal.querySelector<HTMLDivElement>('.gallery__content');
     const galleryName = modal.firstElementChild?.getAttribute('data-galleryName');
     const nextButton = modal.querySelector<HTMLButtonElement>(`#${galleryName}-next`);
     const previousButton = modal.querySelector<HTMLButtonElement>(`#${galleryName}-previous`);
-    const slides = [...modal.querySelectorAll<HTMLDivElement>('.carousel__item')];
+    const slides = [...modal.querySelectorAll<HTMLDivElement>('.gallery__item')];
 
     abortController = new AbortController();
 
@@ -230,7 +229,7 @@ const { galleryName, images } = Astro.props;
     modal.addEventListener(
       'click',
       (e) => {
-        if (e.target instanceof HTMLElement && [...modal.querySelectorAll('.carousel__item')].includes(e.target)) {
+        if (e.target instanceof HTMLElement && [...modal.querySelectorAll('.gallery__item')].includes(e.target)) {
           closeGallery();
         }
       },
@@ -240,7 +239,7 @@ const { galleryName, images } = Astro.props;
 
   const closeGallery = () => {
     modals.forEach((modal) => {
-      modal.querySelectorAll('.carousel__item.is-active').forEach((el) => el.classList.remove('is-active'));
+      modal.querySelectorAll('.gallery__item.is-active').forEach((el) => el.classList.remove('is-active'));
       modal.close();
       modalTrigger?.focus({ preventScroll: true });
       modalTrigger = null;
@@ -309,9 +308,10 @@ const { galleryName, images } = Astro.props;
   .gallery__content {
     width: 100%;
     height: 100dvh;
+    padding: 0;
   }
 
-  .carousel__item {
+  .gallery__item {
     visibility: hidden;
     display: flex;
     flex-direction: column;
@@ -320,30 +320,30 @@ const { galleryName, images } = Astro.props;
     max-height: 0;
   }
 
-  .carousel__item.is-active {
+  .gallery__item.is-active {
     visibility: visible;
     gap: 1rem;
     padding: 1rem;
     max-height: 100dvh;
-    transition: opacity 300ms ease-in-out;
+    animation: fadein 0.3s ease-in-out;
 
     @include breakpoint(medium) {
       padding: 2rem 0;
     }
   }
 
-  :global(.carousel__item.is-active > *) {
+  :global(.gallery__item.is-active > *) {
     margin: auto;
   }
 
-  :global(.carousel__item img) {
+  :global(.gallery__item img) {
     visibility: hidden;
     transition: opacity 300ms ease-in-out;
     object-fit: contain;
     opacity: 0;
     min-height: 0;
   }
-  :global(.carousel__item.is-active img) {
+  :global(.gallery__item.is-active img) {
     visibility: visible;
     opacity: 1;
     max-height: 94dvh;
@@ -352,13 +352,13 @@ const { galleryName, images } = Astro.props;
     width: fit-content;
   }
 
-  .carousel__item__text {
+  .gallery__item__text {
     color: white;
     text-align: center;
     max-width: 70ch;
     text-wrap: balance;
   }
-  .carousel__item__text::first-letter {
+  .gallery__item__text::first-letter {
     text-transform: capitalize;
   }
 
@@ -396,14 +396,6 @@ const { galleryName, images } = Astro.props;
     }
     to {
       opacity: 1;
-    }
-  }
-  @keyframes fadeout {
-    from {
-      opacity: 1;
-    }
-    to {
-      opacity: 0;
     }
   }
 </style>
