@@ -5,17 +5,12 @@
 
 version: 2
 updates:
-  - package-ecosystem: "npm" # See documentation for possible values
-    directory: "/" # Location of package manifests
+  - package-ecosystem: "npm"
+    directory: "/"
     schedule:
       interval: "weekly"
-  groups:
-    production-dependencies:
-      dependency-type: "production"
-    development-dependencies:
-      dependency-type: "development"
-  ignore:
+    ignore:
       # imports broken after "^2.1.1", no default import as of v2.1.4
-    - dependency-name: "@sanity/astro"
+      - dependency-name: "express"
       # build failing with version greater than "2.8.0"
-    - dependency-name: "svgo"
+      - dependency-name: "svgo"
