@@ -33,20 +33,20 @@ const { galleryName, images } = Astro.props;
           <Icon pack="ion" name="close" alt="" />
         </button>
       </div>
-      <div class="absolute right-0 top-1/2">
-        <label class="sr-only" for={`${galleryName}-next`} id="next-image-label">
-          {'Next image'}
-        </label>
-        <button class="p-0" id={`${galleryName}-next`}>
-          <Icon pack="ion" name="chevron-forward-outline" alt="" />
-        </button>
-      </div>
       <div class="absolute left-0 top-1/2">
         <label class="sr-only" for={`${galleryName}-previous`} id="previous-image-label">
           {'Previous image'}
         </label>
         <button id={`${galleryName}-previous`}>
           <Icon pack="ion" name="chevron-back-outline" alt="" />
+        </button>
+      </div>
+      <div class="absolute right-0 top-1/2">
+        <label class="sr-only" for={`${galleryName}-next`} id="next-image-label">
+          {'Next image'}
+        </label>
+        <button class="p-0" id={`${galleryName}-next`}>
+          <Icon pack="ion" name="chevron-forward-outline" alt="" />
         </button>
       </div>
     </div>
