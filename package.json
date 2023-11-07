@@ -41,7 +41,7 @@
     "typescript": "^5.2.2"
   },
   "dependencies": {
-    "@astrojs/check": "^0.2.1",
+    "@astrojs/check": "^0.3.1",
     "@astrojs/react": "^3.0.3",
     "@astrojs/vercel": "^5.0.2",
     "@sanity/astro": "^2.1.1",
