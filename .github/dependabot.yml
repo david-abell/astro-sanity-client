@@ -9,13 +9,13 @@ updates:
     directory: "/" # Location of package manifests
     schedule:
       interval: "weekly"
-groups:
-  production-dependencies:
-    dependency-type: "production"
-  development-dependencies:
-    dependency-type: "development"
-ignore:
-        # imports broken after "^2.1.1", no default import as of v2.1.4
-      - dependency-name: "@sanity/astro"
-        # build failing with version greater than "2.8.0"
-      - dependency-name: "svgo"
+  groups:
+    production-dependencies:
+      dependency-type: "production"
+    development-dependencies:
+      dependency-type: "development"
+  ignore:
+      # imports broken after "^2.1.1", no default import as of v2.1.4
+    - dependency-name: "@sanity/astro"
+      # build failing with version greater than "2.8.0"
+    - dependency-name: "svgo"
