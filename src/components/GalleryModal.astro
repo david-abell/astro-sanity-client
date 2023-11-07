@@ -159,9 +159,9 @@ const { galleryName, images } = Astro.props;
     abortController = new AbortController();
 
     // focus target for when modal is closed
-    modalTrigger = e.target as HTMLButtonElement;
+    modalTrigger = (e.target as HTMLButtonElement).closest('[data-gallery-trigger]');
 
-    imageIndex = Number(modalTrigger.id.split('-').at(-1)!) ?? 0;
+    imageIndex = modalTrigger ? Number(modalTrigger.id.split('-').at(-1)!) : 0;
     imageCount = slides.length;
 
     setActiveSlide([...slides]);
