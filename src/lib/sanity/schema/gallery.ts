@@ -61,6 +61,11 @@ const gallery = defineType({
               type: 'string',
               validation: (Rule) => Rule.required(),
             },
+            {
+              name: 'subtext',
+              title: 'Optional image subtext to be shown in full size gallery view. ',
+              type: 'text',
+            },
           ],
           options: {
             hotspot: true,

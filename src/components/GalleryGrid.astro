@@ -1,16 +1,16 @@
 ---
-import type { ImageWithExpandedMetaData } from '@lib/sanity/types';
+import type { ImageWithOptionalDescription } from '@lib/sanity/types';
 import { chunkArray } from '@util/index';
-import { Modal } from 'accessible-astro-components';
 import ExternalImage from './ExternalImage.astro';
+import GalleryModal from './GalleryModal.astro';
 
 type Props = {
-  images: ImageWithExpandedMetaData[];
-  name: string;
+  images: ImageWithOptionalDescription[];
+  galleryName: string;
   preview?: boolean;
 };
 
-const { images, name, preview = false } = Astro.props;
+const { images, galleryName, preview = false } = Astro.props;
 
 const COLUMN_COUNT = 4;
 const CHUNK_SIZE = images.length < COLUMN_COUNT ? 1 : Math.floor(images.length / COLUMN_COUNT);
@@ -27,16 +27,21 @@ const chunkedImages = chunkArray(images, CHUNK_SIZE);
             {chunk.map((imgSrc, imgIndex) => {
               const isTall = !preview && (chunkIndex + imgIndex) % 2 === 0;
               return (
-                <button
-                  class={`image-button flex h-full w-full rounded-lg border-none p-0`}
-                  id={`gallery-${name}-${chunkIndex * CHUNK_SIZE + imgIndex}`}
-                >
-                  <ExternalImage
-                    imageSource={imgSrc}
-                    size="thumb"
-                    class={`h-full w-full rounded-lg object-cover object-center  ${isTall ? 'min-h-[320px]' : ''}`}
-                  />
-                </button>
+                <>
+                  <button
+                    type="button"
+                    class={`image-button flex h-full w-full rounded-lg border-none p-0`}
+                    id={`gallery-${galleryName}-${chunkIndex * CHUNK_SIZE + imgIndex}`}
+                    data-gallery-trigger={galleryName}
+                  >
+                    <ExternalImage
+                      imageSource={imgSrc}
+                      size="thumb"
+                      class={`h-full w-full rounded-lg object-cover object-center  ${isTall ? 'min-h-[320px]' : ''}`}
+                    />
+                    <span class="sr-only">Open in gallery</span>
+                  </button>
+                </>
               );
             })}
           </div>
@@ -46,7 +51,7 @@ const chunkedImages = chunkArray(images, CHUNK_SIZE);
     {
       preview && (
         <a
-          href={`/gallery/${name}`}
+          href={`/gallery/${galleryName}`}
           class={`image-button grid h-full w-full place-items-center rounded-lg border-none bg-[var(--secondary-background)] p-0 font-bold`}
         >
           See the full gallery
@@ -54,30 +59,10 @@ const chunkedImages = chunkArray(images, CHUNK_SIZE);
       )
     }
   </div>
-  {
-    images.map((imgSrc, index) => {
-      return (
-        <Modal triggerId={`gallery-${name}-${index}`}>
-          <label for={`img-close-button-${index}`} class="sr-only">
-            hide image
-          </label>
-          <button
-            type="button"
-            onclick="
-            closeModal()
-            "
-            class="border-none p-0"
-            id={`img-close-button-${index}`}
-          >
-            <ExternalImage imageSource={imgSrc} size="full" class="max-h-[94dvh] object-cover object-center" />
-          </button>
-        </Modal>
-      );
-    })
-  }
+  <GalleryModal galleryName={galleryName} images={images} />
 </div>
 
-<style>
+<!-- <style>
   .grid__column {
     grid-template-rows: max-content;
   }
@@ -102,4 +87,4 @@ const chunkedImages = chunkArray(images, CHUNK_SIZE);
     white-space: nowrap;
     border-width: 0;
   }
-</style>
+</style> -->

@@ -31,6 +31,7 @@ const {
   headline = 'This will be a fancy gallery',
   description = loremDescription,
   images,
+  slug,
 } = Astro.props;
 ---
 
@@ -48,7 +49,7 @@ const {
       <h2>{headline}</h2>
       <p>{description}</p>
     </div>
-    {!!images && <GalleryGrid images={images} name="current" />}
+    {!!images && <GalleryGrid images={images} galleryName={slug.current} />}
   </div>
 </DefaultLayout>
 

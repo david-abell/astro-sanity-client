@@ -1,0 +1,401 @@
+---
+import type { ImageWithOptionalDescription } from '@lib/sanity/types';
+import Icon from 'astro-icon';
+import ExternalImage from './ExternalImage.astro';
+
+interface Props {
+  galleryName: string;
+  images: ImageWithOptionalDescription[];
+}
+
+const { galleryName, images } = Astro.props;
+---
+
+<dialog
+  class="gallery__modal w-full max-w-full"
+  aria-labelledby={galleryName}
+  role="region"
+  aria-roledescription="carousel"
+>
+  <div
+    class="relative p-0"
+    role="region"
+    aria-roledescription="carousel"
+    aria-label={galleryName.replace('-', ' ')}
+    data-galleryName={galleryName}
+  >
+    <div role="group" aria-label="Slide controls" class="slide__controls z-20">
+      <div class="gallery__close absolute right-0 top-0">
+        <label class="sr-only" for={`${galleryName}-close-button`}>
+          {'Close image gallery'}
+        </label>
+        <button id={`${galleryName}-close-button`}>
+          <Icon pack="ion" name="close" alt="" />
+        </button>
+      </div>
+      <div class="absolute left-0 top-1/2">
+        <label class="sr-only" for={`${galleryName}-previous`} id="previous-image-label">
+          {'Previous image'}
+        </label>
+        <button id={`${galleryName}-previous`}>
+          <Icon pack="ion" name="chevron-back-outline" alt="" />
+        </button>
+      </div>
+      <div class="absolute right-0 top-1/2">
+        <label class="sr-only" for={`${galleryName}-next`} id="next-image-label">
+          {'Next image'}
+        </label>
+        <button class="p-0" id={`${galleryName}-next`}>
+          <Icon pack="ion" name="chevron-forward-outline" alt="" />
+        </button>
+      </div>
+    </div>
+    <div class="gallery__content">
+      {
+        images.map((imgSrc, index) => {
+          return (
+            <div
+              role="group"
+              aria-roledescription="Slide"
+              aria-labelledby={`carousel-item-${index}__heading`}
+              id={`carousel-item-${index}`}
+              class="gallery__item"
+            >
+              <ExternalImage
+                imageSource={imgSrc}
+                size="full"
+                data-item-index={index}
+                class={!imgSrc.subtext ? 'm-auto' : 'mt-auto'}
+              />
+              <div class={`gallery__item__text ${!imgSrc.subtext ? 'sr-only' : ''}`}>
+                <h3 id={`carousel-item-${index}__heading`} class="sr-only">
+                  {imgSrc.altText}
+                </h3>
+                {!!imgSrc.subtext && <p>{imgSrc.subtext}</p>}
+              </div>
+            </div>
+          );
+        })
+      }
+    </div>
+  </div>
+</dialog>
+
+<script>
+  import type { FocusableElement } from '../types';
+
+  // variables
+  let modals = document.querySelectorAll<HTMLDialogElement>('.gallery__modal');
+  let modalTrigger: HTMLButtonElement | null = null;
+  let imageIndex = 0;
+  let imageCount = 0;
+
+  let abortController: AbortController | undefined;
+
+  function getKeyboardFocusableElements(element: HTMLElement) {
+    const focusables = [
+      ...element.querySelectorAll('a, button, input, textarea, select, details,[tabindex]:not([tabindex="-1"])'),
+    ] as FocusableElement[];
+    return focusables.filter((el) => !el.hasAttribute('disabled'));
+  }
+
+  function trapFocus(event: KeyboardEvent, modal: HTMLDialogElement) {
+    const focusables = getKeyboardFocusableElements(modal);
+
+    // These will not be undefined as a modal always has at least one <button>
+    const firstFocusable = focusables[0]!;
+    const lastFocusable = focusables[focusables.length - 1]!;
+
+    if (document.activeElement === lastFocusable && event.key === 'Tab' && !event.shiftKey) {
+      event.preventDefault();
+      firstFocusable.focus();
+    }
+
+    if (document.activeElement === firstFocusable && event.key === 'Tab' && event.shiftKey) {
+      event.preventDefault();
+      lastFocusable.focus();
+    }
+  }
+
+  function setButtonLabels(imageIndex: number) {
+    const previousButtonLabel = document.getElementById('previous-image-label');
+    const nextButtonLabel = document.getElementById('next-image-label');
+
+    previousButtonLabel!.textContent = imageIndex <= 0 ? 'Previous image' : `Show image ${imageIndex} of ${imageCount}`;
+    nextButtonLabel!.textContent =
+      imageIndex >= imageCount - 1 ? 'Next image' : `Show image ${imageIndex + 2} of ${imageCount}`;
+  }
+
+  function setActiveSlide(slides: HTMLDivElement[]) {
+    slides.forEach((slide, index) => {
+      if (index === imageIndex) {
+        slide.classList.add('is-active');
+      } else {
+        slide.classList.remove('is-active');
+      }
+    });
+  }
+
+  function setButtonState(nextButton: HTMLButtonElement | null, previousButton: HTMLButtonElement | null) {
+    if (!nextButton || !previousButton) return;
+    if (imageIndex >= imageCount - 1) {
+      nextButton.setAttribute('aria-disabled', 'true');
+    } else {
+      nextButton.removeAttribute('aria-disabled');
+    }
+    if (imageIndex === 0) {
+      previousButton.setAttribute('aria-disabled', 'true');
+    } else {
+      previousButton?.removeAttribute('aria-disabled');
+    }
+  }
+
+  function showGallery(e: Event, modal: HTMLDialogElement) {
+    const galleryName = modal.firstElementChild?.getAttribute('data-galleryName');
+    const nextButton = modal.querySelector<HTMLButtonElement>(`#${galleryName}-next`);
+    const previousButton = modal.querySelector<HTMLButtonElement>(`#${galleryName}-previous`);
+    const slides = [...modal.querySelectorAll<HTMLDivElement>('.gallery__item')];
+
+    abortController = new AbortController();
+
+    // focus target for when modal is closed
+    modalTrigger = (e.target as HTMLButtonElement).closest('[data-gallery-trigger]');
+
+    imageIndex = modalTrigger ? Number(modalTrigger.id.split('-').at(-1)!) : 0;
+    imageCount = slides.length;
+
+    setActiveSlide([...slides]);
+    setButtonLabels(imageIndex);
+    setButtonState(nextButton, previousButton);
+
+    nextButton?.addEventListener(
+      'click',
+      (e) => {
+        e.stopPropagation();
+        if (nextButton.hasAttribute('aria-disabled')) return;
+        if (imageIndex < slides.length - 1) {
+          imageIndex += 1;
+        }
+
+        setActiveSlide(slides);
+        setButtonLabels(imageIndex);
+        setButtonState(nextButton, previousButton);
+      },
+      { signal: abortController.signal },
+    );
+
+    previousButton?.addEventListener(
+      'click',
+      (e) => {
+        e.stopPropagation();
+        if (previousButton.hasAttribute('aria-disabled')) return;
+        if (imageIndex > 0) {
+          imageIndex -= 1;
+        }
+
+        setActiveSlide(slides);
+        setButtonLabels(imageIndex);
+        setButtonState(nextButton, previousButton);
+      },
+      { signal: abortController.signal },
+    );
+
+    modal.showModal();
+
+    document.addEventListener('keydown', (e) => trapFocus(e, modal), { signal: abortController.signal });
+
+    modal.addEventListener(
+      'keydown',
+      (e) => {
+        switch (e.key) {
+          case 'Escape':
+            closeGallery();
+            break;
+          case 'ArrowLeft':
+            if (imageIndex > 0) {
+              imageIndex -= 1;
+            }
+            setActiveSlide(slides);
+            setButtonLabels(imageIndex);
+            setButtonState(nextButton, previousButton);
+            break;
+          case 'ArrowRight':
+            if (imageIndex < slides.length - 1) {
+              imageIndex += 1;
+            }
+            setActiveSlide(slides);
+            setButtonLabels(imageIndex);
+            setButtonState(nextButton, previousButton);
+            break;
+        }
+      },
+      { signal: abortController.signal },
+    );
+
+    modal.addEventListener(
+      'click',
+      (e) => {
+        if (e.target instanceof HTMLElement && [...modal.querySelectorAll('.gallery__item')].includes(e.target)) {
+          closeGallery();
+        }
+      },
+      { signal: abortController.signal },
+    );
+  }
+
+  function closeGallery() {
+    modals.forEach((modal) => {
+      modal.querySelectorAll('.gallery__item.is-active').forEach((el) => el.classList.remove('is-active'));
+      modal.close();
+      modalTrigger?.focus({ preventScroll: true });
+      modalTrigger = null;
+      abortController?.abort();
+    });
+  }
+
+  // execution
+  function setTriggers() {
+    modals.forEach((modal) => {
+      const modalId = modal.getAttribute('aria-labelledby');
+      const modalCloseButton = modal.querySelector('.gallery__close button');
+      const galleryName = modal.firstElementChild?.getAttribute('data-galleryName');
+      const triggers = document.querySelectorAll(`[data-gallery-trigger="${galleryName}"]`);
+
+      if (!triggers) {
+        throw new Error(`Trigger element not found. \n
+        Did you forget to add a trigger element with id: "${modalId}"?`);
+      }
+
+      triggers.forEach((btn) => btn.addEventListener('click', (e) => showGallery(e, modal)));
+      modalCloseButton?.addEventListener('click', closeGallery);
+    });
+  }
+
+  setTriggers();
+
+  window.closeGallery = closeGallery;
+
+  // Listen for view transitions
+  document.addEventListener('astro:after-swap', () => {
+    // reset variables
+    modals = document.querySelectorAll<HTMLDialogElement>('.gallery__modal');
+
+    setTriggers();
+  });
+</script>
+
+<style lang="scss">
+  @use '../assets/scss/base/breakpoint' as *;
+
+  .gallery__modal::backdrop {
+    background-color: rgba(0, 0, 0, 0.9);
+    filter: blur(6px);
+  }
+
+  .gallery__modal {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    height: 100lvh;
+    background-color: transparent;
+    position: relative;
+  }
+
+  .slide__controls {
+    position: absolute;
+    width: 100%;
+    height: 100dvh;
+    pointer-events: none;
+  }
+  .slide__controls button {
+    pointer-events: auto;
+  }
+
+  .gallery__content {
+    width: 100%;
+    height: 100dvh;
+    padding: 0;
+  }
+
+  .gallery__item {
+    visibility: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: white;
+    max-height: 0;
+  }
+
+  .gallery__item.is-active {
+    visibility: visible;
+    gap: 1rem;
+    padding: 1rem;
+    height: 100dvh;
+    max-height: 100dvh;
+    animation: fadein 0.3s ease-in-out;
+
+    @include breakpoint(medium) {
+      padding: 2rem 0;
+    }
+  }
+
+  :global(.gallery__item img) {
+    visibility: hidden;
+    transition: opacity 300ms ease-in-out;
+    object-fit: contain;
+    opacity: 0;
+    min-height: 0;
+  }
+  :global(.gallery__item.is-active img) {
+    visibility: visible;
+    opacity: 1;
+  }
+
+  .gallery__item__text {
+    color: white;
+    text-align: center;
+    max-width: 70ch;
+    text-wrap: balance;
+    margin: 0 0 auto;
+  }
+  .gallery__item__text::first-letter {
+    text-transform: capitalize;
+  }
+
+  .gallery__modal button {
+    display: block;
+    border: none;
+    color: black;
+    background-color: grey;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+  }
+  .gallery__modal button[aria-disabled] {
+    color: red;
+  }
+  .gallery__modal button svg {
+    width: auto;
+    height: 3rem;
+  }
+
+  .gallery__modal button:hover,
+  .gallery__modal button:focus {
+    text-decoration: underline;
+  }
+
+  /* Animation */
+  dialog[open],
+  dialog[open]::backdrop {
+    animation: fadein 0.3s ease-in-out;
+  }
+
+  @keyframes fadein {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+</style>

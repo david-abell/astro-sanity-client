@@ -5,6 +5,10 @@ export type ImageWithExpandedMetaData = Image & {
   asset: ImageAsset;
 };
 
+export type ImageWithOptionalDescription = ImageWithExpandedMetaData & {
+  subtext?: string;
+};
+
 export interface Post {
   _type: 'post';
   _createdAt: string;
@@ -60,5 +64,5 @@ export interface Gallery {
   slug: Slug;
   headline: 'string';
   description: 'string';
-  images: ImageWithExpandedMetaData[];
+  images: ImageWithOptionalDescription[];
 }
