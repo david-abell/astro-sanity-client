@@ -87,14 +87,14 @@ const { galleryName, images } = Astro.props;
 
   let abortController: AbortController | undefined;
 
-  const getKeyboardFocusableElements = (element: HTMLElement) => {
+  function getKeyboardFocusableElements(element: HTMLElement) {
     const focusables = [
       ...element.querySelectorAll('a, button, input, textarea, select, details,[tabindex]:not([tabindex="-1"])'),
     ] as FocusableElement[];
     return focusables.filter((el) => !el.hasAttribute('disabled'));
-  };
+  }
 
-  const trapFocus = (event: KeyboardEvent, modal: HTMLDialogElement) => {
+  function trapFocus(event: KeyboardEvent, modal: HTMLDialogElement) {
     const focusables = getKeyboardFocusableElements(modal);
 
     // These will not be undefined as a modal always has at least one <button>
@@ -110,18 +110,18 @@ const { galleryName, images } = Astro.props;
       event.preventDefault();
       lastFocusable.focus();
     }
-  };
+  }
 
-  const setButtonLabels = (imageIndex: number) => {
+  function setButtonLabels(imageIndex: number) {
     const previousButtonLabel = document.getElementById('previous-image-label');
     const nextButtonLabel = document.getElementById('next-image-label');
 
     previousButtonLabel!.textContent = imageIndex <= 0 ? 'Previous image' : `Show image ${imageIndex} of ${imageCount}`;
     nextButtonLabel!.textContent =
       imageIndex >= imageCount - 1 ? 'Next image' : `Show image ${imageIndex + 2} of ${imageCount}`;
-  };
+  }
 
-  const setActiveSlide = (slides: HTMLDivElement[]) => {
+  function setActiveSlide(slides: HTMLDivElement[]) {
     slides.forEach((slide, index) => {
       if (index === imageIndex) {
         slide.classList.add('is-active');
@@ -129,8 +129,9 @@ const { galleryName, images } = Astro.props;
         slide.classList.remove('is-active');
       }
     });
-  };
-  const setButtonState = (nextButton: HTMLButtonElement | null, previousButton: HTMLButtonElement | null) => {
+  }
+
+  function setButtonState(nextButton: HTMLButtonElement | null, previousButton: HTMLButtonElement | null) {
     if (!nextButton || !previousButton) return;
     if (imageIndex >= imageCount - 1) {
       nextButton.setAttribute('aria-disabled', 'true');
@@ -142,9 +143,9 @@ const { galleryName, images } = Astro.props;
     } else {
       previousButton?.removeAttribute('aria-disabled');
     }
-  };
+  }
 
-  const showGallery = (e: Event, modal: HTMLDialogElement) => {
+  function showGallery(e: Event, modal: HTMLDialogElement) {
     const galleryName = modal.firstElementChild?.getAttribute('data-galleryName');
     const nextButton = modal.querySelector<HTMLButtonElement>(`#${galleryName}-next`);
     const previousButton = modal.querySelector<HTMLButtonElement>(`#${galleryName}-previous`);
@@ -235,9 +236,9 @@ const { galleryName, images } = Astro.props;
       },
       { signal: abortController.signal },
     );
-  };
+  }
 
-  const closeGallery = () => {
+  function closeGallery() {
     modals.forEach((modal) => {
       modal.querySelectorAll('.gallery__item.is-active').forEach((el) => el.classList.remove('is-active'));
       modal.close();
@@ -245,7 +246,7 @@ const { galleryName, images } = Astro.props;
       modalTrigger = null;
       abortController?.abort();
     });
-  };
+  }
 
   // execution
   function setTriggers() {
