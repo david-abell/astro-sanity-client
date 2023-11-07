@@ -1,11 +1,11 @@
 ---
-import type { ImageWithExpandedMetaData } from '@lib/sanity/types';
+import type { ImageWithOptionalDescription } from '@lib/sanity/types';
 import Icon from 'astro-icon';
 import ExternalImage from './ExternalImage.astro';
 
 interface Props {
   galleryName: string;
-  images: ImageWithExpandedMetaData[];
+  images: ImageWithOptionalDescription[];
 }
 
 const { galleryName, images } = Astro.props;
@@ -24,7 +24,7 @@ const { galleryName, images } = Astro.props;
     aria-label={galleryName.replace('-', ' ')}
     data-galleryName={galleryName}
   >
-    <div role="group" aria-label="Slide controls" class="slide__controls">
+    <div role="group" aria-label="Slide controls" class="slide__controls z-20">
       <div class="gallery__close absolute right-0 top-0">
         <label class="sr-only" for={`${galleryName}-close-button`}>
           {'Close image gallery'}
@@ -62,15 +62,11 @@ const { galleryName, images } = Astro.props;
               class="carousel__item"
             >
               <ExternalImage imageSource={imgSrc} size="full" data-item-index={index} />
-              <div class="carousel__item__text space-content">
-                <h3 id={`carousel-item-${index}__heading`} class="">
+              <div class="carousel__item__text">
+                <h3 id={`carousel-item-${index}__heading`} class="sr-only">
                   {imgSrc.altText}
                 </h3>
-                <p>
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia autem itaque aspernatur quidem amet
-                  accusamus beatae debitis eaque. Cumque, culpa ipsum doloremque commodi distinctio eos aspernatur harum
-                  voluptatibus voluptate voluptatum.
-                </p>
+                {!!imgSrc.subtext && <p>{imgSrc.subtext}</p>}
               </div>
             </div>
           );
