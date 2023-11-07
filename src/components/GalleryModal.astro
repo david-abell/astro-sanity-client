@@ -61,8 +61,13 @@ const { galleryName, images } = Astro.props;
               id={`carousel-item-${index}`}
               class="gallery__item"
             >
-              <ExternalImage imageSource={imgSrc} size="full" data-item-index={index} />
-              <div class="gallery__item__text">
+              <ExternalImage
+                imageSource={imgSrc}
+                size="full"
+                data-item-index={index}
+                class={!imgSrc.subtext ? 'm-auto' : 'mt-auto'}
+              />
+              <div class={`gallery__item__text ${!imgSrc.subtext ? 'sr-only' : ''}`}>
                 <h3 id={`carousel-item-${index}__heading`} class="sr-only">
                   {imgSrc.altText}
                 </h3>
@@ -325,16 +330,13 @@ const { galleryName, images } = Astro.props;
     visibility: visible;
     gap: 1rem;
     padding: 1rem;
+    height: 100dvh;
     max-height: 100dvh;
     animation: fadein 0.3s ease-in-out;
 
     @include breakpoint(medium) {
       padding: 2rem 0;
     }
-  }
-
-  :global(.gallery__item.is-active > *) {
-    margin: auto;
   }
 
   :global(.gallery__item img) {
@@ -347,10 +349,6 @@ const { galleryName, images } = Astro.props;
   :global(.gallery__item.is-active img) {
     visibility: visible;
     opacity: 1;
-    max-height: 94dvh;
-    min-height: 50vh;
-    flex: 1 1 94dvh;
-    width: fit-content;
   }
 
   .gallery__item__text {
@@ -358,6 +356,7 @@ const { galleryName, images } = Astro.props;
     text-align: center;
     max-width: 70ch;
     text-wrap: balance;
+    margin: 0 0 auto;
   }
   .gallery__item__text::first-letter {
     text-transform: capitalize;
