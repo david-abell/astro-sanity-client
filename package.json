@@ -1,7 +1,7 @@
 {
   "name": "astro-sanity-starter",
   "description": "A simple starter using Sanity and accessible-astro-starter",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "author": "David Abell",
   "homepage": "",
   "scripts": {
