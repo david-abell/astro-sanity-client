@@ -11,6 +11,6 @@ updates:
       interval: "daily"
     ignore:
       # imports broken after "^2.1.1", no default import as of v2.1.4
-      - dependency-name: "express"
+      - dependency-name: "@sanity/astro"
       # build failing with version greater than "2.8.0"
       - dependency-name: "svgo"
