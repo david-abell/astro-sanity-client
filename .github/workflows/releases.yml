@@ -22,4 +22,4 @@ jobs:
           repo_token: '${{ secrets.GITHUB_TOKEN }}'
           automatic_release_tag: 'latest'
           prerelease: true
-          title: 'Release ${{ steps.package-version.outputs.current-version}}'
+          title: ${{ format('Release v{0}', steps.package-version.outputs.current-version)}}
