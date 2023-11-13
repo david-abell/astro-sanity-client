@@ -332,7 +332,7 @@ const { galleryName, images } = Astro.props;
     padding: 1rem;
     height: 100dvh;
     max-height: 100dvh;
-    animation: fadein 0.3s ease-in-out;
+    animation: fadeIn 0.3s ease-in-out;
 
     @include breakpoint(medium) {
       padding: 2rem 0;
@@ -387,10 +387,10 @@ const { galleryName, images } = Astro.props;
   /* Animation */
   dialog[open],
   dialog[open]::backdrop {
-    animation: fadein 0.3s ease-in-out;
+    animation: fadeIn 0.3s ease-in-out;
   }
 
-  @keyframes fadein {
+  @keyframes fadeIn {
     from {
       opacity: 0;
     }
