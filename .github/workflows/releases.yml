@@ -19,10 +19,16 @@ jobs:
         id: package-version
         uses: martinbeentjes/npm-get-version-action@v1.3.1
 
+      - name: 'Build Changelog'
+        id: build_changelog
+        uses: mikepenz/release-changelog-builder-action@v4
+        with:
+          token: '${{ secrets.GITHUB_TOKEN }}'
+
       - name: create-next-release
         uses: softprops/action-gh-release@v0.1.15
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           name: ${{ format('Release v{0}', steps.package-version.outputs.current-version)}}
           prerelease: true
-          tag_name: 'latest'
+          body: ${{steps.build_changelog.outputs.changelog}}
