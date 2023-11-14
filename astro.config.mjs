@@ -43,4 +43,12 @@ export default defineConfig({
     }),
     react(),
   ],
+  // unsafe fix expose to local dev server with npm linked packages and `npx astro dev --host`
+  // vite: {
+  //   server: {
+  //     fs: {
+  //       strict: false,
+  //     },
+  //   },
+  // },
 });

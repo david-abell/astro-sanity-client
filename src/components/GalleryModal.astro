@@ -83,12 +83,12 @@ const { galleryName, images } = Astro.props;
 
 <script>
   import type { FocusableElement } from '../types';
-
+  import 'node_modules/swiped-events/dist/swiped-events.min.js';
   // variables
   let modals = document.querySelectorAll<HTMLDialogElement>('.gallery__modal');
   let modalTrigger: HTMLButtonElement | null = null;
-  let imageIndex = 0;
-  let imageCount = 0;
+  let slideIndex = 0;
+  let slideCount = 0;
 
   let abortController: AbortController | undefined;
 
@@ -117,33 +117,71 @@ const { galleryName, images } = Astro.props;
     }
   }
 
-  function setButtonLabels(imageIndex: number) {
+  function setButtonLabels(slideIndex: number) {
     const previousButtonLabel = document.getElementById('previous-image-label');
     const nextButtonLabel = document.getElementById('next-image-label');
 
-    previousButtonLabel!.textContent = imageIndex <= 0 ? 'Previous image' : `Show image ${imageIndex} of ${imageCount}`;
+    previousButtonLabel!.textContent = slideIndex <= 0 ? 'Previous image' : `Show image ${slideIndex} of ${slideCount}`;
     nextButtonLabel!.textContent =
-      imageIndex >= imageCount - 1 ? 'Next image' : `Show image ${imageIndex + 2} of ${imageCount}`;
+      slideIndex >= slideCount - 1 ? 'Next image' : `Show image ${slideIndex + 2} of ${slideCount}`;
   }
 
-  function setActiveSlide(slides: HTMLDivElement[]) {
-    slides.forEach((slide, index) => {
-      if (index === imageIndex) {
-        slide.classList.add('is-active');
-      } else {
-        slide.classList.remove('is-active');
-      }
-    });
+  function animateSlideInFromLeft(slide: HTMLDivElement | null) {
+    slide?.classList.add('slideInLeft');
+    slide?.addEventListener(
+      'animationend',
+      () => {
+        slide?.classList.remove('slideInLeft');
+      },
+      { once: true },
+    );
+  }
+
+  function animateSlideInFromRight(slide: HTMLDivElement | null) {
+    slide?.classList.add('slideInRight');
+    slide?.addEventListener(
+      'animationend',
+      () => {
+        slide?.classList.remove('slideInRight');
+      },
+      { once: true },
+    );
+  }
+
+  function animateSlideOutLeft(slide: HTMLDivElement | null) {
+    slide?.classList.add('slideOutLeft');
+
+    slide?.addEventListener(
+      'animationend',
+      () => {
+        slide?.classList.remove('slideOutLeft');
+        slide?.classList.remove('current');
+      },
+      { once: true },
+    );
+  }
+
+  function animateSlideOutRight(slide: HTMLDivElement | null) {
+    slide?.classList.add('slideOutRight');
+
+    slide?.addEventListener(
+      'animationend',
+      () => {
+        slide?.classList.remove('slideOutRight');
+        slide?.classList.remove('current');
+      },
+      { once: true },
+    );
   }
 
   function setButtonState(nextButton: HTMLButtonElement | null, previousButton: HTMLButtonElement | null) {
     if (!nextButton || !previousButton) return;
-    if (imageIndex >= imageCount - 1) {
+    if (slideIndex >= slideCount - 1) {
       nextButton.setAttribute('aria-disabled', 'true');
     } else {
       nextButton.removeAttribute('aria-disabled');
     }
-    if (imageIndex === 0) {
+    if (slideIndex === 0) {
       previousButton.setAttribute('aria-disabled', 'true');
     } else {
       previousButton?.removeAttribute('aria-disabled');
@@ -161,24 +199,54 @@ const { galleryName, images } = Astro.props;
     // focus target for when modal is closed
     modalTrigger = (e.target as HTMLButtonElement).closest('[data-gallery-trigger]');
 
-    imageIndex = modalTrigger ? Number(modalTrigger.id.split('-').at(-1)!) : 0;
-    imageCount = slides.length;
+    slideIndex = modalTrigger ? Number(modalTrigger.id.split('-').at(-1)!) : 0;
+    slideCount = slides.length;
 
-    setActiveSlide([...slides]);
-    setButtonLabels(imageIndex);
+    let current: HTMLDivElement | null = slides[slideIndex] || null;
+    current?.classList.add('current');
+    current?.classList.add('zoom-in');
+    current?.addEventListener(
+      'animationend',
+      () => {
+        current?.classList.remove('zoom-in');
+      },
+      { once: true },
+    );
+
+    function showSlide(direction: 'left' | 'right') {
+      const next = slides[slideIndex];
+
+      if (!next) return;
+
+      if (direction === 'left') {
+        animateSlideOutRight(current);
+      } else {
+        animateSlideOutLeft(current);
+      }
+
+      next?.classList.add('current');
+
+      if (direction === 'left') {
+        animateSlideInFromLeft(next);
+      } else {
+        animateSlideInFromRight(next);
+      }
+      current = next;
+    }
+
+    setButtonLabels(slideIndex);
     setButtonState(nextButton, previousButton);
 
     nextButton?.addEventListener(
       'click',
       (e) => {
         e.stopPropagation();
-        if (nextButton.hasAttribute('aria-disabled')) return;
-        if (imageIndex < slides.length - 1) {
-          imageIndex += 1;
-        }
+        if (nextButton.hasAttribute('aria-disabled') || slideIndex >= slides.length - 1) return;
 
-        setActiveSlide(slides);
-        setButtonLabels(imageIndex);
+        slideIndex += 1;
+
+        showSlide('right');
+        setButtonLabels(slideIndex);
         setButtonState(nextButton, previousButton);
       },
       { signal: abortController.signal },
@@ -188,13 +256,12 @@ const { galleryName, images } = Astro.props;
       'click',
       (e) => {
         e.stopPropagation();
-        if (previousButton.hasAttribute('aria-disabled')) return;
-        if (imageIndex > 0) {
-          imageIndex -= 1;
-        }
+        if (previousButton.hasAttribute('aria-disabled') || slideIndex <= 0) return;
 
-        setActiveSlide(slides);
-        setButtonLabels(imageIndex);
+        slideIndex -= 1;
+
+        showSlide('left');
+        setButtonLabels(slideIndex);
         setButtonState(nextButton, previousButton);
       },
       { signal: abortController.signal },
@@ -204,29 +271,55 @@ const { galleryName, images } = Astro.props;
 
     document.addEventListener('keydown', (e) => trapFocus(e, modal), { signal: abortController.signal });
 
+    document.addEventListener(
+      'swiped',
+      function (e) {
+        switch (e.detail.dir) {
+          case 'left':
+            if (slideIndex >= slides.length - 1) return;
+
+            slideIndex += 1;
+            showSlide('right');
+            setButtonLabels(slideIndex);
+            setButtonState(nextButton, previousButton);
+            if (slideIndex <= 0) return;
+            break;
+
+          case 'right':
+            slideIndex -= 1;
+            showSlide('left');
+            setButtonLabels(slideIndex);
+            setButtonState(nextButton, previousButton);
+            break;
+        }
+      },
+      { signal: abortController.signal },
+    );
+
     modal.addEventListener(
       'keydown',
       (e) => {
+        let direction: 'left' | 'right' | undefined;
+
         switch (e.key) {
           case 'Escape':
-            closeGallery();
-            break;
+            return closeGallery();
           case 'ArrowLeft':
-            if (imageIndex > 0) {
-              imageIndex -= 1;
-            }
-            setActiveSlide(slides);
-            setButtonLabels(imageIndex);
-            setButtonState(nextButton, previousButton);
+            if (slideIndex <= 0) return;
+            slideIndex -= 1;
+            direction = 'left';
             break;
           case 'ArrowRight':
-            if (imageIndex < slides.length - 1) {
-              imageIndex += 1;
-            }
-            setActiveSlide(slides);
-            setButtonLabels(imageIndex);
-            setButtonState(nextButton, previousButton);
+            if (slideIndex >= slides.length - 1) return;
+            slideIndex += 1;
+            direction = 'right';
             break;
+        }
+
+        if (direction) {
+          showSlide(direction);
+          setButtonLabels(slideIndex);
+          setButtonState(nextButton, previousButton);
         }
       },
       { signal: abortController.signal },
@@ -245,11 +338,24 @@ const { galleryName, images } = Astro.props;
 
   function closeGallery() {
     modals.forEach((modal) => {
-      modal.querySelectorAll('.gallery__item.is-active').forEach((el) => el.classList.remove('is-active'));
-      modal.close();
-      modalTrigger?.focus({ preventScroll: true });
-      modalTrigger = null;
-      abortController?.abort();
+      modal.querySelectorAll('.gallery__item.current').forEach((el) => {
+        el.classList.add('zoom-out');
+        modal.classList.add('fade-out');
+        modal.addEventListener(
+          'animationend',
+          () => {
+            modal.close();
+            el.classList.remove('zoom-out');
+            el.classList.remove('current');
+            modal.classList.remove('fade-out');
+          },
+          { once: true },
+        );
+
+        modalTrigger?.focus({ preventScroll: true });
+        modalTrigger = null;
+        abortController?.abort();
+      });
     });
   }
 
@@ -312,9 +418,12 @@ const { galleryName, images } = Astro.props;
   }
 
   .gallery__content {
+    display: flex;
     width: 100%;
     height: 100dvh;
     padding: 0;
+    margin: 0;
+    transform: translate3d(0, 0, 0);
   }
 
   .gallery__item {
@@ -324,15 +433,17 @@ const { galleryName, images } = Astro.props;
     align-items: center;
     color: white;
     max-height: 0;
+    width: 0;
   }
 
-  .gallery__item.is-active {
+  .gallery__item.current {
     visibility: visible;
     gap: 1rem;
     padding: 1rem;
-    height: 100dvh;
     max-height: 100dvh;
-    animation: fadein 0.3s ease-in-out;
+    max-width: 100%;
+    height: 100dvh;
+    width: 100%;
 
     @include breakpoint(medium) {
       padding: 2rem 0;
@@ -345,10 +456,14 @@ const { galleryName, images } = Astro.props;
     object-fit: contain;
     opacity: 0;
     min-height: 0;
+    max-width: 100vw;
+    width: auto;
+    height: auto;
   }
-  :global(.gallery__item.is-active img) {
+  :global(.gallery__item.current img) {
     visibility: visible;
     opacity: 1;
+    flex: 0 1 100%;
   }
 
   .gallery__item__text {
@@ -387,15 +502,121 @@ const { galleryName, images } = Astro.props;
   /* Animation */
   dialog[open],
   dialog[open]::backdrop {
-    animation: fadein 0.3s ease-in-out;
+    animation: fadeIn 0.3s ease-in-out;
+  }
+  dialog[open].fade-out,
+  dialog[open].fade-out::backdrop {
+    animation: fadeOut 0.3s ease-in-out;
   }
 
-  @keyframes fadein {
+  .gallery__item.current.zoom-in {
+    animation: zoomIn 0.3s ease-in-out;
+  }
+  .gallery__item.current.zoom-out {
+    pointer-events: none;
+    animation: zoomOut 0.3s ease-in-out;
+  }
+
+  .slideOutLeft {
+    pointer-events: none;
+    animation: slideOutLeft 0.3s linear;
+  }
+  .slideInLeft {
+    pointer-events: none;
+    animation: slideInLeft 0.3s linear;
+  }
+  .slideOutRight {
+    pointer-events: none;
+    animation: slideOutRight 0.3s linear;
+  }
+  .slideInRight {
+    pointer-events: none;
+    animation: slideInRight 0.3s linear;
+  }
+
+  @keyframes fadeIn {
     from {
       opacity: 0;
     }
     to {
       opacity: 1;
+    }
+  }
+
+  @keyframes fadeOut {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+      visibility: hidden;
+    }
+  }
+
+  @keyframes slideInLeft {
+    from {
+      opacity: 0;
+      transform: translate3d(-80%, 0, 0);
+    }
+    to {
+      transform: translate3d(0, 0, 0);
+      opacity: 1;
+    }
+  }
+
+  @keyframes slideOutLeft {
+    from {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
+    to {
+      opacity: 0;
+      transform: translate3d(-80%, 0, 0);
+    }
+  }
+
+  @keyframes slideInRight {
+    from {
+      opacity: 0;
+      transform: translate3d(80%, 0, 0);
+    }
+    to {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
+  }
+
+  @keyframes slideOutRight {
+    from {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
+    to {
+      opacity: 0;
+      transform: translate3d(80%, 0, 0);
+    }
+  }
+
+  @keyframes zoomIn {
+    from {
+      opacity: 0;
+      transform: scale3d(0.3, 0.3, 0.3);
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes zoomOut {
+    from {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0;
+      transform: scale3d(0.3, 0.3, 0.3);
+    }
+    to {
+      opacity: 0;
     }
   }
 </style>
