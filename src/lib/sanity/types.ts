@@ -47,7 +47,7 @@ export interface Homepage {
   headline: 'string';
   subheadline: 'string';
   heroImage: ImageWithExpandedMetaData;
-  introduction: 'string';
+  introduction: PortableTextBlock[];
   companyPortrait: ImageWithExpandedMetaData;
   problemTitle: 'string';
   problem: PortableTextBlock[];
