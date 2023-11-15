@@ -1,0 +1,113 @@
+---
+import type { Benefit } from '@lib/sanity/types';
+import { PortableText } from 'astro-portabletext';
+type Props = {
+  content: Benefit[];
+};
+
+const { content } = Astro.props;
+---
+
+<div class="container">
+  <div class="content__grid overflow-hidden rounded-lg">
+    {
+      content.map((item) => {
+        return (
+          <section class="content__section my-24 md:my-48">
+            <div class="space-content container">
+              {
+                <header>
+                  <h3>{item.headline}</h3>
+                </header>
+              }
+              <div class="content mt-12 rounded-lg ">
+                <div class="space-content md:text-xl">
+                  <PortableText value={item.textBlock} />
+                </div>
+              </div>
+            </div>
+          </section>
+        );
+      })
+    }
+  </div>
+</div>
+
+<style lang="scss">
+  @use '../assets/scss/base/breakpoint' as *;
+
+  .content__grid {
+    --background: var(--primary-1);
+    --background-2: var(--primary-9);
+    --action-color: var(--secondary-4);
+    --action-color-state: var(--secondary-12);
+  }
+
+  .darkmode .content__grid {
+    --background: var(--primary-2);
+    --background-2: var(--primary-11);
+    --action-color: var(--secondary-11);
+    --action-color-state: var(--secondary-12);
+  }
+
+  .content__grid {
+    color: var(--primary-12);
+    display: flex;
+    flex-direction: column;
+    gap: 6rem;
+
+    :where(.content__section) {
+      background-color: var(--background);
+      border-radius: 8px;
+    }
+
+    .content__section:nth-child(even) {
+      --action-color: var(--secondary-2);
+
+      background-color: var(--background-2);
+      color: var(--neutral-0);
+    }
+
+    .content__section {
+      margin: 0;
+      padding: 2rem;
+      z-index: 2;
+    }
+
+    .content__section > .container {
+      padding: 0;
+    }
+
+    @include breakpoint(medium) {
+      display: grid;
+      align-items: center;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0;
+      margin: 0;
+      z-index: 4;
+
+      img {
+        margin-bottom: auto;
+        aspect-ratio: 2/3;
+      }
+
+      // resets .content__section:nth-child(even) {...} for breakpoint styles
+      .content__section:nth-child(n) {
+        background-color: var(--background);
+        color: var(--neutral-12);
+      }
+
+      .content__section {
+        border-radius: 0;
+        height: 100%;
+      }
+
+      .content__section:first-child,
+      .content__section:nth-child(4n),
+      .content__section:nth-child(4n + 1) {
+        background-color: var(--background-2);
+        color: var(--neutral-0);
+      }
+    }
+  }
+</style>
