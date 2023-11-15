@@ -4,10 +4,10 @@ import Hero from '../components/Hero.astro';
 import Feature from '../components/Feature.astro';
 import Counter from '../components/Counter.astro';
 import ContentMedia from '../components/ContentMedia.astro';
-import ContentGrid from '@components/ContentGrid.astro';
 import { getHomepage } from '@lib/sanity/homePage';
 import { imageBuilder } from '@lib/sanity/imageBuilder';
 import { PortableText } from 'astro-portabletext';
+import DoubleFeature from '@components/DoubleFeature.astro';
 
 const {
   headline,
@@ -28,93 +28,28 @@ const heroImageUrl = imageBuilder(heroImage, 'hero-sq').largeUrl;
 <DefaultLayout title="Home">
   <Hero src={heroImageUrl} headline={headline} subheadline={subheadline} heroImgAltText={heroImage.altText} />
 
-  <section class="container my-24 lg:my-48" id="first-section">
-    <div class="text-container space-content md:text-lg">
-      <h2 class="text-3xl">{problemTitle}</h2>
-      <p>{problem}</p>
-      <h2 class="text-3xl">{solutionTitle}</h2>
-      <p>{solution}</p>
+  <section class="container my-24 lg:my-48">
+    <ContentMedia title="About our company" imgSrc={companyPortrait}>
+      <PortableText value={introduction} />
+    </ContentMedia>
+  </section>
+
+  <section class="my-24 lg:my-48">
+    <div class="container">
+      <div class="grid grid-cols-1 gap-24 md:grid-cols-2 md:gap-12">
+        <Feature icon="mdi:tailwind" title={problemTitle}>
+          <PortableText value={problem} />
+        </Feature>
+        <Feature icon="mdi:tailwind" title={solutionTitle}>
+          <PortableText value={solution} />
+        </Feature>
+      </div>
     </div>
   </section>
 
   <section class="my-24 lg:my-48">
-    <ContentGrid>
-      {
-        !!benefits[0] && !!benefits[1] && !!benefits[2] && !!benefits[3] && (
-          <>
-            <ContentMedia imgSrc={benefits[0].benefitImage} title={benefits[0].headline} reverseImg>
-              <div class="space-content">
-                <PortableText value={benefits[0].textBlock} />
-              </div>
-              <p slot="footer">Disclaimer, results may vary.</p>
-            </ContentMedia>
-
-            <ContentMedia imgSrc={benefits[1].benefitImage} title={benefits[1].headline}>
-              <div class="space-content">
-                <PortableText value={benefits[1].textBlock} />
-              </div>
-              <p slot="footer">Disclaimer, results may vary.</p>
-            </ContentMedia>
-
-            <ContentMedia imgSrc={benefits[2].benefitImage} title={benefits[2].headline}>
-              <div class="space-content">
-                <PortableText value={benefits[2].textBlock} />
-              </div>
-              <p slot="footer">Disclaimer, results may vary.</p>
-            </ContentMedia>
-
-            <ContentMedia imgSrc={benefits[3].benefitImage} title={benefits[3].headline}>
-              <div class="space-content">
-                <PortableText value={benefits[3].textBlock} />
-              </div>
-              <p slot="footer">Disclaimer, results may vary. Read the fine print.</p>
-            </ContentMedia>
-          </>
-        )
-      }
-    </ContentGrid>
+    <DoubleFeature content={benefits} />
   </section>
-
-  <section class="container my-24 lg:my-48">
-    <ContentMedia title="About our company" imgSrc={companyPortrait}>
-      <p>{introduction}</p>
-    </ContentMedia>
-  </section>
-
-  <!-- <section class="my-24 lg:my-48">
-    <div class="container">
-      <h2 class="mb-16 text-6xl">Features</h2>
-      <div class="grid grid-cols-1 gap-12 md:grid-cols-2 lg:grid-cols-3">
-        <Feature icon="mdi:tailwind" title="Tailwind CSS">
-          Use the power of Tailwind to greatly improve your productivity and enhance your developer workflow.
-        </Feature>
-        <Feature icon="mdi:wheelchair-accessibility" title="a11y Components">
-          17 components and counting, all tried and tested for the most optimal accessible experience for your visitors.
-        </Feature>
-        <Feature icon="mdi:looks" title="Prettier">
-          Less worry about formatting your code, let the Astro Prettier integration do the heavy lifting.
-        </Feature>
-        <Feature icon="mdi:eslint" title="ESLint">
-          Lint your code with strict a11y settings to ensure you stay on track with the WCAG standards.
-        </Feature>
-        <Feature icon="mdi:book-open-page-variant" title="Blog">
-          This theme comes with a fully integrated blog, dynamic pages and SEO optimization.
-        </Feature>
-        <Feature icon="mdi:language-markdown" title="Markdown & MDX">
-          Easily use .md and .mdx pages to build your websites or use it with Netlify CMS.
-        </Feature>
-        <Feature icon="mdi:theme-light-dark" title="Dark mode">
-          Fully integrated Dark mode gives your users the choice for their favorite viewing mode.
-        </Feature>
-        <Feature icon="mdi:cog" title="Design System">
-          The theme offers some very handy utilities to help you build your website faster.
-        </Feature>
-        <Feature icon="mdi:lighthouse" title="Lighthouse Scores">
-          Excellent lighthouse scores means your website will load faster and get better SEO rankings.
-        </Feature>
-      </div>
-    </div>
-  </section> -->
 
   <section class="my-24 lg:my-48">
     <div class="container">
