@@ -58,7 +58,7 @@
       display: grid;
       align-items: center;
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 0;
+      gap: 6rem 0;
       margin: 0;
 
       img {
@@ -77,16 +77,12 @@
         height: 100%;
       }
 
-      .content-media__outer:nth-child(1) {
+      .content-media__outer:nth-child(odd) {
         border-top-left-radius: 1rem;
-      }
-      .content-media__outer:nth-child(2) {
-        border-top-right-radius: 1rem;
-      }
-      .content-media__outer:nth-child(3) {
         border-bottom-left-radius: 1rem;
       }
-      .content-media__outer:nth-child(4) {
+      .content-media__outer:nth-child(even) {
+        border-top-right-radius: 1rem;
         border-bottom-right-radius: 1rem;
       }
 
