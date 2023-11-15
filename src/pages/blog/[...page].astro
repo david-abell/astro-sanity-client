@@ -5,7 +5,7 @@ import { Card, Pagination } from 'accessible-astro-components';
 import { formatDate } from '@util/index';
 
 import type { Post } from '@lib/sanity/types';
-import type { GetStaticPaths } from 'astro';
+import type { GetStaticPaths, Page } from 'astro';
 import { imageBuilder } from '@lib/sanity/imageBuilder';
 
 export const getStaticPaths: GetStaticPaths = async ({ paginate }) => {
@@ -13,6 +13,10 @@ export const getStaticPaths: GetStaticPaths = async ({ paginate }) => {
 
   return paginate(posts, { pageSize: 6 });
 };
+
+interface Props {
+  page: Page<Post>;
+}
 
 const { page } = Astro.props;
 ---
