@@ -50,9 +50,9 @@ export interface Homepage {
   introduction: 'string';
   companyPortrait: ImageWithExpandedMetaData;
   problemTitle: 'string';
-  problem: 'string';
+  problem: PortableTextBlock[];
   solutionTitle: 'string';
-  solution: 'string';
+  solution: PortableTextBlock[];
   benefits: Benefit[];
   // showcaseProjects: Post[]; // This is actually an array of references...
 }
