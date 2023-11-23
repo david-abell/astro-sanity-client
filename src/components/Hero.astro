@@ -12,10 +12,10 @@ const {
 } = Astro.props;
 ---
 
-<section class="hero pb-24 pt-12 md:pb-36">
+<section class="hero flex">
   <div class="space-content container relative z-20">
-    <div class="grid grid-cols-1 items-center gap-12 md:grid-cols-2 md:gap-24">
-      <div class="flex flex-col gap-8">
+    <div class="md:pb:0 grid grid-cols-1 items-center gap-8 pb-12 md:grid-cols-2 md:py-12">
+      <div class="flex flex-col gap-8 py-12">
         <h1>
           {headline}
         </h1>
@@ -75,6 +75,10 @@ const {
     line-height: 0;
     background-color: var(--primary-0);
     z-index: 10;
+
+    @include breakpoint(large) {
+      height: 50%;
+    }
   }
 
   .shape-divider-bottom svg {
@@ -82,17 +86,10 @@ const {
     position: relative;
     display: block;
     width: calc(200% + 1.3px);
-    height: 100px;
+    height: 100%;
+    max-height: 100%;
     transform: rotateY(180deg);
-
     filter: drop-shadow(-20px 0px 5.5px var(--shadow-color));
-
-    @include breakpoint(medium) {
-      height: 400px;
-    }
-    @include breakpoint(large) {
-      height: 420px;
-    }
   }
 
   .shape-fill {
