@@ -28,13 +28,13 @@ const heroImageUrl = imageBuilder(heroImage, 'hero-sq').largeUrl;
 <DefaultLayout title="Home">
   <Hero src={heroImageUrl} headline={headline} subheadline={subheadline} heroImgAltText={heroImage.altText} />
 
-  <section class="container my-24 lg:my-48">
+  <section class="mt-18 container lg:mt-36">
     <ContentMedia title="About our company" imgSrc={companyPortrait}>
       <PortableText value={introduction} />
     </ContentMedia>
   </section>
 
-  <section class="my-24 lg:my-48">
+  <section class="mt-24 lg:mt-48">
     <div class="container">
       <div class="grid grid-cols-1 gap-24 md:grid-cols-2 md:gap-12">
         <Feature icon="mdi:tailwind" title={problemTitle}>
@@ -47,11 +47,11 @@ const heroImageUrl = imageBuilder(heroImage, 'hero-sq').largeUrl;
     </div>
   </section>
 
-  <section class="my-24 lg:my-48">
+  <section class="mt-24 lg:mt-48">
     <DoubleFeature content={benefits} />
   </section>
 
-  <section class="my-24 lg:my-48">
+  <section class="mt-24 lg:mt-48">
     <div class="container">
       <h2 class="mb-12">Counters</h2>
       <div class="grid grid-cols-1 gap-12 sm:grid-cols-2 md:grid-cols-4">
