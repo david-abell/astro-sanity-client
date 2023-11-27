@@ -463,7 +463,6 @@ const { galleryName, images } = Astro.props;
   :global(.gallery__item.current img) {
     visibility: visible;
     opacity: 1;
-    flex: 0 1 100%;
   }
 
   .gallery__item__text {
@@ -471,7 +470,7 @@ const { galleryName, images } = Astro.props;
     text-align: center;
     max-width: 70ch;
     text-wrap: balance;
-    margin: 0 0 auto;
+    margin: auto 0 0;
   }
   .gallery__item__text::first-letter {
     text-transform: capitalize;
