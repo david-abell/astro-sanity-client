@@ -8,12 +8,12 @@ type Props = {
 const { content } = Astro.props;
 ---
 
-<div class="content__grid overflow-hidden rounded-lg">
+<div class="content__grid gap-12 overflow-hidden rounded-lg">
   {
     content.map((item) => {
       return (
-        <section class="content__section my-24 md:my-48">
-          <div class="space-content container">
+        <section class="content__section">
+          <div class="space-content">
             {
               <header>
                 <h3>{item.headline}</h3>
@@ -52,7 +52,6 @@ const { content } = Astro.props;
     color: var(--primary-12);
     display: flex;
     flex-direction: column;
-    gap: 6rem;
 
     :where(.content__section) {
       background-color: var(--background);
