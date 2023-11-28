@@ -1,15 +1,15 @@
 ---
+import Section from '@components/Section.astro';
 import DefaultLayout from '../layouts/DefaultLayout.astro';
 ---
 
 <DefaultLayout title="Contact">
-  <section class="my-12 text-center">
-    <div class="space-content container">
-      <h1>Thank you</h1>
-      <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Natus, quisquam.</p>
-    </div>
-  </section>
-  <section class="mb-12">
-    <div class="container"></div>
-  </section>
+  <Section>
+    <section class="text-center">
+      <div class="space-content">
+        <h1>Thank you</h1>
+        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Natus, quisquam.</p>
+      </div>
+    </section>
+  </Section>
 </DefaultLayout>

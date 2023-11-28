@@ -8,29 +8,27 @@ type Props = {
 const { content } = Astro.props;
 ---
 
-<div class="container">
-  <div class="content__grid overflow-hidden rounded-lg">
-    {
-      content.map((item) => {
-        return (
-          <section class="content__section my-24 md:my-48">
-            <div class="space-content container">
-              {
-                <header>
-                  <h3>{item.headline}</h3>
-                </header>
-              }
-              <div class="content mt-12 rounded-lg ">
-                <div class="space-content md:text-xl">
-                  <PortableText value={item.textBlock} />
-                </div>
+<div class="content__grid overflow-hidden rounded-lg">
+  {
+    content.map((item) => {
+      return (
+        <section class="content__section my-24 md:my-48">
+          <div class="space-content container">
+            {
+              <header>
+                <h3>{item.headline}</h3>
+              </header>
+            }
+            <div class="content mt-12 rounded-lg ">
+              <div class="space-content md:text-xl">
+                <PortableText value={item.textBlock} />
               </div>
             </div>
-          </section>
-        );
-      })
-    }
-  </div>
+          </div>
+        </section>
+      );
+    })
+  }
 </div>
 
 <style lang="scss">

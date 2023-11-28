@@ -2,83 +2,88 @@
 import Icon from 'astro-icon';
 import DefaultLayout from '../layouts/DefaultLayout.astro';
 import { getSettings } from '@lib/sanity/companySettings';
+import Section from '@components/Section.astro';
 const { tagline, companyAddress, companyEmail, companyPhone } = await getSettings();
 ---
 
 <DefaultLayout title="Contact">
-  <section class="container mt-12 md:mt-24">
-    <div class="space-content mt-12 md:mt-24">
-      <p class="font-bold">{tagline}</p>
-      <h1>Contact us</h1>
-      <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Natus, quisquam.</p>
-    </div>
-    <div class="mt-12 grid w-full gap-12 md:mt-24 md:gap-24 lg:grid-cols-2">
-      <form
-        class="grid gap-4"
-        method="POST"
-        id="contact-form"
-        target="_blank"
-        data-netlify="true"
-        action="/success"
-        netlify-honeypot="bot-field"
-      >
-        <div class="label__group">
-          <label for="name">Name</label>
-          <input type="text" id="name" name="name" data-required />
-        </div>
+  <div class="mt-12 md:mt-24">
+    <Section>
+      <div class="space-content">
+        <p class="font-bold">{tagline}</p>
+        <h1>Contact us</h1>
+        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Natus, quisquam.</p>
+      </div>
+    </Section>
+    <Section>
+      <div class="grid w-full gap-12 md:gap-24 lg:grid-cols-2">
+        <form
+          class="grid gap-4"
+          method="POST"
+          id="contact-form"
+          target="_blank"
+          data-netlify="true"
+          action="/success"
+          netlify-honeypot="bot-field"
+        >
+          <div class="label__group">
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" data-required />
+          </div>
 
-        <div class="label__group">
-          <label for="email">Email</label>
-          <input type="email" id="email" name="email" data-required />
-        </div>
+          <div class="label__group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" data-required />
+          </div>
 
-        <div class="label__group">
-          <label for="selectoption">Pick an option</label>
-          <select id="selectoption" name="selectoption">
-            <option value="value1">Value 1</option>
-            <option value="value2">Value 2</option>
-            <option value="value3">Value 3</option>
-          </select>
-        </div>
+          <div class="label__group">
+            <label for="selectoption">Pick an option</label>
+            <select id="selectoption" name="selectoption">
+              <option value="value1">Value 1</option>
+              <option value="value2">Value 2</option>
+              <option value="value3">Value 3</option>
+            </select>
+          </div>
 
-        <div class="label__group">
-          <label for="userMessage">Message:</label>
-          <textarea rows="5" id="userMessage" name="userMessage" data-required></textarea>
-        </div>
+          <div class="label__group">
+            <label for="userMessage">Message:</label>
+            <textarea rows="5" id="userMessage" name="userMessage" data-required></textarea>
+          </div>
 
-        <!-- Form honeypot -->
-        <div class="absolute left-[-999px]">
-          <label for="bot-field">username</label>
-          <input type="text" id="bot-field" name="bot-field" class="" tabindex="-1" />
-        </div>
+          <!-- Form honeypot -->
+          <div class="absolute left-[-999px]">
+            <label for="bot-field">username</label>
+            <input type="text" id="bot-field" name="bot-field" class="" tabindex="-1" />
+          </div>
 
-        <div class="label__group">
-          <button type="submit" class="button col-span-2 col-start-5 w-full dark:text-white">Submit</button>
-        </div>
-      </form>
+          <div class="label__group">
+            <button type="submit" class="button col-span-2 col-start-5 w-full dark:text-white">Submit</button>
+          </div>
+        </form>
 
-      <div class="grid gap-24 sm:grid-cols-2 md:justify-items-center">
-        <div class="flex flex-col gap-2">
-          <Icon pack="ion" name="mail" alt="" />
-          <h2>Email</h2>
-          <p>Lorem ipsum dolor sit amet.</p>
-          <a href={`mailto:${companyEmail}`}>{companyEmail}</a>
-        </div>
-        <div class="flex flex-col gap-2">
-          <Icon pack="ion" name="location-sharp" alt="" />
-          <h2>Address</h2>
-          <p>Lorem ipsum dolor sit amet.</p>
-          <address>{companyAddress}</address>
-        </div>
-        <div class="flex flex-col gap-2">
-          <Icon pack="ion" name="call" alt="" />
-          <h2>Phone</h2>
-          <p>Lorem ipsum dolor sit amet.</p>
-          <a href={`tel:${companyPhone}`}>{companyPhone}</a>
+        <div class="grid gap-24 sm:grid-cols-2 md:justify-items-center">
+          <div class="flex flex-col gap-2">
+            <Icon pack="ion" name="mail" alt="" />
+            <h2>Email</h2>
+            <p>Lorem ipsum dolor sit amet.</p>
+            <a href={`mailto:${companyEmail}`}>{companyEmail}</a>
+          </div>
+          <div class="flex flex-col gap-2">
+            <Icon pack="ion" name="location-sharp" alt="" />
+            <h2>Address</h2>
+            <p>Lorem ipsum dolor sit amet.</p>
+            <address>{companyAddress}</address>
+          </div>
+          <div class="flex flex-col gap-2">
+            <Icon pack="ion" name="call" alt="" />
+            <h2>Phone</h2>
+            <p>Lorem ipsum dolor sit amet.</p>
+            <a href={`tel:${companyPhone}`}>{companyPhone}</a>
+          </div>
         </div>
       </div>
-    </div>
-  </section>
+    </Section>
+  </div>
 </DefaultLayout>
 
 <style lang="scss">

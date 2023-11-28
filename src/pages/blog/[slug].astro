@@ -6,6 +6,7 @@ import { PortableText } from 'astro-portabletext';
 import { getPost, getPosts } from '@lib/sanity/post';
 import { formatDate } from '@util/index';
 import ExternalImage from '@components/ExternalImage.astro';
+import Section from '@components/Section.astro';
 
 export async function getStaticPaths() {
   const posts = await getPosts();
@@ -29,19 +30,21 @@ const post = await getPost(slug);
         <BreadcrumbsItem currentPage={true} label={post.title} />
       </Breadcrumbs>
     </div>
-    <section class="prose mx-auto mt-12 max-w-4xl dark:prose-invert md:mt-24">
-      <h1 class="capitalize">{post.title}</h1>
-      <p>{post.excerpt}</p>
-      <time datetime={post._createdAt}>
-        {formatDate(post._createdAt)}
-      </time>
-      <div class="mt-12 md:mt-24">
-        <ExternalImage imageSource={post.mainImage} size="hero" />
+    <Section>
+      <div class="prose mx-auto max-w-4xl dark:prose-invert">
+        <h1 class="capitalize">{post.title}</h1>
+        <p>{post.excerpt}</p>
+        <time datetime={post._createdAt}>
+          {formatDate(post._createdAt)}
+        </time>
+        <div class="mt-12 md:mt-24">
+          <ExternalImage imageSource={post.mainImage} size="hero" />
+        </div>
+        <div class="prose-xl mt-12 md:mt-24">
+          <PortableText value={post.body} />
+        </div>
       </div>
-      <div class="prose-xl mt-12 md:mt-24">
-        <PortableText value={post.body} />
-      </div>
-    </section>
+    </Section>
   </div>
 </DefaultLayout>
 

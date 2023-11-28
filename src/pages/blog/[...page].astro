@@ -7,6 +7,7 @@ import { formatDate } from '@util/index';
 import type { Post } from '@lib/sanity/types';
 import type { GetStaticPaths, Page } from 'astro';
 import { imageBuilder } from '@lib/sanity/imageBuilder';
+import Section from '@components/Section.astro';
 
 export const getStaticPaths: GetStaticPaths = async ({ paginate }) => {
   const posts = await getPosts();
@@ -25,45 +26,45 @@ const { page } = Astro.props;
   title="Blog"
   description="An example of a blog with dynamic content fetched from JSONPlaceholder using the title, body and userId."
 >
-  <section class="mt-12 md:mt-24">
-    <div class="space-content container">
+  <Section>
+    <div class="space-content">
       <h1>Blog</h1>
-      <p class="text-xl">An example of a blog with dynamic CMS post content.</p>
+      <p class="text-xl">An example of a blog with dynamic CMS content.</p>
     </div>
-  </section>
-  <section class="mt-12 md:mt-24">
-    <div class="container">
-      <p class="text-sm">
-        <em>Post {page.start + 1} through {page.end + 1} of {page.total} total posts</em>
-      </p>
-      <ul class="my-3">
-        {
-          page.data.map((post: Post) => (
-            <li>
-              <Card
-                url={`/blog/${post.slug.current}`}
-                title={post.title}
-                img={post.mainImage ? imageBuilder(post.mainImage, 'thumb').largeUrl : ''}
-                footer={'date:' + formatDate(post._createdAt)}
-              >
-                {post.excerpt}
-              </Card>
-            </li>
-          ))
-        }
-      </ul>
-      <div class="mt-12 grid place-content-center md:mt-24">
-        <Pagination
-          firstPage={page.url.prev ? '/blog' : null}
-          previousPage={page.url.prev ? page.url.prev : null}
-          nextPage={page.url.next ? page.url.next : null}
-          lastPage={page.url.next ? `/blog/${Math.round(page.total / page.size)}` : null}
-          currentPage={page.currentPage}
-          totalPages={Math.round(page.total / page.size)}
-        />
-      </div>
+  </Section>
+  <Section>
+    <p class="text-sm">
+      <em>Post {page.start + 1} through {page.end + 1} of {page.total} total posts</em>
+    </p>
+    <ul class="my-3">
+      {
+        page.data.map((post: Post) => (
+          <li>
+            <Card
+              url={`/blog/${post.slug.current}`}
+              title={post.title}
+              img={post.mainImage ? imageBuilder(post.mainImage, 'thumb').largeUrl : ''}
+              footer={'date:' + formatDate(post._createdAt)}
+            >
+              {post.excerpt}
+            </Card>
+          </li>
+        ))
+      }
+    </ul>
+  </Section>
+  <Section>
+    <div class="grid place-content-center">
+      <Pagination
+        firstPage={page.url.prev ? '/blog' : null}
+        previousPage={page.url.prev ? page.url.prev : null}
+        nextPage={page.url.next ? page.url.next : null}
+        lastPage={page.url.next ? `/blog/${Math.round(page.total / page.size)}` : null}
+        currentPage={page.currentPage}
+        totalPages={Math.round(page.total / page.size)}
+      />
     </div>
-  </section>
+  </Section>
 </DefaultLayout>
 
 <style lang="scss">

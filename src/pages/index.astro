@@ -8,6 +8,7 @@ import { getHomepage } from '@lib/sanity/homePage';
 import { imageBuilder } from '@lib/sanity/imageBuilder';
 import { PortableText } from 'astro-portabletext';
 import DoubleFeature from '@components/DoubleFeature.astro';
+import Section from '@components/Section.astro';
 
 const {
   headline,
@@ -28,38 +29,34 @@ const heroImageUrl = imageBuilder(heroImage, 'hero-sq').largeUrl;
 <DefaultLayout title="Home">
   <Hero src={heroImageUrl} headline={headline} subheadline={subheadline} heroImgAltText={heroImage.altText} />
 
-  <section class="container">
+  <Section>
     <ContentMedia title="About our company" imgSrc={companyPortrait}>
       <PortableText value={introduction} />
     </ContentMedia>
-  </section>
+  </Section>
 
-  <section class="mt-12 md:mt-24 lg:mt-48">
-    <div class="container">
-      <div class="grid grid-cols-1 gap-24 md:grid-cols-2 md:gap-12">
-        <Feature icon="mdi:tailwind" title={problemTitle}>
-          <PortableText value={problem} />
-        </Feature>
-        <Feature icon="mdi:tailwind" title={solutionTitle}>
-          <PortableText value={solution} />
-        </Feature>
-      </div>
+  <Section>
+    <div class="grid grid-cols-1 gap-24 md:grid-cols-2 md:gap-12">
+      <Feature icon="mdi:tailwind" title={problemTitle}>
+        <PortableText value={problem} />
+      </Feature>
+      <Feature icon="mdi:tailwind" title={solutionTitle}>
+        <PortableText value={solution} />
+      </Feature>
     </div>
-  </section>
+  </Section>
 
-  <section class="mt-12 md:mt-24 lg:mt-48">
+  <Section>
     <DoubleFeature content={benefits} />
-  </section>
+  </Section>
 
-  <section class="mt-12 md:mt-24 lg:mt-48">
-    <div class="container">
-      <h2 class="mb-12">Counters</h2>
-      <div class="grid grid-cols-1 gap-12 sm:grid-cols-2 md:grid-cols-4">
-        <Counter count="5" title="Popular" sub="Locations" />
-        <Counter count="50+" title="Lighting" sub="Styles" />
-        <Counter count="5000" title="Satisfied" sub="Customers" />
-        <Counter count="5+" title="Years" sub="Since launch" />
-      </div>
+  <Section>
+    <h2 class="mb-12">Counters</h2>
+    <div class="grid grid-cols-1 gap-12 sm:grid-cols-2 md:grid-cols-4">
+      <Counter count="5" title="Popular" sub="Locations" />
+      <Counter count="50+" title="Lighting" sub="Styles" />
+      <Counter count="5000" title="Satisfied" sub="Customers" />
+      <Counter count="5+" title="Years" sub="Since launch" />
     </div>
-  </section>
+  </Section>
 </DefaultLayout>
