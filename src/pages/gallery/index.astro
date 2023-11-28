@@ -18,13 +18,15 @@ const galleries = await sanityClient.fetch<Gallery[]>(groq`*[_type == "gallery"]
   {
     galleries?.map((gallery) => {
       return (
-        <section class="container my-24 md:my-48">
-          <div class="space-content my-24">
-            <h1>{gallery.title}</h1>
-            <h2>{gallery.headline}</h2>
+        <section class="container mt-12 md:mt-24">
+          <div class="space-content">
+            <h2>{gallery.title}</h2>
+            <h3>{gallery.headline}</h3>
             <p>{gallery.description}</p>
           </div>
-          <GalleryGrid images={gallery.images} galleryName={gallery.slug.current} preview />
+          <div class=" mt-12 md:mt-24">
+            <GalleryGrid images={gallery.images} galleryName={gallery.slug.current} preview />
+          </div>
         </section>
       );
     })

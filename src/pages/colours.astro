@@ -7,15 +7,15 @@ import Icon from 'astro-icon';
 ---
 
 <DefaultLayout title="Accessible Components">
-  <section class="my-12">
+  <section class="my-12 md:mt-24">
     <div class="space-content container">
-      <h1>Find your Colour palette</h1>
+      <h1>Colour palettes</h1>
       <p class="text-xl">Design your own colour scheme with eighteen carefully selected hues.</p>
-      <p class="text-xl">Select a row of hues to set them as theme colours</p>
+      <h2 class="text-xl">Select a row of hues to set them as theme colours</h2>
     </div>
   </section>
-  <section class="mb-12 mt-32">
-    <div class="color-grid w-full text-center">
+  <section class="container mt-12 md:mt-24">
+    <div class="color-grid text-center">
       {
         Array(18)
           .fill(null)
@@ -31,17 +31,9 @@ import Icon from 'astro-icon';
                         class="grid-item"
                         data-hue={paletteHues[hueIndex]}
                         data-hue-value={colorPalettes[paletteHues[hueIndex]!][valueIndex]}
-                      >
-                        <p class="color-description">
-                          {paletteHues[hueIndex]}
-                          <br />
-                          {
-                            // @ts-expect-error indexing by valueIndex is correct
-                            colorPalettes[paletteHues[hueIndex]!][valueIndex]
-                          }
-                        </p>
-                      </div>
+                      />
                     ))}
+                  <span class="color-description">{paletteHues[hueIndex]}</span>
                 </button>
                 <Modal triggerId={`grid-button-${hueIndex}`} title={`Select ${paletteHues[hueIndex]} colours?`}>
                   <div class="modal-content space-content mx-auto max-w-full">
@@ -306,24 +298,21 @@ import Icon from 'astro-icon';
       border: none;
       display: flex;
       width: 100%;
+      position: relative;
     }
 
     .grid-item {
       flex-grow: 1;
       aspect-ratio: 1;
-      position: relative;
+    }
 
-      p {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-      }
-      @media only screen and (max-width: 1200px) {
-        .color-description {
-          display: none;
-        }
-      }
+    .color-description {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 1.6em;
+      text-transform: capitalize;
     }
 
     .grid-item:nth-child(n + 6) {

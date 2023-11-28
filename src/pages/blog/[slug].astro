@@ -21,7 +21,7 @@ const post = await getPost(slug);
 ---
 
 <DefaultLayout title={post.title} description={post.excerpt} url={post.slug.current}>
-  <div class="container">
+  <div class="container mx-auto mt-12">
     <div class="mt-12">
       <Breadcrumbs>
         <BreadcrumbsItem href="/" label="Home" />
@@ -29,23 +29,20 @@ const post = await getPost(slug);
         <BreadcrumbsItem currentPage={true} label={post.title} />
       </Breadcrumbs>
     </div>
-  </div>
-  <section class="my-12">
-    <div class="space-content container">
-      <section class="post space-content">
-        <h1>{post.title}</h1>
-        <p>{post.excerpt}</p>
-        <time datetime={post._createdAt}>
-          {formatDate(post._createdAt)}
-        </time>
-        <!-- <img src={imageBuilder(post.mainImage, 'hero-sm')} alt={post.mainImage.altText || 'Cover'} /> -->
+    <section class="prose mx-auto mt-12 max-w-4xl dark:prose-invert md:mt-24">
+      <h1 class="capitalize">{post.title}</h1>
+      <p>{post.excerpt}</p>
+      <time datetime={post._createdAt}>
+        {formatDate(post._createdAt)}
+      </time>
+      <div class="mt-12 md:mt-24">
         <ExternalImage imageSource={post.mainImage} size="hero" />
-        <div class="prose my-12 dark:prose-invert lg:prose-xl">
-          <PortableText value={post.body} />
-        </div>
-      </section>
-    </div>
-  </section>
+      </div>
+      <div class="prose-xl mt-12 md:mt-24">
+        <PortableText value={post.body} />
+      </div>
+    </section>
+  </div>
 </DefaultLayout>
 
 <style lang="scss">

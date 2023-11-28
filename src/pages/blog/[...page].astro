@@ -25,13 +25,13 @@ const { page } = Astro.props;
   title="Blog"
   description="An example of a blog with dynamic content fetched from JSONPlaceholder using the title, body and userId."
 >
-  <section class="my-12">
+  <section class="mt-12 md:mt-24">
     <div class="space-content container">
       <h1>Blog</h1>
       <p class="text-xl">An example of a blog with dynamic CMS post content.</p>
     </div>
   </section>
-  <section class="my-12">
+  <section class="mt-12 md:mt-24">
     <div class="container">
       <p class="text-sm">
         <em>Post {page.start + 1} through {page.end + 1} of {page.total} total posts</em>
@@ -52,7 +52,7 @@ const { page } = Astro.props;
           ))
         }
       </ul>
-      <div class="mt-12 grid place-content-center">
+      <div class="mt-12 grid place-content-center md:mt-24">
         <Pagination
           firstPage={page.url.prev ? '/blog' : null}
           previousPage={page.url.prev ? page.url.prev : null}
