@@ -39,9 +39,6 @@ export default defineConfig({
         mdi: ['*'], // (Default) Loads entire Material Design Icon set
         ion: ['*'], // (Default) Loads entire Material Design Icon set
       },
-      svgoOptions: {
-        plugins: ['removeViewBox'],
-      },
     }),
     mdx(),
     tailwind(),
