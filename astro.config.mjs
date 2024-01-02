@@ -34,6 +34,11 @@ export default defineConfig({
   }),
   integrations: [
     icon({
+      include: {
+        // update setting to include on used icons for ssr/hybrid js bundle size
+        mdi: ['*'], // (Default) Loads entire Material Design Icon set
+        ion: ['*'], // (Default) Loads entire Material Design Icon set
+      },
       svgoOptions: {
         plugins: ['removeViewBox'],
       },
