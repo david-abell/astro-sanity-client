@@ -12,11 +12,11 @@ const {
 } = Astro.props;
 ---
 
-<section class="hero my-24 lg:my-48">
-  <div class="container">
-    <div class="grid grid-cols-1 items-center gap-24 lg:grid-cols-2">
-      <div class="flex flex-col items-center gap-8 md:items-start">
-        <h1 class="text-balance text-4xl md:text-left lg:text-6xl lg:leading-tight">
+<section class="hero mb-24 flex lg:mb-36">
+  <div class="space-content container relative z-20">
+    <div class="md:pb:0 grid grid-cols-1 items-center gap-8 pb-12 md:grid-cols-2 md:py-12">
+      <div class="flex flex-col gap-8 py-12">
+        <h1>
           {headline}
         </h1>
         <p class="text-balance text-lg">{subheadline}</p>
@@ -32,16 +32,25 @@ const {
         </div>
       </div>
       <img
-        class="hero-img lg:auto h-[50vmin] w-full rounded-lg object-cover lg:h-auto lg:rounded-full"
+        class="hero-img hidden aspect-square rounded-full object-cover md:block lg:max-h-[540px]"
         src={src}
         alt={heroImgAltText}
         decoding="async"
       />
     </div>
   </div>
+  <div class="shape-divider-bottom">
+    <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+      <path
+        d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z"
+        class="shape-fill"></path>
+    </svg>
+  </div>
 </section>
 
 <style lang="scss">
+  @use '../assets/scss/base/breakpoint' as *;
+
   .text-gradient {
     background: linear-gradient(315deg, var(--primary-6) 25%, var(--secondary-4));
     background-clip: border-box;
@@ -49,10 +58,77 @@ const {
     -webkit-text-fill-color: transparent;
   }
 
+  .hero {
+    --shadow-color: hsl(0deg 0% 0% / 0.31);
+    background-color: var(--primary-background);
+    position: relative;
+    h1,
+    p {
+      text-wrap: balance;
+    }
+  }
+
+  .hero-img {
+    filter: drop-shadow(1px 2px 6px var(--shadow-color));
+  }
+
+  .shape-divider-bottom {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+    line-height: 0;
+    background-color: var(--background);
+    z-index: 10;
+
+    @include breakpoint(large) {
+      height: 50%;
+    }
+  }
+
+  .shape-divider-bottom svg {
+    max-width: unset;
+    position: relative;
+    display: block;
+    width: calc(200% + 1.3px);
+    height: 100%;
+    max-height: 100%;
+    transform: rotateY(180deg);
+    filter: drop-shadow(-20px 0px 5.5px var(--shadow-color));
+  }
+
+  .shape-fill {
+    fill: var(--primary-1);
+  }
+
+  .subheadline {
+    position: relative;
+    padding-left: 1.8rem;
+  }
+
+  .subheadline::before {
+    content: '';
+    position: absolute;
+    background-color: var(--action-color);
+    width: 5px;
+    left: 0;
+    top: 5%;
+    height: 2rem;
+  }
+
   :global(.darkmode .text-gradient) {
     background: linear-gradient(315deg, var(--primary-4) 25%, var(--secondary-6));
     background-clip: border-box;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+  }
+
+  :global(.darkmode .hero) {
+    background-color: var(--neutral-11);
+  }
+
+  :global(.darkmode .shape-divider-bottom .shape-fill) {
+    fill: var(--neutral-11);
   }
 </style>

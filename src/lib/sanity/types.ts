@@ -47,12 +47,12 @@ export interface Homepage {
   headline: 'string';
   subheadline: 'string';
   heroImage: ImageWithExpandedMetaData;
-  introduction: 'string';
+  introduction: PortableTextBlock[];
   companyPortrait: ImageWithExpandedMetaData;
   problemTitle: 'string';
-  problem: 'string';
+  problem: PortableTextBlock[];
   solutionTitle: 'string';
-  solution: 'string';
+  solution: PortableTextBlock[];
   benefits: Benefit[];
   // showcaseProjects: Post[]; // This is actually an array of references...
 }

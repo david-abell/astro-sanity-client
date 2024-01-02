@@ -8,9 +8,7 @@ const { icon = 'mdi:rocket', title = 'Title' } = Astro.props;
   <Icon name={icon} size={30} />
   <div class="content">
     <h3>{title}</h3>
-    <p>
-      <slot>Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic, corporis.</slot>
-    </p>
+    <slot>Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic, corporis.</slot>
   </div>
 </div>
 
@@ -39,10 +37,10 @@ const { icon = 'mdi:rocket', title = 'Title' } = Astro.props;
 
     &::before {
       inset: 0;
-      background-color: var(--neutral-0);
+      background-color: var(--background);
       border: 3px solid var(--neutral-10);
       border-radius: 1rem;
-      box-shadow: 0 0 0 6px var(--neutral-0);
+      box-shadow: 0 0 0 6px var(--background);
       z-index: 1;
     }
 

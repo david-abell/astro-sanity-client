@@ -1,17 +1,16 @@
 ---
-import DefaultLayout from '../layouts/DefaultLayout.astro'
+import Section from '@components/Section.astro';
+import DefaultLayout from '../layouts/DefaultLayout.astro';
 ---
 
 <DefaultLayout title="404">
-  <section class="my-12">
-    <div class="container">
-      <h1>404</h1>
+  <Section>
+    <h1>404</h1>
+    <p class="text-xl">This page does not exist. Don't worry though, we got you.</p>
+  </Section>
+  <Section>
+    <div class="space-content">
+      <a class="button" href="/">Take me home</a>
     </div>
-  </section>
-  <section class="my-12">
-    <div class="space-content container">
-      <p class="text-2xl">This page does not exist. Don't worry though, we got you.</p>
-      <a class="button" href="/">Let's get you home Astronout 🚀</a>
-    </div>
-  </section>
+  </Section>
 </DefaultLayout>

@@ -44,7 +44,18 @@ const homepage = defineType({
       name: 'introduction',
       title: 'Company introduction statement',
       description: 'Introduce your company in a few paragraphs.',
-      type: 'text',
+      type: 'array',
+      of: [
+        defineArrayMember({
+          title: 'Block',
+          name: 'blockText',
+          type: 'block',
+          styles: [
+            { title: 'Normal', value: 'normal' },
+            { title: 'Quote', value: 'blockquote' },
+          ],
+        }),
+      ],
       validation: (Rule) => Rule.required(),
     }),
     defineField({
@@ -76,8 +87,20 @@ const homepage = defineType({
     defineField({
       name: 'problem',
       title: 'Problem statement',
-      description: 'Describe the problem your company solves.',
-      type: 'text',
+      description:
+        'Describe the problem your company solves. Break-up text into multiple paragraphs for better spacing.',
+      type: 'array',
+      of: [
+        defineArrayMember({
+          title: 'Block',
+          name: 'blockText',
+          type: 'block',
+          styles: [
+            { title: 'Normal', value: 'normal' },
+            { title: 'Quote', value: 'blockquote' },
+          ],
+        }),
+      ],
       validation: (Rule) => Rule.required(),
     }),
     defineField({
@@ -90,8 +113,20 @@ const homepage = defineType({
     defineField({
       name: 'solution',
       title: 'Solution statement',
-      description: 'Describe your companies solution the the problem it solves.',
-      type: 'text',
+      description:
+        'Describe your companies solution the the problem it solves. Break-up text into multiple paragraphs for better spacing.',
+      type: 'array',
+      of: [
+        defineArrayMember({
+          title: 'Block',
+          name: 'blockText',
+          type: 'block',
+          styles: [
+            { title: 'Normal', value: 'normal' },
+            { title: 'Quote', value: 'blockquote' },
+          ],
+        }),
+      ],
       validation: (Rule) => Rule.required(),
     }),
     defineField({

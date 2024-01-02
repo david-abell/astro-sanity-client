@@ -4,6 +4,7 @@ import DefaultLayout from '../../layouts/DefaultLayout.astro';
 import { sanityClient } from 'sanity:client';
 import groq from 'groq';
 import GalleryGrid from '@components/GalleryGrid.astro';
+import Section from '@components/Section.astro';
 
 const galleries = await sanityClient.fetch<Gallery[]>(groq`*[_type == "gallery"] {
       ...,
@@ -15,17 +16,21 @@ const galleries = await sanityClient.fetch<Gallery[]>(groq`*[_type == "gallery"]
 ---
 
 <DefaultLayout title="Gallery">
+  <Section>
+    <h1>Our work</h1>
+  </Section>
   {
     galleries?.map((gallery) => {
       return (
-        <section class="container my-24 md:my-48">
-          <div class="space-content my-24">
-            <h1>{gallery.title}</h1>
+        <Section>
+          <div class="space-content text-container">
             <h2>{gallery.headline}</h2>
             <p>{gallery.description}</p>
           </div>
-          <GalleryGrid images={gallery.images} galleryName={gallery.slug.current} preview />
-        </section>
+          <div class=" mt-12 md:mt-24">
+            <GalleryGrid images={gallery.images} galleryName={gallery.slug.current} preview />
+          </div>
+        </Section>
       );
     })
   }
