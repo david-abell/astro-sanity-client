@@ -1,5 +1,5 @@
 ---
-import { Icon } from 'astro-icon';
+import { Icon } from 'astro-icon/components';
 
 const defaultSubheadline =
   'Welcome to Ambient Lighting Limited, where we specialize in enhancing spaces with exquisite mood lighting. We believe that lighting has the power to create captivating atmospheres and elevate any environment.';
@@ -19,11 +19,17 @@ const {
         <h1>
           {headline}
         </h1>
-        <p class="subheadline">{subheadline}</p>
-        <a class="button has-icon mr-auto" href="/contact">
-          <Icon pack="ion" name="paper-plane-outline" alt="" />
-           Send us a message</a
-        >
+        <p class="text-balance text-lg">{subheadline}</p>
+        <div class="flex flex-col gap-3 min-[500px]:flex-row">
+          <a class="button has-icon" href="/contact">
+            <Icon name="ion:paper-plane-outline" size={30} />
+             Send us a message</a
+          >
+          <a class="button has-icon" href="#first-section" data-color="secondary">
+            <Icon name="ion:arrow-down-circle-outline" size={30} />
+             About us
+          </a>
+        </div>
       </div>
       <img
         class="hero-img hidden aspect-square rounded-full object-cover md:block lg:max-h-[540px]"

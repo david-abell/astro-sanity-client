@@ -1,5 +1,5 @@
 ---
-import Icon from 'astro-icon';
+import { Icon } from 'astro-icon/components';
 import DefaultLayout from '../layouts/DefaultLayout.astro';
 import { getSettings } from '@lib/sanity/companySettings';
 import Section from '@components/Section.astro';
@@ -63,19 +63,19 @@ const { tagline, companyAddress, companyEmail, companyPhone } = await getSetting
 
         <div class="grid gap-24 sm:grid-cols-2 md:justify-items-center">
           <div class="flex flex-col gap-2">
-            <Icon pack="ion" name="mail" alt="" />
+            <Icon name="ion:mail" size={30} />
             <h2>Email</h2>
             <p>Lorem ipsum dolor sit amet.</p>
             <a href={`mailto:${companyEmail}`}>{companyEmail}</a>
           </div>
           <div class="flex flex-col gap-2">
-            <Icon pack="ion" name="location-sharp" alt="" />
+            <Icon name="ion:location-sharp" size={30} />
             <h2>Address</h2>
             <p>Lorem ipsum dolor sit amet.</p>
             <address>{companyAddress}</address>
           </div>
           <div class="flex flex-col gap-2">
-            <Icon pack="ion" name="call" alt="" />
+            <Icon name="ion:call" size={30} />
             <h2>Phone</h2>
             <p>Lorem ipsum dolor sit amet.</p>
             <a href={`tel:${companyPhone}`}>{companyPhone}</a>
@@ -84,159 +84,159 @@ const { tagline, companyAddress, companyEmail, companyPhone } = await getSetting
       </div>
     </Section>
   </div>
-</DefaultLayout>
 
-<style lang="scss">
-  .label__group {
-    margin-bottom: 1.5rem;
-    display: grid;
-    grid-template-columns: repeat(6, minmax(0, 1fr));
-
-    label {
-      display: block;
-      grid-column: span 2 / span 2;
-    }
-
-    input,
-    select,
-    textarea {
-      display: block;
-      padding: 0.5rem;
-      border-radius: 0.5rem;
-      background-color: var(--neutral-background);
-      grid-column: span 4 / span 4;
-      grid-column-start: 3;
-      width: 100%;
-    }
-
-    input:required:valid,
-    select:required:valid,
-    textarea:required:valid {
-      border: 2px solid green;
-    }
-
-    input:invalid:required,
-    select:invalid:required,
-    textarea:invalid:required {
-      border: 2px dashed red;
-    }
-  }
-
-  @media (max-width: 1024px) {
+  <style lang="scss">
     .label__group {
-      display: block;
+      margin-bottom: 1.5rem;
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
 
       label {
-        margin-bottom: 0.5rem;
+        display: block;
+        grid-column: span 2 / span 2;
       }
-    }
-  }
 
-  :global(.darkmode) {
-    .label__group {
       input,
       select,
       textarea {
-        background-color: var(--neutral-11);
+        display: block;
+        padding: 0.5rem;
+        border-radius: 0.5rem;
+        background-color: var(--neutral-background);
+        grid-column: span 4 / span 4;
+        grid-column-start: 3;
+        width: 100%;
+      }
+
+      input:required:valid,
+      select:required:valid,
+      textarea:required:valid {
+        border: 2px solid green;
+      }
+
+      input:invalid:required,
+      select:invalid:required,
+      textarea:invalid:required {
+        border: 2px dashed red;
       }
     }
-  }
 
-  :global([astro-icon] path) {
-    fill: var(--action-color);
-  }
-</style>
+    @media (max-width: 1024px) {
+      .label__group {
+        display: block;
 
-<script>
-  import { navigate } from 'astro:transitions/client';
-  const arrivalTime = new Date().getTime();
-
-  const spamKeywords = [
-    'generate more leads',
-    'click here',
-    'unsubscribe',
-    'freelance',
-    'logo',
-    'tinyurl',
-    'seo',
-    'income',
-    'hosting',
-    'optout',
-    'opt-out',
-    'pills',
-    '/>',
-    'copyright',
-    'violating',
-    'sex',
-    'href',
-    'weight loss',
-    'money-back guarantee',
-    'www',
-  ];
-
-  function handleSubmit(e: SubmitEvent) {
-    e.preventDefault();
-
-    // silently reject if form submission is too quick
-    if (new Date().getTime() - arrivalTime < 3000) {
-      return navigate('/success');
+        label {
+          margin-bottom: 0.5rem;
+        }
+      }
     }
 
-    const form = e.target as HTMLFormElement;
-    const requireFields = form.querySelectorAll('[data-required]');
+    :global(.darkmode) {
+      .label__group {
+        input,
+        select,
+        textarea {
+          background-color: var(--neutral-11);
+        }
+      }
+    }
 
-    // don't bug user with form validation before entry
-    requireFields.forEach((field) => field.setAttribute('required', ''));
+    :global([data-icon] path) {
+      fill: var(--action-color);
+    }
+  </style>
 
-    const data = new FormData(form);
+  <script>
+    import { navigate } from 'astro:transitions/client';
+    const arrivalTime = new Date().getTime();
 
-    for (const [key, value] of data.entries()) {
-      switch (key.trim()) {
-        case 'name':
-          break;
-        case 'email':
-          break;
-        case 'selectoption':
-          break;
-        case 'userMessage':
-          if (typeof value === 'string') {
-            const loweredValue = value.toLowerCase();
-            for (const word of spamKeywords) {
-              if (loweredValue.includes(word)) {
-                return navigate('/success');
+    const spamKeywords = [
+      'generate more leads',
+      'click here',
+      'unsubscribe',
+      'freelance',
+      'logo',
+      'tinyurl',
+      'seo',
+      'income',
+      'hosting',
+      'optout',
+      'opt-out',
+      'pills',
+      '/>',
+      'copyright',
+      'violating',
+      'sex',
+      'href',
+      'weight loss',
+      'money-back guarantee',
+      'www',
+    ];
+
+    function handleSubmit(e: SubmitEvent) {
+      e.preventDefault();
+
+      // silently reject if form submission is too quick
+      if (new Date().getTime() - arrivalTime < 3000) {
+        return navigate('/success');
+      }
+
+      const form = e.target as HTMLFormElement;
+      const requireFields = form.querySelectorAll('[data-required]');
+
+      // don't bug user with form validation before entry
+      requireFields.forEach((field) => field.setAttribute('required', ''));
+
+      const data = new FormData(form);
+
+      for (const [key, value] of data.entries()) {
+        switch (key.trim()) {
+          case 'name':
+            break;
+          case 'email':
+            break;
+          case 'selectoption':
+            break;
+          case 'userMessage':
+            if (typeof value === 'string') {
+              const loweredValue = value.toLowerCase();
+              for (const word of spamKeywords) {
+                if (loweredValue.includes(word)) {
+                  return navigate('/success');
+                }
               }
             }
-          }
-          break;
-        case 'bot-field':
-          if (typeof value === 'string' && value.trim().length) {
-            return navigate('/success');
-          }
-          break;
+            break;
+          case 'bot-field':
+            if (typeof value === 'string' && value.trim().length) {
+              return navigate('/success');
+            }
+            break;
+        }
       }
+
+      if (!form.checkValidity()) return false;
+
+      // typescript fix for Formdata file fields
+      const convertedFormEntries = Array.from(data, ([key, value]) => [
+        key,
+        typeof value === 'string' ? value : value.name,
+      ]);
+      const searchParams = new URLSearchParams(convertedFormEntries);
+
+      // Netlify form submission
+      fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: searchParams.toString(),
+      })
+        .then(() => navigate('/success'))
+        .catch((error) => alert(error));
     }
 
-    if (!form.checkValidity()) return false;
-
-    // typescript fix for Formdata file fields
-    const convertedFormEntries = Array.from(data, ([key, value]) => [
-      key,
-      typeof value === 'string' ? value : value.name,
-    ]);
-    const searchParams = new URLSearchParams(convertedFormEntries);
-
-    // Netlify form submission
-    fetch('/', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: searchParams.toString(),
-    })
-      .then(() => navigate('/success'))
-      .catch((error) => alert(error));
-  }
-
-  document.querySelector('form')?.addEventListener('submit', handleSubmit);
-  document.addEventListener('astro:after-swap', () =>
-    document.querySelector('form')?.addEventListener('submit', handleSubmit),
-  );
-</script>
+    document.querySelector('form')?.addEventListener('submit', handleSubmit);
+    document.addEventListener('astro:after-swap', () =>
+      document.querySelector('form')?.addEventListener('submit', handleSubmit),
+    );
+  </script>
+</DefaultLayout>

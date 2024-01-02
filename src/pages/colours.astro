@@ -3,7 +3,7 @@ import DefaultLayout from '../layouts/DefaultLayout.astro';
 import { colorPalettes, paletteHues } from '@assets/scss/base/color-palettes';
 import { Modal } from 'accessible-astro-components';
 
-import Icon from 'astro-icon';
+import { Icon } from 'astro-icon/components';
 ---
 
 <DefaultLayout title="Accessible Components">
@@ -72,7 +72,7 @@ import Icon from 'astro-icon';
                       <ul class="menu flex flex-col justify-center gap-4 md:flex-row md:items-center">
                         <li class="menu-item type-icon">
                           <button type="button" title="Example link with icon" class="fake-anchor">
-                            <Icon pack="ion" name="logo-github" alt="" />
+                            <Icon name="ion:logo-github" size={30} />
                             Example link with icon
                           </button>
                         </li>
@@ -257,7 +257,7 @@ import Icon from 'astro-icon';
       justify-content: center;
       align-items: center;
 
-      [astro-icon] {
+      [data-icon] {
         width: 30px;
         padding-right: 0.25rem;
 
@@ -268,7 +268,7 @@ import Icon from 'astro-icon';
       }
 
       &:hover {
-        [astro-icon] path {
+        [data-icon] path {
           fill: var(--action-color-state);
         }
       }

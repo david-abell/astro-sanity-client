@@ -4,6 +4,7 @@ import tailwind from '@astrojs/tailwind';
 import react from '@astrojs/react';
 import { loadEnv } from 'vite';
 import nodejs from '@astrojs/node';
+import icon from 'astro-icon';
 
 const {
   PUBLIC_SANITY_STUDIO_PROJECT_ID,
@@ -32,6 +33,14 @@ export default defineConfig({
     mode: 'standalone',
   }),
   integrations: [
+    icon({
+      include: {
+        // update setting to include on used icons for ssr/hybrid js bundle size
+        mdi: ['*'], // (Default) Loads entire Material Design Icon set
+        ion: ['*'], // (Default) Loads entire Ion Icon set
+        'simple-icons': ['sanity'],
+      },
+    }),
     mdx(),
     tailwind(),
     sanity({

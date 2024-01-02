@@ -1,6 +1,6 @@
 ---
 import type { ImageWithOptionalDescription } from '@lib/sanity/types';
-import Icon from 'astro-icon';
+import { Icon } from 'astro-icon/components';
 import ExternalImage from './ExternalImage.astro';
 
 interface Props {
@@ -30,7 +30,7 @@ const { galleryName, images } = Astro.props;
           {'Close image gallery'}
         </label>
         <button id={`${galleryName}-close-button`}>
-          <Icon pack="ion" name="close" alt="" />
+          <Icon name="ion:close" size={30} />
         </button>
       </div>
       <div class="absolute left-0 top-1/2">
@@ -38,7 +38,7 @@ const { galleryName, images } = Astro.props;
           {'Previous image'}
         </label>
         <button id={`${galleryName}-previous`}>
-          <Icon pack="ion" name="chevron-back-outline" alt="" />
+          <Icon name="ion:chevron-back-outline" size={30} />
         </button>
       </div>
       <div class="absolute right-0 top-1/2">
@@ -46,7 +46,7 @@ const { galleryName, images } = Astro.props;
           {'Next image'}
         </label>
         <button class="p-0" id={`${galleryName}-next`}>
-          <Icon pack="ion" name="chevron-forward-outline" alt="" />
+          <Icon name="ion:chevron-forward-outline" size={30} />
         </button>
       </div>
     </div>

@@ -1,7 +1,7 @@
 ---
 import { PortableText } from 'astro-portabletext';
 import { getCallToAction } from '@lib/sanity/companySettings';
-import Icon from 'astro-icon';
+import { Icon } from 'astro-icon/components';
 
 const { callToAction } = await getCallToAction();
 ---
@@ -12,7 +12,7 @@ const { callToAction } = await getCallToAction();
       <div class="">
         <PortableText value={callToAction} />
         <a class="button has-icon" href="/contact">
-          <Icon pack="ion" name="paper-plane-outline" alt="" />
+          <Icon name="ion:paper-plane-outline" size={30} />
            Send us a message</a
         >
       </div>

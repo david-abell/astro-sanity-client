@@ -1,12 +1,12 @@
 ---
-import { Icon } from 'astro-icon';
+import { Icon } from 'astro-icon/components';
 
 const { icon = 'mdi:rocket', title = 'Title' } = Astro.props;
 ---
 
 <div class="feature flex flex-col gap-4">
-  <Icon name={icon} alt="" />
-  <div class="space-content">
+  <Icon name={icon} size={30} />
+  <div class="content">
     <h3>{title}</h3>
     <slot>Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic, corporis.</slot>
   </div>
@@ -52,7 +52,7 @@ const { icon = 'mdi:rocket', title = 'Title' } = Astro.props;
     }
   }
 
-  :global(.feature [astro-icon]) {
+  :global(.feature [data-icon]) {
     width: 4rem;
     color: var(--action-color);
   }
