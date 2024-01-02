@@ -59,19 +59,19 @@ const { tagline, companyAddress, companyEmail, companyPhone } = await getSetting
 
       <div class="grid gap-24 sm:grid-cols-2 md:justify-items-center">
         <div class="flex flex-col gap-2">
-          <Icon name="ion:mail" />
+          <Icon name="ion:mail" size={30} />
           <h2>Email</h2>
           <p>Lorem ipsum dolor sit amet.</p>
           <a href={`mailto:${companyEmail}`}>{companyEmail}</a>
         </div>
         <div class="flex flex-col gap-2">
-          <Icon name="ion:location-sharp" />
+          <Icon name="ion:location-sharp" size={30} />
           <h2>Address</h2>
           <p>Lorem ipsum dolor sit amet.</p>
           <address>{companyAddress}</address>
         </div>
         <div class="flex flex-col gap-2">
-          <Icon name="ion:call" />
+          <Icon name="ion:call" size={30} />
           <h2>Phone</h2>
           <p>Lorem ipsum dolor sit amet.</p>
           <a href={`tel:${companyPhone}`}>{companyPhone}</a>
