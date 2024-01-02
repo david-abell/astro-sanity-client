@@ -52,13 +52,60 @@
   font-display: swap;
 }
 
+@font-face {
+  font-family: 'Poppins';
+  src:
+    local('Poppins ExtraBold'),
+    local('Poppins-ExtraBold'),
+    url('/fonts/Poppins-ExtraBold.woff2') format('woff2'),
+    url('/fonts/Poppins-ExtraBold.woff') format('woff');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Poppins';
+  src:
+    local('Poppins Bold'),
+    local('Poppins-Bold'),
+    url('/fonts/Poppins-Bold.woff2') format('woff2'),
+    url('/fonts/Poppins-Bold.woff') format('woff');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Poppins';
+  src:
+    local('Poppins Italic'),
+    local('Poppins-Italic'),
+    url('/fonts/Poppins-Italic.woff2') format('woff2'),
+    url('/fonts/Poppins-Italic.woff') format('woff');
+  font-weight: normal;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Poppins';
+  src:
+    local('Poppins Regular'),
+    local('Poppins-Regular'),
+    url('/fonts/Poppins-Regular.woff2') format('woff2'),
+    url('/fonts/Poppins-Regular.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 body {
   font-family: var(--font-family-default);
   text-shadow: rgba(0, 0, 0, 0.01) 0 0 1px;
   text-rendering: optimizeLegibility;
   font-synthesis: none;
   font-size: 1rem;
-  line-height: 1.5rem;
   -webkit-text-size-adjust: 100%;
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
@@ -88,10 +135,7 @@ body {
   }
 
   h1,
-  h2 {
-    font-weight: 800;
-  }
-
+  h2,
   h3,
   h4,
   h5,
@@ -100,62 +144,29 @@ body {
   }
 
   h1 {
-    font-size: 2.25rem;
-    line-height: 3.375rem;
+    font-size: 2.5rem;
+    line-height: 1.2;
 
     @include breakpoint(medium) {
-      font-size: 3rem;
-      line-height: 3.625rem;
+      font-size: 3.5rem;
     }
   }
 
   h2 {
-    font-size: 1.875rem;
-    line-height: 2.8125rem;
+    font-size: 2.25rem;
+    line-height: 1.2;
 
     @include breakpoint(medium) {
-      font-size: 2.25rem;
-      line-height: 3.375rem;
+      font-size: 3rem;
     }
   }
 
   h3 {
-    font-size: 1.5rem;
-    line-height: 2.25rem;
+    font-size: 2rem;
+    line-height: 1.2;
 
     @include breakpoint(medium) {
-      font-size: 1.875rem;
-      line-height: 2.8125rem;
-    }
-  }
-
-  h4 {
-    font-size: 1.25rem;
-    line-height: 1.875rem;
-
-    @include breakpoint(medium) {
-      font-size: 1.5rem;
-      line-height: 2.25rem;
-    }
-  }
-
-  h5 {
-    font-size: 1.125rem;
-    line-height: 1.6875rem;
-
-    @include breakpoint(medium) {
-      font-size: 1.25rem;
-      line-height: 1.875rem;
-      h6 {
-        font-size: 1rem;
-      }
-    }
-
-    line-height: 1.5rem;
-
-    @include breakpoint(medium) {
-      font-size: 1.125rem;
-      line-height: 1.6875rem;
+      font-size: 2.5rem;
     }
   }
 }

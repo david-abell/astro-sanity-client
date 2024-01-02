@@ -29,24 +29,24 @@ const {
 
     <SiteMeta title={title} description={description} url={canonicalURL} image={socialImageURL || ''} author={author} />
     <script is:inline>
-    // Setup any saved theme custom properties in :root
-    function setRootThemeProperties() {
-      for (let i = 0; i <= 12; i++) {
-        const storePrimaryProperty = localStorage.getItem(`--primary-${i}`);
-        const storeSecondaryProperty = localStorage.getItem(`--secondary-${i}`);
+      // Setup any saved theme custom properties in :root
+      function setRootThemeProperties() {
+        for (let i = 0; i <= 12; i++) {
+          const storePrimaryProperty = localStorage.getItem(`--primary-${i}`);
+          const storeSecondaryProperty = localStorage.getItem(`--secondary-${i}`);
 
-        if (storePrimaryProperty) {
-          document.documentElement.style.setProperty(`--primary-${i}`, storePrimaryProperty);
-        }
-        if (storeSecondaryProperty) {
-          document.documentElement.style.setProperty(`--secondary-${i}`, storeSecondaryProperty);
+          if (storePrimaryProperty) {
+            document.documentElement.style.setProperty(`--primary-${i}`, storePrimaryProperty);
+          }
+          if (storeSecondaryProperty) {
+            document.documentElement.style.setProperty(`--secondary-${i}`, storeSecondaryProperty);
+          }
         }
       }
-    }
 
-    // Execution
-    setRootThemeProperties();
-    document.addEventListener('astro:after-swap', setRootThemeProperties);
+      // Execution
+      setRootThemeProperties();
+      document.addEventListener('astro:after-swap', setRootThemeProperties);
     </script>
     <ViewTransitions />
   </head>
@@ -59,14 +59,14 @@ const {
         --radius-large: 6px;
         --gap-default: 2rem;
         --font-measure: 70ch;
-        --font-family-default: 'Open Sans', sans-serif;
-        --font-family-special: 'Open Sans', sans-serif;
+        --font-family-default: 'Poppins', sans-serif;
+        --font-family-special: 'Poppins', sans-serif;
         // light theme
         --font-color: var(--neutral-12);
         --action-color: var(--primary-10);
         --action-color-state: var(--secondary-10);
         --background: var(--primary-0);
-        --primary-background: var(--primary-0);
+        --primary-background: var(--primary-1);
         --secondary-background: var(--secondary-0);
         --neutral-background: var(--neutral-1);
         // dark theme
@@ -102,7 +102,6 @@ const {
         flex-direction: column;
         color: var(--font-color);
         background-color: var(--background);
-        position: relative;
 
         main {
           flex: 1 0 auto;

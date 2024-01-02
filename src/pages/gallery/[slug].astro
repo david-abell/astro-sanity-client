@@ -5,6 +5,7 @@ import groq from 'groq';
 import type { Gallery } from '../../lib/sanity/types';
 import { sanityClient } from 'sanity:client';
 import { Breadcrumbs, BreadcrumbsItem } from 'accessible-astro-components';
+import Section from '@components/Section.astro';
 
 const loremDescription =
   'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Aperiam tenetur ut repellat quaerat cum deleniti eos ipsam officiis necessitatibus iste.';
@@ -43,14 +44,19 @@ const {
       <BreadcrumbsItem currentPage={true} label={title} />
     </Breadcrumbs>
   </div>
-  <div class="container my-12">
-    <div class="space-content my-12">
-      <h1>{title}</h1>
-      <h2>{headline}</h2>
+  <Section>
+    <div class="space-content text-container">
+      <h1>{headline}</h1>
       <p>{description}</p>
     </div>
-    {!!images && <GalleryGrid images={images} galleryName={slug.current} />}
-  </div>
+  </Section>
+  {
+    !!images && (
+      <Section>
+        <GalleryGrid images={images} galleryName={slug.current} />
+      </Section>
+    )
+  }
 </DefaultLayout>
 
 <style lang="scss">
