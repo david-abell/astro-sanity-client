@@ -1,5 +1,5 @@
 ---
-import Icon from 'astro-icon';
+import { Icon } from 'astro-icon/components';
 import DefaultLayout from '../layouts/DefaultLayout.astro';
 import { getSettings } from '@lib/sanity/companySettings';
 const { tagline, companyAddress, companyEmail, companyPhone } = await getSettings();
@@ -59,19 +59,19 @@ const { tagline, companyAddress, companyEmail, companyPhone } = await getSetting
 
       <div class="grid gap-24 sm:grid-cols-2 md:justify-items-center">
         <div class="flex flex-col gap-2">
-          <Icon pack="ion" name="mail" alt="" />
+          <Icon name="ion:mail" />
           <h2>Email</h2>
           <p>Lorem ipsum dolor sit amet.</p>
           <a href={`mailto:${companyEmail}`}>{companyEmail}</a>
         </div>
         <div class="flex flex-col gap-2">
-          <Icon pack="ion" name="location-sharp" alt="" />
+          <Icon name="ion:location-sharp" />
           <h2>Address</h2>
           <p>Lorem ipsum dolor sit amet.</p>
           <address>{companyAddress}</address>
         </div>
         <div class="flex flex-col gap-2">
-          <Icon pack="ion" name="call" alt="" />
+          <Icon name="ion:call" />
           <h2>Phone</h2>
           <p>Lorem ipsum dolor sit amet.</p>
           <a href={`tel:${companyPhone}`}>{companyPhone}</a>
@@ -137,7 +137,7 @@ const { tagline, companyAddress, companyEmail, companyPhone } = await getSetting
     }
   }
 
-  :global([astro-icon] path) {
+  :global([data-icon] path) {
     fill: var(--action-color);
   }
 </style>

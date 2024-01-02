@@ -1,7 +1,7 @@
 ---
 import Navigation from '../components/Navigation.astro';
 import { SkipLinks } from 'accessible-astro-components';
-import { Icon } from 'astro-icon';
+import { Icon } from 'astro-icon/components';
 ---
 
 <header transition:persist>
@@ -28,7 +28,7 @@ import { Icon } from 'astro-icon';
     </li>
     <li class="menu-item type-icon">
       <a href="https://github.com/david-abell" title="Go to my github page">
-        <Icon pack="ion" name="logo-github" alt="" />
+        <Icon name="ion:logo-github" />
       </a>
     </li>
     <li class="menu-item type-icon">
@@ -59,7 +59,7 @@ import { Icon } from 'astro-icon';
     .type-icon a {
       display: block;
 
-      [astro-icon] {
+      [data-icon] {
         margin-top: -4px;
         width: 30px;
 
@@ -70,7 +70,7 @@ import { Icon } from 'astro-icon';
       }
 
       &:hover {
-        [astro-icon] path {
+        [data-icon] path {
           fill: var(--action-color-state);
         }
       }
