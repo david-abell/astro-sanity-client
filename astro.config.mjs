@@ -37,7 +37,8 @@ export default defineConfig({
       include: {
         // update setting to include on used icons for ssr/hybrid js bundle size
         mdi: ['*'], // (Default) Loads entire Material Design Icon set
-        ion: ['*'], // (Default) Loads entire Material Design Icon set
+        ion: ['*'], // (Default) Loads entire Ion Icon set
+        'simple-icons': ['sanity'],
       },
     }),
     mdx(),
