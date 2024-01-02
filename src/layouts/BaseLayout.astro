@@ -29,24 +29,24 @@ const {
 
     <SiteMeta title={title} description={description} url={canonicalURL} image={socialImageURL || ''} author={author} />
     <script is:inline>
-    // Setup any saved theme custom properties in :root
-    function setRootThemeProperties() {
-      for (let i = 0; i <= 12; i++) {
-        const storePrimaryProperty = localStorage.getItem(`--primary-${i}`);
-        const storeSecondaryProperty = localStorage.getItem(`--secondary-${i}`);
+      // Setup any saved theme custom properties in :root
+      function setRootThemeProperties() {
+        for (let i = 0; i <= 12; i++) {
+          const storePrimaryProperty = localStorage.getItem(`--primary-${i}`);
+          const storeSecondaryProperty = localStorage.getItem(`--secondary-${i}`);
 
-        if (storePrimaryProperty) {
-          document.documentElement.style.setProperty(`--primary-${i}`, storePrimaryProperty);
-        }
-        if (storeSecondaryProperty) {
-          document.documentElement.style.setProperty(`--secondary-${i}`, storeSecondaryProperty);
+          if (storePrimaryProperty) {
+            document.documentElement.style.setProperty(`--primary-${i}`, storePrimaryProperty);
+          }
+          if (storeSecondaryProperty) {
+            document.documentElement.style.setProperty(`--secondary-${i}`, storeSecondaryProperty);
+          }
         }
       }
-    }
 
-    // Execution
-    setRootThemeProperties();
-    document.addEventListener('astro:after-swap', setRootThemeProperties);
+      // Execution
+      setRootThemeProperties();
+      document.addEventListener('astro:after-swap', setRootThemeProperties);
     </script>
     <ViewTransitions />
   </head>
@@ -135,7 +135,7 @@ const {
         background-color: var(--background);
       }
 
-      [astro-icon] {
+      [data-icon] {
         width: 30px;
       }
     </style>
