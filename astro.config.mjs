@@ -4,6 +4,7 @@ import tailwind from '@astrojs/tailwind';
 import react from '@astrojs/react';
 import { loadEnv } from 'vite';
 import nodejs from '@astrojs/node';
+import icon from 'astro-icon';
 
 const {
   PUBLIC_SANITY_STUDIO_PROJECT_ID,
@@ -32,6 +33,11 @@ export default defineConfig({
     mode: 'standalone',
   }),
   integrations: [
+    icon({
+      svgoOptions: {
+        plugins: ['removeViewBox'],
+      },
+    }),
     mdx(),
     tailwind(),
     sanity({
