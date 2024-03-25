@@ -39,7 +39,7 @@
     "autoprefixer": "^10.4.16",
     "eslint": "^8.53.0",
     "eslint-config-prettier": "^9.0.0",
-    "eslint-plugin-astro": "^0.31.0",
+    "eslint-plugin-astro": "^0.33.1",
     "eslint-plugin-jsx-a11y": "^6.8.0",
     "groq": "^3.19.2",
     "prettier": "^3.0.3",
