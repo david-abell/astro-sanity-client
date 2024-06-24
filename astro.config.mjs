@@ -3,7 +3,7 @@ import mdx from '@astrojs/mdx';
 import tailwind from '@astrojs/tailwind';
 import react from '@astrojs/react';
 import { loadEnv } from 'vite';
-import nodejs from '@astrojs/node';
+import netlify from '@astrojs/netlify';
 import icon from 'astro-icon';
 
 const {
@@ -29,9 +29,7 @@ export default defineConfig({
   // Hybrid+adapter is required to support embedded Sanity Studio
   output: 'hybrid',
   // adapter: vercel(),
-  adapter: nodejs({
-    mode: 'standalone',
-  }),
+  adapter: netlify(),
   integrations: [
     icon({
       include: {
